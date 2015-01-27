@@ -1,0 +1,3 @@
+Csulb Class Scheduling applicaiton !
+----------------------------------------
+
