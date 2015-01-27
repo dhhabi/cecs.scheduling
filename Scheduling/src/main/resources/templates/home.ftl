@@ -23,6 +23,7 @@
     <#if currentUser?? && currentUser.role == "ADMIN">
         <li><a href="/user/create">Create a new user</a></li>
         <li><a href="/users">View all users</a></li>
+        <li><a href="/adminui">AdminUI</a></li>
     </#if>
     </ul>
 </nav>
