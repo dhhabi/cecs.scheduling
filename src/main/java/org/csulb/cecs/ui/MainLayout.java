@@ -23,7 +23,10 @@ import org.vaadin.spring.security.Security;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -31,6 +34,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
@@ -76,12 +80,20 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		navbar.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 		addComponent(navbar);
 		
-		final Label brand = new Label("Vaadin4Spring Security Demo");
-		brand.addStyleName(ValoTheme.LABEL_H2);
-		brand.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-		navbar.addComponent(brand);
-		navbar.setComponentAlignment(brand, Alignment.MIDDLE_LEFT);
-		navbar.setExpandRatio(brand, 1);
+		// Serve the image from the theme
+		Resource res = new ClassResource("/img/csulb.gif");
+
+
+		// Display the image without caption
+		Image brandImage = new Image(null, res);
+		
+		
+		final Label brand = new Label("CECS Classes");
+		brandImage.addStyleName(ValoTheme.LABEL_H2);
+		brandImage.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+		navbar.addComponent(brandImage);
+		navbar.setComponentAlignment(brandImage, Alignment.MIDDLE_LEFT);
+		navbar.setExpandRatio(brandImage, 1);
 		
 		btnHome = new Button("Home", FontAwesome.HOME);
 		btnHome.addStyleName(ValoTheme.BUTTON_BORDERLESS);

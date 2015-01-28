@@ -43,7 +43,7 @@ public class SignInViewImpl extends AbstractMvpView implements SignInView, Click
 		layout.setSpacing(true);
 		setCompositionRoot(layout);
 		
-		caption = new Label("Sign in to Vaadin4Spring Security Demo");
+		caption = new Label("Sign in CECS Class Scheduling");
 		caption.addStyleName(ValoTheme.LABEL_H2);
 		caption.setSizeUndefined();		
 		layout.addComponent(caption);
