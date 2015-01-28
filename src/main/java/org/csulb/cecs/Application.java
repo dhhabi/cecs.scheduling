@@ -1,8 +1,5 @@
 package org.csulb.cecs;
 
-import javax.sql.DataSource;
-
-import org.csulb.cecs.account.JdbcAccountRepository;
 import org.csulb.cecs.ui.security.HttpResponseFactory;
 import org.csulb.cecs.ui.security.HttpResponseFilter;
 import org.csulb.cecs.ui.security.SpringApplicationContext;
@@ -14,11 +11,6 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.vaadin.spring.servlet.SpringAwareVaadinServlet;
@@ -86,7 +78,7 @@ public class Application  {
 	}
 	
 	
-	@Bean(destroyMethod = "shutdown")
+	/*@Bean(destroyMethod = "shutdown")
 	public DataSource dataSource() {
 		EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
 		factory.setDatabaseName("scheduledb");
@@ -101,7 +93,7 @@ public class Application  {
 		populator.addScript(new ClassPathResource("data.sql", JdbcAccountRepository.class));
 		populator.addScript(new ClassPathResource("rememberme.sql", JdbcAccountRepository.class));
 		return populator;
-	}
+	}*/
 	
 	
 }

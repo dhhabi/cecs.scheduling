@@ -1,15 +1,34 @@
-package org.csulb.cecs.account;
+package org.csulb.cecs.model.account;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+@Entity
+@Table(name = "account")
 public class Account {
+	
+	public Account(){
+		
+	}
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+	private Long id;
+	
 	@NotEmpty(message="Username is required")
+	 @Column(name = "username", nullable = false, unique = true)
 	private String username;
 
 	@Size(min = 6, message = "Password must be at least 6 characters")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@NotEmpty(message="First name is required")
@@ -18,6 +37,7 @@ public class Account {
 	@NotEmpty(message="Last name is required")
 	private String lastName;
 	
+	@Column(name = "role", nullable = false)
 	private String role;
 
 	public Account(String username, String password, String firstName, String lastName, String role) {
@@ -66,6 +86,14 @@ public class Account {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	

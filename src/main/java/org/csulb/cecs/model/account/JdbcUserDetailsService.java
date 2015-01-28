@@ -1,4 +1,4 @@
-package org.csulb.cecs.account;
+package org.csulb.cecs.model.account;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

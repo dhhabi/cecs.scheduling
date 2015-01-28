@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.csulb.cecs.account;
+package org.csulb.cecs.model.account;
 
 @SuppressWarnings("serial")
 public class UsernameAlreadyInUseException extends Exception {
