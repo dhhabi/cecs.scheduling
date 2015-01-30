@@ -104,7 +104,7 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 	}
 	
 	private void buildForm() {
-		username = new TextField("Username");
+		username = new TextField("Email");
 		username.setWidth("100%");
 		username.setImmediate(true);
 		username.setValidationVisible(false);

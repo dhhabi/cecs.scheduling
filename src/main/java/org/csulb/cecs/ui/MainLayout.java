@@ -19,6 +19,7 @@ import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.mvp.MvpPresenterView;
 import org.vaadin.spring.navigator.SpringViewProvider;
 import org.vaadin.spring.security.Security;
+import org.vaadin.spring.sidebar.SideBar;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -36,6 +37,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -50,6 +53,10 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	
 	private HorizontalLayout navbar;
 	
+	private MenuBar menuBar;
+	private MenuItem menuItemAdmin;
+	private MenuItem menuItemUser;
+	
 	private Button btnHome;
 	private Button btnUser;
 	private Button btnAdmin;
@@ -57,6 +64,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	private Button btnSignIn;
 	private Button btnSignUp;
 	private Button btnLogout;
+	private Button btnSurvey;
 	
 	private String key = UUID.randomUUID().toString();
 	
@@ -76,24 +84,36 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		
 		navbar = new HorizontalLayout();
 		navbar.setWidth("100%");
-		navbar.setMargin(true);
+		//navbar.setMargin(true);
 		navbar.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 		addComponent(navbar);
-		
-		// Serve the image from the theme
+		menuBar = new MenuBar();
+		menuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+		navbar.addComponent(menuBar);
+		navbar.setComponentAlignment(menuBar, Alignment.MIDDLE_LEFT);
+		navbar.setExpandRatio(menuBar, 1);
+		initMenuBar();
+		/*// Serve the image from the theme
 		Resource res = new ClassResource("/img/csulb.gif");
 
 
 		// Display the image without caption
-		Image brandImage = new Image(null, res);
+		Image brandImage = new Image(null, res);*/
 		
 		
-		final Label brand = new Label("CECS Classes");
-		brandImage.addStyleName(ValoTheme.LABEL_H2);
+		final Label brandImage = new Label("CECS Classes");
+		brandImage.addStyleName(ValoTheme.LABEL_H4);
 		brandImage.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-		navbar.addComponent(brandImage);
-		navbar.setComponentAlignment(brandImage, Alignment.MIDDLE_LEFT);
-		navbar.setExpandRatio(brandImage, 1);
+		//navbar.addComponent(brandImage);
+		//navbar.setComponentAlignment(brandImage, Alignment.MIDDLE_LEFT);
+		//navbar.setExpandRatio(brandImage, 1);
+		
+		
+		btnSurvey = new Button("Survey", FontAwesome.BOOK);
+		btnSurvey.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		btnSurvey.setData(ViewToken.USER);
+		btnSurvey.addClickListener(this);
+		navbar.addComponent(btnSurvey);
 		
 		btnHome = new Button("Home", FontAwesome.HOME);
 		btnHome.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -125,7 +145,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnSignIn.addClickListener(this);
 		navbar.addComponent(btnSignIn);
 		
-		btnSignUp = new Button("Sign up", FontAwesome.PENCIL_SQUARE_O);
+		btnSignUp = new Button("Add User", FontAwesome.PENCIL_SQUARE_O);
 		btnSignUp.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		btnSignUp.setData(ViewToken.SIGNUP);
 		btnSignUp.addClickListener(this);
@@ -145,8 +165,15 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		
 		viewContainer = new Panel();
 		viewContainer.setSizeFull();
+		
 		addComponent(viewContainer);
 		setExpandRatio(viewContainer, 1);				
+	}
+	
+	private void initMenuBar(){
+		menuItemAdmin = menuBar.addItem("Hello", null);
+		
+		menuItemUser = menuBar.addItem("Welcome", null);
 	}
 	
 	@PreDestroy
@@ -213,7 +240,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnAdminHidden.setVisible(false);
 		btnLogout.setVisible(false);
 		btnSignIn.setVisible(true);
-		btnSignUp.setVisible(true);		
+		btnSignUp.setVisible(false);		
 	}
 	
 	private void displayUserNavbar() {
@@ -227,7 +254,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnAdminHidden.setVisible(true);
 		btnLogout.setVisible(true);
 		btnSignIn.setVisible(false);
-		btnSignUp.setVisible(false);
+		btnSignUp.setVisible(true);
 	}
 	
 	

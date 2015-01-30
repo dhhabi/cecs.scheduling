@@ -14,33 +14,36 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.vaadin.spring.servlet.SpringAwareVaadinServlet;
+import org.vaadin.spring.sidebar.annotation.EnableSideBar;
 
+/**
+ * Main application class
+ * 
+ * @author Gurprit Singh
+ *
+ */
 @Configuration
 @EnableAutoConfiguration
+@EnableSideBar
 @ComponentScan
 public class Application  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-
 	}
-	
 	@Bean
 	public SpringAwareVaadinServlet springAwareVaadinServlet() {
 		return new CustomVaadinServlet();
 	}
-	
 	@Bean
 	public SpringApplicationContext springApplicationContext() {
 		return new SpringApplicationContext();
 	}
-	
 	@Bean
     @ConditionalOnMissingBean(RequestContextListener.class)
     public RequestContextListener requestContextListener() {
         return new RequestContextListener();
     }
-	
 	/**
 	 * Allow injection of HttpServletResponse
 	 * 
@@ -76,24 +79,6 @@ public class Application  {
 		registrationBean.setFilter(gzipFilter);					
 		return registrationBean;		
 	}
-	
-	
-	/*@Bean(destroyMethod = "shutdown")
-	public DataSource dataSource() {
-		EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
-		factory.setDatabaseName("scheduledb");
-		factory.setDatabaseType(EmbeddedDatabaseType.H2);
-		factory.setDatabasePopulator(databasePopulator());
-		return factory.getDatabase();
-	}
-	
-	private DatabasePopulator databasePopulator() {
-		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();		
-		populator.addScript(new ClassPathResource("Account.sql", JdbcAccountRepository.class));
-		populator.addScript(new ClassPathResource("data.sql", JdbcAccountRepository.class));
-		populator.addScript(new ClassPathResource("rememberme.sql", JdbcAccountRepository.class));
-		return populator;
-	}*/
-	
+		
 	
 }

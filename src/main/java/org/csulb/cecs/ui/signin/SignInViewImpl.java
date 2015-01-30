@@ -89,7 +89,7 @@ public class SignInViewImpl extends AbstractMvpView implements SignInView, Click
 		
 		final Label infoLabel = new Label(FontAwesome.INFO_CIRCLE.getHtml() + " You can sign in as: <br/>\"user\" with password \"user\" <br/>\"admin\" with password \"admin\".", ContentMode.HTML);
 		infoLabel.setWidth("300px");
-		loginPanel.addComponent(infoLabel);
+		//loginPanel.addComponent(infoLabel);
 	}
 	
 	
