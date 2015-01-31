@@ -7,7 +7,7 @@ import java.util.List;
 public interface ViewToken extends Serializable {
 	
 	public static final String HOME="";
-	public static final String USER="/user";	
+	public static final String USER="/user";
 	public static final String ADMIN="/admin";
 	public static final String ADMIN_HIDDEN="/hidden";
 	public static final String SIGNIN="/signin";

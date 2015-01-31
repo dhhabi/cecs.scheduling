@@ -1,6 +1,5 @@
 package org.csulb.cecs.ui.survey;
 
-import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
@@ -16,7 +15,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 @SuppressWarnings("serial")
 @UIScope
-@VaadinView(name=ViewToken.SURVEY)
+@VaadinView(name="/survey")
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.SurveyView> implements SurveyPresenterHandlers  {
 

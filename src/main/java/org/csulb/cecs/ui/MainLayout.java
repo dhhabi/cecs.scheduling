@@ -19,30 +19,25 @@ import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.mvp.MvpPresenterView;
 import org.vaadin.spring.navigator.SpringViewProvider;
 import org.vaadin.spring.security.Security;
-import org.vaadin.spring.sidebar.SideBar;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.ClassResource;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Resource;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.themes.ValoTheme;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 @UIScope
 @VaadinComponent
@@ -163,15 +158,14 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	}
 	
 	private void initMenuBar(){
-		MenuBar.Command menuCommand = new MenuBar.Command() {
-			
+		MenuItem menuItemAdmin = menuBar.addItem("User", null);
+		menuItemAdmin.addItem("Survey Form",new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
-				UI.getCurrent().getNavigator().navigateTo(selectedItem.getText());				
+				UI.getCurrent().getNavigator().navigateTo("/survey");	
 			}
-		};
-		MenuItem menuItemAdmin = menuBar.addItem("User", null);
-		MenuItem surveyMenuItem = menuItemAdmin.addItem(ViewToken.SURVEY, menuCommand);
+		});
+				
 		MenuItem menuItemUser = menuBar.addItem("Welcome", null);
 	}
 	
