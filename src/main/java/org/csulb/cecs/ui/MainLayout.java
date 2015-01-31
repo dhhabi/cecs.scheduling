@@ -54,8 +54,6 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	private HorizontalLayout navbar;
 	
 	private MenuBar menuBar;
-	private MenuItem menuItemAdmin;
-	private MenuItem menuItemUser;
 	
 	private Button btnHome;
 	private Button btnUser;
@@ -64,7 +62,6 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	private Button btnSignIn;
 	private Button btnSignUp;
 	private Button btnLogout;
-	private Button btnSurvey;
 	
 	private String key = UUID.randomUUID().toString();
 	
@@ -109,12 +106,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		//navbar.setExpandRatio(brandImage, 1);
 		
 		
-		btnSurvey = new Button("Survey", FontAwesome.BOOK);
-		btnSurvey.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-		btnSurvey.setData(ViewToken.USER);
-		btnSurvey.addClickListener(this);
-		navbar.addComponent(btnSurvey);
-		
+				
 		btnHome = new Button("Home", FontAwesome.HOME);
 		btnHome.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		btnHome.setData(ViewToken.HOME);
@@ -171,9 +163,16 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	}
 	
 	private void initMenuBar(){
-		menuItemAdmin = menuBar.addItem("Hello", null);
-		
-		menuItemUser = menuBar.addItem("Welcome", null);
+		MenuBar.Command menuCommand = new MenuBar.Command() {
+			
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(selectedItem.getText());				
+			}
+		};
+		MenuItem menuItemAdmin = menuBar.addItem("User", null);
+		MenuItem surveyMenuItem = menuItemAdmin.addItem(ViewToken.SURVEY, menuCommand);
+		MenuItem menuItemUser = menuBar.addItem("Welcome", null);
 	}
 	
 	@PreDestroy
@@ -240,7 +239,8 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnAdminHidden.setVisible(false);
 		btnLogout.setVisible(false);
 		btnSignIn.setVisible(true);
-		btnSignUp.setVisible(false);		
+		btnSignUp.setVisible(false);	
+		menuBar.setVisible(false);
 	}
 	
 	private void displayUserNavbar() {
@@ -248,6 +248,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnLogout.setVisible(true);
 		btnSignIn.setVisible(false);
 		btnSignUp.setVisible(false);
+		menuBar.setVisible(true);
 	}
 	
 	private void displayAdminNavbar() {
@@ -255,6 +256,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnLogout.setVisible(true);
 		btnSignIn.setVisible(false);
 		btnSignUp.setVisible(true);
+		menuBar.setVisible(true);
 	}
 	
 	

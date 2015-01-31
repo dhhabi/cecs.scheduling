@@ -16,7 +16,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 @SuppressWarnings("serial")
 @UIScope
-@VaadinView(name=ViewToken.USER)
+@VaadinView(name=ViewToken.SURVEY)
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.SurveyView> implements SurveyPresenterHandlers  {
 
