@@ -17,7 +17,7 @@ import com.vaadin.ui.UI;
 
 @VaadinUI
 @Title("CECS Class Scheduling")
-@Theme("dashboard")
+@Theme("tests-valo-facebook")
 @SuppressWarnings("serial")
 public class MainUI extends UI {
 	
