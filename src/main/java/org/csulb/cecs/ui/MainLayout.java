@@ -173,6 +173,13 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.SIGNUP);				
 			}
 		});
+		menuItemAdmin.addItem("Request Survey", new MenuBar.Command() {
+			
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.SURVEYREQUEST);				
+			}
+		});
 	}
 	
 	@PreDestroy

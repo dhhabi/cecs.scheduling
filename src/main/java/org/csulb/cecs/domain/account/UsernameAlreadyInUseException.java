@@ -1,4 +1,4 @@
-package org.csulb.cecs.model.account;
+package org.csulb.cecs.domain.account;
 
 @SuppressWarnings("serial")
 public class UsernameAlreadyInUseException extends Exception {

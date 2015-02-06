@@ -13,8 +13,9 @@ public interface ViewToken extends Serializable {
 	public static final String SIGNIN="/signin";
 	public static final String SIGNUP="/signup";
 	public static final String SURVEY="/survey";
+	public static final String SURVEYREQUEST="/surveyRequest";
 	
 	
-	public static final List<String> VALID_TOKENS = Arrays.asList(new String[] {HOME, USER, ADMIN, ADMIN_HIDDEN, SIGNIN, SIGNUP,SURVEY});		
+	public static final List<String> VALID_TOKENS = Arrays.asList(new String[] {HOME, USER, ADMIN, ADMIN_HIDDEN, SIGNIN, SIGNUP,SURVEY,SURVEYREQUEST});		
 
 }

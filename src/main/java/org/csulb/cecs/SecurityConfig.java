@@ -2,7 +2,7 @@ package org.csulb.cecs;
 
 import javax.sql.DataSource;
 
-import org.csulb.cecs.model.account.JdbcUserDetailsService;
+import org.csulb.cecs.domain.account.JdbcUserDetailsService;
 import org.csulb.cecs.ui.security.PreAuthorizeSpringViewProviderAccessDelegate;
 import org.csulb.cecs.ui.security.VaadinPersistentTokenBasedRememberMeServices;
 import org.springframework.beans.factory.annotation.Autowired;

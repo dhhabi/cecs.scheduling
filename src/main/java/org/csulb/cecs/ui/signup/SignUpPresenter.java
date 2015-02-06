@@ -1,8 +1,8 @@
 package org.csulb.cecs.ui.signup;
 
-import org.csulb.cecs.model.account.Account;
-import org.csulb.cecs.model.account.AccountRepository;
-import org.csulb.cecs.model.account.UsernameAlreadyInUseException;
+import org.csulb.cecs.domain.account.Account;
+import org.csulb.cecs.domain.account.AccountRepository;
+import org.csulb.cecs.domain.account.UsernameAlreadyInUseException;
 import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

@@ -1,6 +1,6 @@
 package org.csulb.cecs.ui.signup;
 
-import org.csulb.cecs.model.account.Account;
+import org.csulb.cecs.domain.account.Account;
 import org.csulb.cecs.ui.signup.SignUpPresenter.SignUpView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
@@ -75,7 +75,7 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 		container.addComponent(form);
 		buildForm();
 					
-		btnSignUp = new Button("Signup", FontAwesome.FLOPPY_O);
+		btnSignUp = new Button("Add User", FontAwesome.FLOPPY_O);
 		btnSignUp.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		btnSignUp.addClickListener(this);
 		container.addComponent(btnSignUp);

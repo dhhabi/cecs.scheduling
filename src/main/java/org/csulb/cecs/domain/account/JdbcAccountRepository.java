@@ -1,4 +1,4 @@
-package org.csulb.cecs.model.account;
+package org.csulb.cecs.domain.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,4 +53,5 @@ public class JdbcAccountRepository implements AccountRepository {
 				}, username);
 	}
 
+	
 }

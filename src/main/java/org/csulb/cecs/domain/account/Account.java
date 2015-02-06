@@ -1,4 +1,4 @@
-package org.csulb.cecs.model.account;
+package org.csulb.cecs.domain.account;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
