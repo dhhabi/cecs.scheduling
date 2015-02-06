@@ -2,7 +2,7 @@ package org.csulb.cecs.ui.survey;
 
 import java.util.Date;
 
-import org.csulb.cecs.model.survey.Survey;
+import org.csulb.cecs.domain.survey.Survey;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;

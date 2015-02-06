@@ -1,4 +1,4 @@
-package org.csulb.cecs.model.survey;
+package org.csulb.cecs.domain.survey;
 
 public class Survey {
 	
