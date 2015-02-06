@@ -79,7 +79,7 @@ public class SignInViewImpl extends AbstractMvpView implements SignInView, Click
 		rememberMe = new CheckBox("Remember me");
 		rememberMe.setValue(false);
 		rememberMe.addStyleName(ValoTheme.CHECKBOX_LARGE);
-		loginPanel.addComponent(rememberMe);
+		//loginPanel.addComponent(rememberMe);
 		
 		btnLogin = new Button("Signin", FontAwesome.UNLOCK);
 		btnLogin.addStyleName(ValoTheme.BUTTON_PRIMARY);

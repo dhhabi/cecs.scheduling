@@ -3,13 +3,11 @@ package org.csulb.cecs.ui.signup;
 import org.csulb.cecs.model.account.Account;
 import org.csulb.cecs.model.account.AccountRepository;
 import org.csulb.cecs.model.account.UsernameAlreadyInUseException;
-import org.csulb.cecs.ui.UserSignedInEvent;
 import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.events.EventBus;
-import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.mvp.MvpHasPresenterHandlers;
 import org.vaadin.spring.mvp.MvpView;
 import org.vaadin.spring.mvp.presenter.AbstractMvpPresenterView;
@@ -17,10 +15,11 @@ import org.vaadin.spring.navigator.VaadinView;
 import org.vaadin.spring.security.Security;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.Notification;
 
 @SuppressWarnings("serial")
 @UIScope
+@Secured({"ROLE_ADMIN"})
 @VaadinView(name=ViewToken.SIGNUP)
 public class SignUpPresenter extends AbstractMvpPresenterView<SignUpPresenter.SignUpView> implements SignUpPresenterHandlers {
 
@@ -49,17 +48,17 @@ public class SignUpPresenter extends AbstractMvpPresenterView<SignUpPresenter.Si
 	}
 
 	@Override
-	public void tryCreateAccount(Account account) {
+	public boolean tryCreateAccount(Account account) {
 		
 		try {
-			accountRepository.createAccount(account);
-								
+			return accountRepository.createAccount(account);
+														
 		} catch (UsernameAlreadyInUseException e) {
 			getView().setErrorMessage(e.getMessage());
-			return;
+			return false;
 		}
 		
-		try {			
+		/*try {			
 			security.login(account.getUsername(), account.getPassword());
 			
 			getEventBus().publish(EventScope.UI, this, new UserSignedInEvent());
@@ -73,7 +72,7 @@ public class SignUpPresenter extends AbstractMvpPresenterView<SignUpPresenter.Si
 								
 		} catch (AuthenticationException e) {
 			getView().setErrorMessage(e.getMessage());
-		}				
+		}		*/		
 		
 	}
 }

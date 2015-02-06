@@ -25,14 +25,21 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 
 	@Transactional
-	public void createAccount(Account user) throws UsernameAlreadyInUseException {
+	public boolean createAccount(Account user) throws UsernameAlreadyInUseException {
+		int i = 0;
 		try {
-			jdbcTemplate.update(
+			i = jdbcTemplate.update(
 					"insert into Account (firstName, lastName, username, password, role) values (?, ?, ?, ?, ?)",
 					user.getFirstName(), user.getLastName(), user.getUsername(),
 					passwordEncoder.encode(user.getPassword()), user.getRole());
+			
 		} catch (DuplicateKeyException e) {
 			throw new UsernameAlreadyInUseException(user.getUsername());
+		}
+		if(i>0){
+			return true;
+		}else{
+			return false;
 		}
 	}
 

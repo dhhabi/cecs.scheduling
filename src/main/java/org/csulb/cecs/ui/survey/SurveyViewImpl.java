@@ -149,7 +149,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        wrap.addComponent(newsletter);
 
 	        ComboBox period = new ComboBox();
-	        period.setTextInputAllowed(false);
+	        period.setTextInputAllowed(true);
 	        period.addItem("Daily");
 	        period.addItem("Weekly");
 	        period.addItem("Monthly");

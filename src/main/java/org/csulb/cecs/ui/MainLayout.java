@@ -158,15 +158,21 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 	}
 	
 	private void initMenuBar(){
-		MenuItem menuItemAdmin = menuBar.addItem("User", null);
-		menuItemAdmin.addItem("Survey Form",new MenuBar.Command() {
+		MenuItem menuItemUser = menuBar.addItem("User", null);
+		menuItemUser.addItem("Survey Form",new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 				UI.getCurrent().getNavigator().navigateTo("/survey");	
 			}
 		});
 				
-		MenuItem menuItemUser = menuBar.addItem("Welcome", null);
+		MenuItem menuItemAdmin = menuBar.addItem("Admin", null);
+		menuItemAdmin.addItem("Add User", new MenuBar.Command() {
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.SIGNUP);				
+			}
+		});
 	}
 	
 	@PreDestroy
@@ -195,6 +201,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		AnonymousAuthenticationToken authenticationToken = new AnonymousAuthenticationToken(key, "anonymousUser", AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
 		final SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authenticationToken);
+        
         UI.getCurrent().getNavigator().navigateTo(ViewToken.HOME);
         eventBus.publish(EventScope.UI, this, new UserSignedOutEvent());
 	}

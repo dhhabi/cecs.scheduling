@@ -13,8 +13,10 @@ import com.vaadin.server.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -37,7 +39,7 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 	private PasswordField password;
 	private TextField firstName;	
 	private TextField lastName;
-	
+	private ComboBox role;
 	private Label infoLabel;
 	
 	private Button btnSignUp;
@@ -91,16 +93,16 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 	public void buttonClick(ClickEvent event) {
 		try {
 			binder.commit();
-			
 			Account account = binder.getItemDataSource().getBean();
-			mvpPresenterHandlers.tryCreateAccount(account);
-			
+			boolean success = mvpPresenterHandlers.tryCreateAccount(account);				
+			if(success)
+				Notification.show("User Added Successfully");
 		} catch (CommitException e) {
 			username.setValidationVisible(true);
 			password.setValidationVisible(true);
 			firstName.setValidationVisible(true);
 			lastName.setValidationVisible(true);			
-		} 		
+		}
 	}
 	
 	private void buildForm() {
@@ -136,10 +138,21 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 		lastName.setRequired(true);
 		form.addComponent(lastName);
 		
+		role = new ComboBox();
+        role.setTextInputAllowed(true);
+        role.addItem("ROLE_USER");
+        role.addItem("ROLE_ADMIN");
+        role.setNullSelectionAllowed(false);
+        role.select("ROLE_USER");
+        role.addStyleName("small");
+        role.setWidth("10em");
+        form.addComponent(role);
+		
 		binder.bind(username, "username");
 		binder.bind(password, "password");
 		binder.bind(firstName, "firstName");
-		binder.bind(lastName, "lastName");	
+		binder.bind(lastName, "lastName");
+		binder.bind(role, "role");
 	}
 
 	

@@ -94,7 +94,7 @@ public class SecurityConfig   {
 		@Bean
 		public RememberMeServices persistentTokenBasedRememberMeServices() {
 			VaadinPersistentTokenBasedRememberMeServices services = new VaadinPersistentTokenBasedRememberMeServices(
-					"vaadin4spring", 
+					"cecsscheduling", 
 					userDetailsService, 
 					jdbcTokenRepository());
 			services.setCookieName("REMEMBERME");
@@ -139,7 +139,7 @@ public class SecurityConfig   {
 					.antMatchers("/**").permitAll()
 					.and()		
 				.rememberMe()
-					.key("vaadin4spring")
+					.key("cecsscheduling")
 					.rememberMeServices(persistentTokenBasedRememberMeServices())
 					.and()				
 				.csrf().disable();

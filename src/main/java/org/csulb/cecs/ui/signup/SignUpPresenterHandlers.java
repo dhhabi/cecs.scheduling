@@ -5,6 +5,6 @@ import org.vaadin.spring.mvp.MvpPresenterHandlers;
 
 public interface SignUpPresenterHandlers extends MvpPresenterHandlers {
 	
-	void tryCreateAccount(Account account);
+	boolean tryCreateAccount(Account account);
 
 }

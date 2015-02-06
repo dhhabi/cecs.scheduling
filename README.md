@@ -1,7 +1,7 @@
 Class Scheduling Application
-=======================================
- 
-##References
+--------------------------------------
+
+#References
 Vaadin4Spring Add-on
 <https://github.com/peholmst/vaadin4spring>
 Vaadin4Spring MVP
