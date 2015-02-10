@@ -8,9 +8,11 @@ import org.vaadin.spring.mvp.view.AbstractMvpView;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -43,18 +45,20 @@ public class SurveyRequestViewImpl extends AbstractMvpView implements SurveyRequ
 		infoLabel.setSizeUndefined();
 		layout.addComponent(infoLabel);
 		layout.setComponentAlignment(infoLabel, Alignment.MIDDLE_CENTER);
+		Button button = new Button("test");
+		button.addClickListener(this);
+		layout.addComponent(button);
 		
 	}
 	
 	private void buildForm() {
-		
-			        		
+					        		
 	}
 
 	@Override
 	public void buttonClick(ClickEvent event) {
-		// TODO Auto-generated method stub
-		
+		if(surveyRequestPresenterHandlers!=null)
+			Notification.show("Success");
 	}
 
 	@Override

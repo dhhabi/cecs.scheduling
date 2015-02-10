@@ -38,5 +38,5 @@ public class SurveyRequestPresenter extends AbstractMvpPresenterView<SurveyReque
 	public void enter(ViewChangeEvent arg0) {
 		getView().initView();		
 	}
-	
+		
 }

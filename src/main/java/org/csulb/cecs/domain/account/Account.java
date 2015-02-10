@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -12,6 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "account")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Account {
 	
 	public Account(){
@@ -24,7 +27,7 @@ public class Account {
 	private Long id;
 	
 	@NotEmpty(message="Username is required")
-	 @Column(name = "username", nullable = false, unique = true)
+	@Column(name = "username", nullable = false, unique = true)
 	private String username;
 
 	@Size(min = 6, message = "Password must be at least 6 characters")
@@ -39,6 +42,17 @@ public class Account {
 	
 	@Column(name = "role", nullable = false)
 	private String role;
+	
+	@Column(name = "disabled")
+	private boolean disabled = false;
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 
 	public Account(String username, String password, String firstName, String lastName, String role) {
 		this.username = username;
