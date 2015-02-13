@@ -167,7 +167,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		});
 				
 		MenuItem menuItemAdmin = menuBar.addItem("Admin", null);
-		menuItemAdmin.addItem("Add User", new MenuBar.Command() {
+		menuItemAdmin.addItem("Add Instructor", new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.SIGNUP);				
@@ -256,7 +256,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		btnLogout.setVisible(false);
 		btnSignIn.setVisible(true);
 		btnSignUp.setVisible(false);	
-		menuBar.setVisible(false);
+		menuBar.setVisible(true);
 	}
 	
 	private void displayUserNavbar() {

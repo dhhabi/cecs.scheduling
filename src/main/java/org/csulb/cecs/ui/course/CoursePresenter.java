@@ -1,5 +1,7 @@
 package org.csulb.cecs.ui.course;
 
+import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -14,10 +16,13 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 @SuppressWarnings("serial")
 @UIScope
-@Secured({"ROLE_ADMIN"})
+//@Secured({"ROLE_ADMIN"})
 @VaadinView(name=ViewToken.COURSE)
 public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.CourseView> implements CoursePresenterHandlers {
 
+	@Autowired
+	private CourseDAO courseDAO;
+	
 	public interface CourseView extends MvpView, MvpHasPresenterHandlers<CoursePresenterHandlers> {
 		void initView();
 		void setErrorMessage(String message);
@@ -34,6 +39,11 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	public void enter(ViewChangeEvent event) {
 		getView().initView();
 		
+	}
+
+	@Override
+	public Long saveCourse(Course course) {
+		return courseDAO.addCourse(course);
 	}
 
 }
