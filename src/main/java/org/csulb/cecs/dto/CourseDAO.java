@@ -6,9 +6,9 @@ import org.csulb.cecs.domain.Course;
 import org.hibernate.HibernateException;
 
 public interface CourseDAO {
-	public Long addCourse(Course course) throws HibernateException;
-	public int updateCourse(Course course);
+	public void addCourse(Course course) throws HibernateException;
+	public void updateCourse(Course course);
 	public List<Course> getAllCourses();
 	public Course getCourseById(Long id);
-	
+	public void deleteCourse(Course course);
 }

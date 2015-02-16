@@ -1,5 +1,7 @@
 package org.csulb.cecs.domain.account;
-
+/**
+ * 
+ */
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

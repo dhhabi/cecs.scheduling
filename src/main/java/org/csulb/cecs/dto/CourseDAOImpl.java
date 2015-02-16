@@ -2,6 +2,8 @@ package org.csulb.cecs.dto;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.csulb.cecs.domain.Course;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,37 +12,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class CourseDAOImpl implements CourseDAO{
 
 	@Autowired
 	SessionFactory _sessionFactory;
-	//Session session = _sessionFactory.openSession();
+	
+	private Session getSession(){
+		return _sessionFactory.getCurrentSession();
+	}
+	
 	@Override
-	public Long addCourse(Course course) throws HibernateException {
-		/*session.beginTransaction();
-		Long id = (Long) session.save(course);
-		session.getTransaction().commit();
-		session.close();
-		return id;*/
-		return 0L;
+	public void addCourse(Course course) throws HibernateException {
+		getSession().save(course);
 	}
 
 	@Override
-	public int updateCourse(Course course) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void updateCourse(Course course) {
+		getSession().update(course);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Course> getAllCourses() {
-		// TODO Auto-generated method stub
-		return null;
+		return getSession().createQuery("from course").list();
 	}
 
 	@Override
 	public Course getCourseById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Course) getSession().createQuery("from Course where id=:id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
+
+	@Override
+	public void deleteCourse(Course course) {
+		getSession().delete(course);		
 	}
 
 }

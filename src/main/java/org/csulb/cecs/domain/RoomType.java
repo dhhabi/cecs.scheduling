@@ -8,4 +8,6 @@ public interface RoomType extends Serializable {
 	public static final String DISCUSSION_ROOM="Discussion Room";
 	public static final String BALL_ROOM="Ballroom";
 	public static final String HALL_ROOM="Hall";
+	public static final String LARGE = "large";
+	public static final String SMALL = "small";
 }

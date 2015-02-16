@@ -3,6 +3,7 @@ package org.csulb.cecs.ui.course;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.ui.ViewToken;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
@@ -42,8 +43,14 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	}
 
 	@Override
-	public Long saveCourse(Course course) {
-		return courseDAO.addCourse(course);
+	public boolean saveCourse(Course course) {
+		try{
+		courseDAO.addCourse(course);
+		return true;
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return false;
+		}
 	}
 
 }

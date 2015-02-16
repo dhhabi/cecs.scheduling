@@ -3,6 +3,7 @@ package org.csulb.cecs.ui.course;
 import org.csulb.cecs.domain.AvailableActivities;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.ui.course.CoursePresenter.CourseView;
+import org.hibernate.HibernateException;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
@@ -74,16 +75,24 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		editorLayout.addComponent(new Label("Edit selected course: "));	
 		TextField prefixField = new TextField("Prefix");
 		prefixField.setWidth("300px");
+		prefixField.setValidationVisible(false);
+		prefixField.setNullRepresentation("");
+		prefixField.setInputPrompt("Course Prefix");
+		
 		TextField courseNoField = new TextField("Course No.");
 		courseNoField.setWidth("300px");
+		courseNoField.setValidationVisible(false);
+		courseNoField.setNullRepresentation("");
+		courseNoField.setInputPrompt("Course Number");
 		ComboBox activityBox = new ComboBox("Activity");
 		activityBox.addItem(AvailableActivities.NO_ACTIVITY);
 		activityBox.addItem(AvailableActivities.LAB_ACTIVITY);
 		activityBox.addItem(AvailableActivities.DISCUSSION_ACTIVITY);
-		
+		activityBox.select(AvailableActivities.NO_ACTIVITY);
 		editorLayout.addComponent(prefixField);
 		editorLayout.addComponent(courseNoField);
 		editorLayout.addComponent(activityBox);
+		editorLayout.addComponent(addCourseButton);
 		
 		addCourseButton.addClickListener(new ClickListener() {
 			
@@ -92,12 +101,15 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 				try {
 					binder.commit();
 					Course course = binder.getItemDataSource().getBean();
-					Long id = mvpPresenterHandlers.saveCourse(course);	
-					Notification.show("Added"+ id);
+					if(mvpPresenterHandlers.saveCourse(course))
+						Notification.show("Course Added Successfully");
+					else
+						Notification.show("Something went wrong!");
 				} catch (CommitException e) {
-					
 					e.printStackTrace();
-				}			
+				} catch(HibernateException e){
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -114,13 +126,7 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 	
 	@Override
 	public void buttonClick(ClickEvent event) {
-		try {
-			binder.commit();
-			
-		} catch (CommitException e) {
-			Notification.show("Please validate the data !");
-			
-		}
+		//Universal button click 
 	}
 	
 
