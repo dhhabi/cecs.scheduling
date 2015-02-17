@@ -1,13 +1,12 @@
-package org.csulb.cecs.ui.course;
+package org.csulb.cecs.ui.room;
 
 import java.util.List;
 
-import org.csulb.cecs.domain.Course;
-import org.csulb.cecs.dto.CourseDAO;
+import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.ui.ViewToken;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.mvp.MvpHasPresenterHandlers;
@@ -20,19 +19,28 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 @SuppressWarnings("serial")
 @UIScope
 //@Secured({"ROLE_ADMIN"})
-@VaadinView(name=ViewToken.COURSE)
-public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.CourseView> implements CoursePresenterHandlers {
+@VaadinView(name=ViewToken.ROOMS)
+public class RoomPresenter extends AbstractMvpPresenterView<RoomPresenter.RoomView> implements RoomPresenterHandlers {
 
 	@Autowired
-	private CourseDAO courseDAO;
+	private RoomDAO roomDAO;
 	
-	public interface CourseView extends MvpView, MvpHasPresenterHandlers<CoursePresenterHandlers> {
+	
+	public RoomDAO getRoomDAO() {
+		return roomDAO;
+	}
+
+	public void setRoomDAO(RoomDAO roomDAO) {
+		this.roomDAO = roomDAO;
+	}
+
+	public interface RoomView extends MvpView, MvpHasPresenterHandlers<RoomPresenterHandlers> {
 		void initView();
 		void setErrorMessage(String message);
 	}
 	
 	@Autowired
-	public CoursePresenter(CourseView view, EventBus eventBus) {
+	public RoomPresenter(RoomView view, EventBus eventBus) {
 		super(view, eventBus);
 		getView().setPresenterHandlers(this);
 	
@@ -45,34 +53,23 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	}
 
 	@Override
-	public int saveCourse(Course course) {
+	public int saveRoom(Room Room) {
 		try{
-			if(!courseDAO.isAlreadyExist(course.getPrefix(), course.getCourseNo()))
-				courseDAO.addCourse(course);
+			if(!roomDAO.isAlreadyExist(Room.getBuilding(), Room.getRoomNo()))
+				roomDAO.addRoom(Room);
 			else
 				return 0;
 		}catch(HibernateException he){
-			//he.printStackTrace();
+			he.printStackTrace();
 			return 2;
 		}
 		return 1;
 	}
 
 	@Override
-	public int updateCourse(Course course) {
+	public int updateRoom(Room Room) {
 		try{
-			courseDAO.updateCourse(course);
-		}catch(HibernateException he){
-			//he.printStackTrace();
-			return 2;
-		}
-		return 1;
-	}
-
-	@Override
-	public int removeCourse(Course course) {
-		try{
-			courseDAO.deleteCourse(course);
+			roomDAO.updateRoom(Room);
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return 2;
@@ -81,9 +78,9 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	}
 
 	@Override
-	public List<Course> getAllCourse() {
+	public List<Room> getAllRooms() {
 		try{
-			return courseDAO.getAllCourses();
+			return roomDAO.getAllRooms();
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return null;
@@ -91,13 +88,24 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	}
 
 	@Override
-	public List<Course> searchCourse(String serchString) {
+	public List<Room> searchRoom(String serchString) {
 		try{
-			return courseDAO.searchCourse(serchString);
+			return roomDAO.searchRoom(serchString);
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public int deleteRoom(Room room) {
+		try{
+			roomDAO.deleteRoom(room);
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return 2;
+		}
+		return 1;
 	}
 
 }

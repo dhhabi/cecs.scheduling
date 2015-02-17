@@ -2,18 +2,25 @@ package org.csulb.cecs.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@IdClass(RoomPrimaryKey.class)
 public class Room {
+	@Id
+	@Column(name="building", nullable=false)
+	@NotEmpty(message="Building can not be blank")
+	private String building;
 	
 	@Id
-	@GeneratedValue
-	private Long id;
-	private String building;
-	@Column(name="roomno", nullable=false, unique=true)
+	@NotEmpty(message="Room No can not be blank")
+	@Column(name="roomno", nullable=false)
 	private String roomNo;
+	
+	@NotEmpty(message="Type can not be blank")
 	private String type;
 	
 	public Room(){
@@ -24,13 +31,6 @@ public class Room {
 		this.roomNo=roomNo;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id){
-		this.id = id;
-	}
-
 	public String getBuilding() {
 		return building;
 	}

@@ -39,13 +39,7 @@ public class CourseDAOImpl implements CourseDAO{
 		return getSession().createCriteria(Course.class).list();
 	}
 
-	@Override
-	public Course getCourseById(Long id) {
-		return (Course) getSession().createQuery("from Course where id=:id")
-				.setParameter("id", id)
-				.uniqueResult();
-	}
-
+	
 	@Override
 	public void deleteCourse(Course course) {
 		getSession().delete(course);

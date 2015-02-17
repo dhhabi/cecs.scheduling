@@ -96,7 +96,7 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 	}
 	
 	private void initEditorForm() {
-		editorLayout.addComponent(new Label("Edit selected course: "));	
+		editorLayout.addComponent(new Label("Note* You can not edit Prefix and Course No once added !"));	
 		
 		prefixField.setWidth("300px");
 		prefixField.setValidationVisible(false);
@@ -177,6 +177,9 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 				boxUnits.setValue(3);
 				activityBox.setValue(AvailableActivities.NO_ACTIVITY);
 				prefixField.focus();
+				//Enable primary key fields
+				prefixField.setEnabled(true);
+				courseNoField.setEnabled(true);
 			}
 		});
 		
@@ -285,6 +288,9 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 			public void valueChange(ValueChangeEvent event) {
 				if(!updateCourseButton.isVisible())
 					updateCourseButton.setVisible(true);
+				//Disable primary key fields
+				prefixField.setEnabled(false);
+				courseNoField.setEnabled(false);
 				Object itemId = courseList.getValue();
 				if(itemId!=null){
 					prefixField.setValue((String)courseList.getContainerProperty(itemId,PREFIX).getValue());

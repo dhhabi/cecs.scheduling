@@ -93,7 +93,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		Image brandImage = new Image(null, res);*/
 		
 		
-		final Label brandImage = new Label("CECS Classes");
+		final Label brandImage = new Label("CSULB Classes");
 		brandImage.addStyleName(ValoTheme.LABEL_H4);
 		brandImage.addStyleName(ValoTheme.LABEL_NO_MARGIN);
 		//navbar.addComponent(brandImage);
@@ -187,6 +187,13 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.COURSE);				
 			}
 		});
+		menuItemAdminResources.addItem("Rooms", new MenuBar.Command() {
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.ROOMS);				
+			}
+		});
+		
 		
 	}
 	

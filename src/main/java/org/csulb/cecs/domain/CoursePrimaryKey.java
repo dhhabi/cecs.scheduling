@@ -25,7 +25,7 @@ public class CoursePrimaryKey implements Serializable{
 	@Column(name="courseno", nullable=false)
 	@NotEmpty(message="Course No can not be blank.")
 	private String courseNo;
-	
+		
 	@Override
 	public int hashCode(){
 		return new HashCodeBuilder().append(prefix).append(courseNo).toHashCode();
