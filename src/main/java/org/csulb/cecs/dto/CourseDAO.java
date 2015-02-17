@@ -11,4 +11,6 @@ public interface CourseDAO {
 	public List<Course> getAllCourses();
 	public Course getCourseById(Long id);
 	public void deleteCourse(Course course);
+	public boolean isAlreadyExist(String prefix,String courseNo);
+	public List<Course> searchCourse(String serchString);
 }

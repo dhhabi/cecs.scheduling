@@ -6,7 +6,9 @@ import org.csulb.cecs.domain.Course;
 import org.vaadin.spring.mvp.MvpPresenterHandlers;
 
 public interface CoursePresenterHandlers extends MvpPresenterHandlers {
-	public boolean saveCourse(Course course);
-	//public List<Course> getAllCourses();
-	
+	public int saveCourse(Course course);
+	public int updateCourse(Course course);
+	public int removeCourse(Course course);
+	public List<Course> getAllCourse();
+	public List<Course> searchCourse(String serchString);
 }

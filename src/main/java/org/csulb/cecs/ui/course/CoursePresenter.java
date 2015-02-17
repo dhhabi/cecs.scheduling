@@ -1,5 +1,7 @@
 package org.csulb.cecs.ui.course;
 
+import java.util.List;
+
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.ui.ViewToken;
@@ -43,13 +45,58 @@ public class CoursePresenter extends AbstractMvpPresenterView<CoursePresenter.Co
 	}
 
 	@Override
-	public boolean saveCourse(Course course) {
+	public int saveCourse(Course course) {
 		try{
-		courseDAO.addCourse(course);
-		return true;
+			if(!courseDAO.isAlreadyExist(course.getPrefix(), course.getCourseNo()))
+				courseDAO.addCourse(course);
+			else
+				return 0;
+		}catch(HibernateException he){
+			//he.printStackTrace();
+			return 2;
+		}
+		return 1;
+	}
+
+	@Override
+	public int updateCourse(Course course) {
+		try{
+			courseDAO.updateCourse(course);
+		}catch(HibernateException he){
+			//he.printStackTrace();
+			return 2;
+		}
+		return 1;
+	}
+
+	@Override
+	public int removeCourse(Course course) {
+		try{
+			courseDAO.deleteCourse(course);
+		}catch(HibernateException he){
+			//he.printStackTrace();
+			return 2;
+		}
+		return 1;
+	}
+
+	@Override
+	public List<Course> getAllCourse() {
+		try{
+			return courseDAO.getAllCourses();
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return false;
+			return null;
+		}
+	}
+
+	@Override
+	public List<Course> searchCourse(String serchString) {
+		try{
+			return courseDAO.searchCourse(serchString);
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return null;
 		}
 	}
 

@@ -89,7 +89,7 @@
 			<groupId>org.vaadin.spring</groupId>
 			<artifactId>spring-vaadin-sidebar</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.vaadin.spring</groupId>
 			<artifactId>spring-vaadin-mvp</artifactId>
@@ -135,6 +135,20 @@
 			<artifactId>jetty-jndi</artifactId>
 			<version>8.1.15.v20140411</version>
 		</dependency>
+
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+  			<artifactId>commons-lang3</artifactId>
+  			<version>3.3.2</version>
+		</dependency>
+		
+		<!-- Paged Table addon -->
+		<dependency>
+   <groupId>org.vaadin.addons</groupId>
+   <artifactId>pagedtable</artifactId>
+   <version>0.6.5</version>
+	</dependency>
 
 	</dependencies>
 
@@ -294,6 +308,7 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+				
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

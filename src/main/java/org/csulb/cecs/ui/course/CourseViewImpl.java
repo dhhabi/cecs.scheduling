@@ -3,13 +3,14 @@ package org.csulb.cecs.ui.course;
 import org.csulb.cecs.domain.AvailableActivities;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.ui.course.CoursePresenter.CourseView;
-import org.hibernate.HibernateException;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -33,16 +34,32 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 
 	private CoursePresenterHandlers mvpPresenterHandlers;
 	
+	private static final String PREFIX = "Prefix";
+	private static final String COURSENO = "Course No.";
+	private static final String TITLE = "Course Title";
+	private static final String UNITS = "Units";
+	private static final String ACTIVITY = "Activity";
+	
+	
 	 private Table courseList = new Table();
+	 //private PagedTable courseList = new PagedTable();
      private TextField searchField = new TextField();
      private Button addNewCourseButton = new Button("New");
-     private Button removeCourseButton = new Button("Remove this Course");
-     private Button addCourseButton = new Button("Add Course");
+     private Button updateCourseButton = new Button("Update");
+     private Button addCourseButton = new Button("Add");
+     private Button buttonLoadAllCourses = new Button("Load All");
+     private Button searchButton = new Button("Search");
      private FormLayout editorLayout = new FormLayout();
-     private FieldGroup editorFields = new FieldGroup();
      private VerticalLayout leftLayout = new VerticalLayout();
      private HorizontalLayout bottomLeftLayout = new HorizontalLayout();
-	
+    
+     TextField prefixField = new TextField("Prefix");
+     TextField courseNoField = new TextField("Course No.");
+     ComboBox activityBox = new ComboBox("Activity");
+     TextField fieldTitle = new TextField("Title");
+     ComboBox boxUnits = new ComboBox("Units");
+     
+     	
 	private BeanFieldGroup<Course> binder = new BeanFieldGroup<Course>(Course.class);
 	
 	@Override
@@ -55,16 +72,23 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		setCompositionRoot(panel);
 		HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
 		panel.setContent(horizontalSplitPanel);
-		leftLayout.addComponent(courseList);
-		leftLayout.addComponent(bottomLeftLayout);
+		
 		bottomLeftLayout.addComponent(searchField);
+		bottomLeftLayout.addComponent(searchButton);
 		searchField.setWidth("100%");
+		bottomLeftLayout.addComponent(buttonLoadAllCourses);
 		bottomLeftLayout.addComponent(addNewCourseButton);
 		bottomLeftLayout.setExpandRatio(searchField, 1);
+		searchField.setInputPrompt("Type and click search to find a course");
 		bottomLeftLayout.setWidth("100%");
 		bottomLeftLayout.setComponentAlignment(addNewCourseButton, Alignment.MIDDLE_RIGHT);
+		
+		leftLayout.addComponent(bottomLeftLayout);
+		//leftLayout.addComponent(courseList.createControls());
+		leftLayout.addComponent(courseList);
+		
+		
 		horizontalSplitPanel.setFirstComponent(leftLayout);
-		courseList.setWidth("100%");
 		horizontalSplitPanel.setSecondComponent(editorLayout);
 		editorLayout.setMargin(true);
 		initCourseList();
@@ -73,42 +97,141 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 	
 	private void initEditorForm() {
 		editorLayout.addComponent(new Label("Edit selected course: "));	
-		TextField prefixField = new TextField("Prefix");
+		
 		prefixField.setWidth("300px");
 		prefixField.setValidationVisible(false);
 		prefixField.setNullRepresentation("");
 		prefixField.setInputPrompt("Course Prefix");
 		
-		TextField courseNoField = new TextField("Course No.");
+		
 		courseNoField.setWidth("300px");
 		courseNoField.setValidationVisible(false);
 		courseNoField.setNullRepresentation("");
 		courseNoField.setInputPrompt("Course Number");
-		ComboBox activityBox = new ComboBox("Activity");
-		activityBox.addItem(AvailableActivities.NO_ACTIVITY);
-		activityBox.addItem(AvailableActivities.LAB_ACTIVITY);
-		activityBox.addItem(AvailableActivities.DISCUSSION_ACTIVITY);
+		
+		fieldTitle.setWidth("350px");
+		fieldTitle.setValidationVisible(false);
+		fieldTitle.setNullRepresentation("");
+		fieldTitle.setInputPrompt("Title of the course");
+		
+		for(int i=0;i<10;i++)
+			boxUnits.addItem(i);
+		boxUnits.setNullSelectionAllowed(false);
+		boxUnits.setValidationVisible(false);
+		
+		
+		for(String activity:AvailableActivities.activities){
+			activityBox.addItem(activity);
+		}
+		activityBox.setNullSelectionAllowed(false);
+		activityBox.setValidationVisible(false);
 		activityBox.select(AvailableActivities.NO_ACTIVITY);
+		
 		editorLayout.addComponent(prefixField);
 		editorLayout.addComponent(courseNoField);
+		editorLayout.addComponent(fieldTitle);
+		editorLayout.addComponent(boxUnits);
 		editorLayout.addComponent(activityBox);
-		editorLayout.addComponent(addCourseButton);
 		
-		addCourseButton.addClickListener(new ClickListener() {
-			
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.addComponent(addCourseButton);
+		buttons.addComponent(updateCourseButton);
+		buttons.setMargin(true);
+	
+				
+		editorLayout.addComponent(buttons);
+		
+		updateCourseButton.setVisible(false);
+		updateCourseButton.addClickListener(new ClickListener() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void buttonClick(ClickEvent event) {
 				try {
 					binder.commit();
 					Course course = binder.getItemDataSource().getBean();
-					if(mvpPresenterHandlers.saveCourse(course))
-						Notification.show("Course Added Successfully");
-					else
-						Notification.show("Something went wrong!");
+					int status = mvpPresenterHandlers.updateCourse(course);
+					if(status==1){
+						Notification.show("Course Updated Successfully", Notification.TYPE_TRAY_NOTIFICATION);				
+						Object itemId = courseList.getValue();
+						if(itemId!=null){
+							updateCourseList(course, itemId);
+						}
+					}else if(status==2){
+						Notification.show("Database Exception occure please see the log !", Notification.TYPE_TRAY_NOTIFICATION);
+					}
 				} catch (CommitException e) {
+					showValidations();
 					e.printStackTrace();
-				} catch(HibernateException e){
+				}			
+			}
+		});
+		
+		
+		addNewCourseButton.addClickListener(new ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				prefixField.setValue("");
+				courseNoField.setValue("");
+				fieldTitle.setValue("");
+				boxUnits.setValue(3);
+				activityBox.setValue(AvailableActivities.NO_ACTIVITY);
+				prefixField.focus();
+			}
+		});
+		
+		addCourseButton.addClickListener(new ClickListener() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void buttonClick(ClickEvent event) {
+				try {
+					binder.commit();
+					Course course = binder.getItemDataSource().getBean();
+					int status = mvpPresenterHandlers.saveCourse(course);
+					if(status==1){
+						Notification.show("Course Added Successfully", Notification.TYPE_TRAY_NOTIFICATION);				
+						addCourseToList(course);
+					}else if(status==0){
+						Notification.show("Already Exists !","A course is already exists with this information", Notification.TYPE_TRAY_NOTIFICATION);						
+					}else if(status==2){
+						Notification.show("Database Exception occure please see the log !", Notification.TYPE_TRAY_NOTIFICATION);
+					}
+				} catch (CommitException e) {
+					showValidations();
 					e.printStackTrace();
+				}
+			}
+		});
+		
+		buttonLoadAllCourses.addClickListener(new ClickListener() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if(courseList.removeAllItems()){
+					if(mvpPresenterHandlers.getAllCourse()!=null){
+						for(Course course:mvpPresenterHandlers.getAllCourse())
+							addCourseToList(course);
+					}
+				}else{
+					Notification.show("Something went wrong please see the log",Notification.TYPE_TRAY_NOTIFICATION);
+				}
+			}
+		});
+		
+		searchButton.addClickListener(new ClickListener() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if(courseList.removeAllItems()){
+					if(mvpPresenterHandlers.getAllCourse()!=null){
+						for(Course course:mvpPresenterHandlers.searchCourse(searchField.getValue()))
+							addCourseToList(course);
+					}
+				}else{
+					Notification.show("Something went wrong please see the log",Notification.TYPE_TRAY_NOTIFICATION);
 				}
 			}
 		});
@@ -116,6 +239,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		binder.bind(prefixField, "prefix");
 		binder.bind(courseNoField, "courseNo");
 		binder.bind(activityBox, "activity");
+		binder.bind(boxUnits, "units");
+		binder.bind(fieldTitle, "title");
 	}
 
 	@Override
@@ -143,10 +268,66 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 	}
 	
 	private void initCourseList(){
-		courseList.addContainerProperty("Id", Long.class, null);
-		courseList.addContainerProperty("Prefix", String.class, null);
-		courseList.addContainerProperty("Course No.", String.class, null);
-		courseList.addContainerProperty("Activity", String.class, null);
+		courseList.addContainerProperty(PREFIX, String.class, null);
+		courseList.addContainerProperty(COURSENO, String.class, null);
+		courseList.addContainerProperty(TITLE, String.class, null);
+		courseList.addContainerProperty(UNITS, Integer.class, null);
+		courseList.addContainerProperty(ACTIVITY, String.class, null);
+		courseList.setSelectable(true);
+		courseList.setNullSelectionItemId("");
+		courseList.setImmediate(true);
+		courseList.setHeightUndefined();
+		courseList.setWidth("100%");
+				
+				
+		courseList.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if(!updateCourseButton.isVisible())
+					updateCourseButton.setVisible(true);
+				Object itemId = courseList.getValue();
+				if(itemId!=null){
+					prefixField.setValue((String)courseList.getContainerProperty(itemId,PREFIX).getValue());
+					courseNoField.setValue((String)courseList.getContainerProperty(itemId, COURSENO).getValue());
+					activityBox.setValue((String)courseList.getContainerProperty(itemId, ACTIVITY).getValue());
+					fieldTitle.setValue((String)courseList.getContainerProperty(itemId, TITLE).getValue());
+					boxUnits.setValue(courseList.getContainerProperty(itemId, UNITS).getValue());
+				}
+				
+			}
+		});
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void addCourseToList(Course course){
+		Object itemId = courseList.addItem();
+		Item row = courseList.getItem(itemId);
+		row.getItemProperty(PREFIX).setValue(course.getPrefix());
+		row.getItemProperty(COURSENO).setValue(course.getCourseNo());
+		row.getItemProperty(TITLE).setValue(course.getTitle());
+		row.getItemProperty(UNITS).setValue(course.getUnits());
+		row.getItemProperty(ACTIVITY).setValue(course.getActivity());
+		courseList.select(itemId);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void updateCourseList(Course course, Object itemId){
+		Item row = courseList.getItem(itemId);
+		row.getItemProperty(PREFIX).setValue(course.getPrefix());
+		row.getItemProperty(COURSENO).setValue(course.getCourseNo());
+		row.getItemProperty(TITLE).setValue(course.getTitle());
+		row.getItemProperty(UNITS).setValue(course.getUnits());
+		row.getItemProperty(ACTIVITY).setValue(course.getActivity());
+		courseList.select(itemId);
+	}
+	
+	private void showValidations(){
+		activityBox.setValidationVisible(true);
+		prefixField.setValidationVisible(true);
+		courseNoField.setValidationVisible(true);
+		fieldTitle.setValidationVisible(true);
+		boxUnits.setValidationVisible(true);
+	}
+	
 		
 }
