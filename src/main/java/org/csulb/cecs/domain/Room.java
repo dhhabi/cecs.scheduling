@@ -10,6 +10,19 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @IdClass(RoomPrimaryKey.class)
 public class Room {
+	
+	public Room(){
+		
+	}
+	public Room(String type){
+		this.type=type;
+	}
+
+	public Room(String building,String roomNo){
+		this.building=building;
+		this.roomNo=roomNo;
+	}
+	
 	@Id
 	@Column(name="building", nullable=false)
 	@NotEmpty(message="Building can not be blank")
@@ -20,16 +33,10 @@ public class Room {
 	@Column(name="roomno", nullable=false)
 	private String roomNo;
 	
+	@Column(name="type", columnDefinition = "varchar(255) default 'none'")
 	@NotEmpty(message="Type can not be blank")
 	private String type;
 	
-	public Room(){
-		
-	}
-	public Room(String building,String roomNo){
-		this.building=building;
-		this.roomNo=roomNo;
-	}
 	
 	public String getBuilding() {
 		return building;

@@ -1,44 +1,27 @@
 package org.csulb.cecs.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-public class Lab {
+public class Lab extends Room{
 	
-	@Id
-	@GeneratedValue
-	private Long id;
-	private String building;
-	private String roomNo;
+	public Lab(){
+		super("none");
+	}
+	
+	@Column(name="labtype", nullable=false, columnDefinition = "varchar(255) default 'none'")
+	@NotEmpty(message="Lab type can not be empty.")
 	private String labType;
-	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getBuilding() {
-		return building;
-	}
-	public void setBuilding(String building) {
-		this.building = building;
-	}
-	public String getRoomNo() {
-		return roomNo;
-	}
-	public void setRoomNo(String roomNo) {
-		this.roomNo = roomNo;
-	}
+
 	public String getLabType() {
 		return labType;
 	}
+
 	public void setLabType(String labType) {
 		this.labType = labType;
 	}
-	
 	
 }

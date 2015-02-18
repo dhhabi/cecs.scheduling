@@ -14,12 +14,6 @@ public interface RoomType extends Serializable {
 	public static final String LARGE = "Large";
 	public static final String SMALL = "Small";
 	
-	public static final String[] rooms ={LAB_ROOM
-		,LECTURE_ROOM
-		,DISCUSSION_ROOM
-		,BALL_ROOM
-		,HALL_ROOM
-		,LARGE
-		,SMALL};
+	public static final String[] rooms ={LARGE, SMALL};
 	
 }

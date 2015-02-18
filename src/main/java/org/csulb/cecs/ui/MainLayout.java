@@ -193,6 +193,12 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.ROOMS);				
 			}
 		});
+		menuItemAdminResources.addItem("Labs", new MenuBar.Command() {
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.LABS);				
+			}
+		});
 		
 		
 	}

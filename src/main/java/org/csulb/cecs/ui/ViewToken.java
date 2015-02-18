@@ -20,8 +20,10 @@ public interface ViewToken extends Serializable {
 	public static final String SURVEYREQUEST="/surveyRequest";
 	public static final String COURSE="/course";
 	public static final String ROOMS="/rooms";	
+	public static final String LABS="/labs";
 	
 	public static final List<String> VALID_TOKENS = Arrays.asList(new String[] {HOME, USER, ADMIN, ADMIN_HIDDEN, SIGNIN, SIGNUP,SURVEY,SURVEYREQUEST, 
-			COURSE,ROOMS
+			COURSE,ROOMS,
+			LABS
 			});		
 }
