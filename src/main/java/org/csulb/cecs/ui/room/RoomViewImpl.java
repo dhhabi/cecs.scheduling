@@ -17,6 +17,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -37,9 +38,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	
 	private static final String BUILDING = "Building";
 	private static final String ROOMNO = "Room No.";
-	private static final String TYPE = "Type";
-	
-	
+	private static final String TYPE = "Room Type";
+	private static final String IS_SMALL = "Is Small?";
 	
 	 private Table roomList = new Table();
 	 //private PagedTable roomList = new PagedTable();
@@ -56,7 +56,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      TextField fieldBuilding = new TextField(BUILDING);
      TextField fieldRoomNo = new TextField(ROOMNO);
      ComboBox boxType = new ComboBox(TYPE);
-          
+     CheckBox boxIsSmall = new CheckBox(IS_SMALL);
      	
 	private BeanFieldGroup<Room> binder = new BeanFieldGroup<Room>(Room.class);
 	
@@ -107,9 +107,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fieldRoomNo.setNullRepresentation("");
 		fieldRoomNo.setInputPrompt("Room Number");
 		
-		
-				
-		
 		for(String room:RoomType.rooms){
 			boxType.addItem(room);
 		}
@@ -121,6 +118,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		editorLayout.addComponent(fieldRoomNo);
 		editorLayout.addComponent(boxType);
 		boxType.select(RoomType.LECTURE_ROOM);
+		editorLayout.addComponent(boxIsSmall);
+		
 		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addRoomButton);
@@ -146,7 +145,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 							updateCourseList(room, itemId);
 						}
 					}else if(status==2){
-						Notification.show("Database Exception occure please see the log !", Notification.TYPE_TRAY_NOTIFICATION);
+						Notification.show("Database Exception occured please see the log !", Notification.TYPE_TRAY_NOTIFICATION);
 					}
 				} catch (CommitException e) {
 					showValidations();
@@ -228,7 +227,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		
 		binder.bind(fieldBuilding, "building");
 		binder.bind(fieldRoomNo, "roomNo");
-		binder.bind(boxType, "type");
+		binder.bind(boxType, "roomType");
+		binder.bind(boxIsSmall, "small");
 		
 	}
 
@@ -291,7 +291,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		Item row = roomList.getItem(itemId);
 		row.getItemProperty(BUILDING).setValue(room.getBuilding());
 		row.getItemProperty(ROOMNO).setValue(room.getRoomNo());
-		row.getItemProperty(TYPE).setValue(room.getType());
+		row.getItemProperty(TYPE).setValue(room.getRoomType());
 		
 		
 		roomList.select(itemId);
@@ -302,7 +302,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		Item row = roomList.getItem(itemId);
 		row.getItemProperty(BUILDING).setValue(room.getBuilding());
 		row.getItemProperty(ROOMNO).setValue(room.getRoomNo());
-		row.getItemProperty(TYPE).setValue(room.getType());
+		row.getItemProperty(TYPE).setValue(room.getRoomType());
 		roomList.select(itemId);
 	}
 	

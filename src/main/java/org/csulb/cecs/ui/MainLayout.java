@@ -167,13 +167,8 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		});
 				
 		MenuItem menuItemAdmin = menuBar.addItem("Admin", null);
-		menuItemAdmin.addItem("Add Instructor", new MenuBar.Command() {
-			@Override
-			public void menuSelected(MenuItem selectedItem) {
-				UI.getCurrent().getNavigator().navigateTo(ViewToken.SIGNUP);				
-			}
-		});
-		menuItemAdmin.addItem("Request Survey", new MenuBar.Command() {	
+		
+		menuItemAdmin.addItem("Initiate Scheduling", new MenuBar.Command() {	
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.SURVEYREQUEST);				
@@ -181,6 +176,13 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 		});
 		//Resource admin menuitem
 		MenuItem menuItemAdminResources = menuItemAdmin.addItem("Resources", null);
+		menuItemAdminResources.addItem("Instructors", new MenuBar.Command() {
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.SIGNUP);				
+			}
+		});
+		
 		menuItemAdminResources.addItem("Courses", new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
@@ -193,12 +195,12 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.ROOMS);				
 			}
 		});
-		menuItemAdminResources.addItem("Labs", new MenuBar.Command() {
+		/*menuItemAdminResources.addItem("Labs", new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.LABS);				
 			}
-		});
+		});*/
 		
 		
 	}

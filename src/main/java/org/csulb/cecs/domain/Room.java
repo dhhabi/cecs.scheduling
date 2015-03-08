@@ -1,7 +1,11 @@
 package org.csulb.cecs.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
@@ -14,8 +18,8 @@ public class Room {
 	public Room(){
 		
 	}
-	public Room(String type){
-		this.type=type;
+	public Room(String roomType){
+		this.roomType=roomType;
 	}
 
 	public Room(String building,String roomNo){
@@ -33,11 +37,41 @@ public class Room {
 	@Column(name="roomno", nullable=false)
 	private String roomNo;
 	
-	@Column(name="type", columnDefinition = "varchar(255) default 'none'")
+	@Column(name="type", columnDefinition = "varchar(255) default 'Medium'")
 	@NotEmpty(message="Type can not be blank")
-	private String type;
+	private String roomType;
 	
 	
+	@Column(name="isavailableallday", nullable=false, columnDefinition="boolean default false")
+	private boolean isAvailableAllDay;
+		
+	@ElementCollection(fetch=FetchType.EAGER)
+	private List<Timing> roomTimings;
+	
+	@Column(name="small",nullable=false,columnDefinition="boolean default false")
+	private boolean small = false;
+	
+	
+	
+		
+	public String getRoomType() {
+		return roomType;
+	}
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
+	}
+	public List<Timing> getRoomTimings() {
+		return roomTimings;
+	}
+	public void setRoomTimings(List<Timing> roomTimings) {
+		this.roomTimings = roomTimings;
+	}
+	public boolean isSmall() {
+		return small;
+	}
+	public void setSmall(boolean small) {
+		this.small = small;
+	}
 	public String getBuilding() {
 		return building;
 	}
@@ -53,16 +87,18 @@ public class Room {
 	public void setRoomNo(String roomNo) {
 		this.roomNo = roomNo;
 	}
-
-	public String getType() {
-		return type;
+	
+	public boolean isAvailableAllDay() {
+		return isAvailableAllDay;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setAvailableAllDay(boolean isAvailableAllDay) {
+		this.isAvailableAllDay = isAvailableAllDay;
 	}
+	
+	
+	
 	@Override
 	public String toString(){
 		return building +" "+roomNo;
 	}
-	
-}
+	}

@@ -37,7 +37,6 @@ public class RoomDAOImpl implements RoomDAO {
 	@Override
 	public List<Room> getAllRooms() {
 		return getSession().createCriteria(Room.class)
-				.add(Restrictions.ne("type", "none"))
 				.list();
 	}
 
@@ -56,10 +55,9 @@ public class RoomDAOImpl implements RoomDAO {
 		String search = "%"+searchString+"%";
 		return getSession().createCriteria(Room.class)
 			    .add( Restrictions.disjunction()
-			    		.add(Restrictions.ne("type", "none"))
 			            .add( Restrictions.ilike("building", search ) )
 			            .add( Restrictions.ilike("roomNo", search ) )
-			            .add( Restrictions.ilike("type", search ) )
+			            .add( Restrictions.ilike("roomType", search ) )
 			        )
 			    .list();
 	}

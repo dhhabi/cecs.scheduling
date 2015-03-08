@@ -1,14 +1,14 @@
 package org.csulb.cecs.domain;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
-@Entity
+//We are not using Lab class for now- islab boolean is added to Room class insted of this 
+//@Entity
 public class Lab extends Room{
 	
 	public Lab(){
+		//Pass roomType as none 
 		super("none");
 	}
 	
