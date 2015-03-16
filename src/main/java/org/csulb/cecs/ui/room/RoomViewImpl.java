@@ -40,8 +40,12 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	private static final String ROOMNO = "Room No.";
 	private static final String TYPE = "Room Type";
 	private static final String IS_SMALL = "Is Small?";
+	private static final String START_TIME = "Start Time";
+	private static final String END_TIME="End Time";
+	private static final String DAY = "Day";
 	
 	 private Table roomList = new Table();
+	 private Table tableTiming = new Table();
 	 //private PagedTable roomList = new PagedTable();
      private TextField searchField = new TextField();
      private Button addNewRoomButton = new Button("New");
@@ -52,7 +56,14 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      private FormLayout editorLayout = new FormLayout();
      private VerticalLayout leftLayout = new VerticalLayout();
      private HorizontalLayout bottomLeftLayout = new HorizontalLayout();
-    
+     private VerticalLayout rightLayout = new VerticalLayout();
+     private HorizontalLayout timingEditLayout = new HorizontalLayout();
+     private VerticalLayout timingLayout = new VerticalLayout();
+     
+     ComboBox boxStartTime = new ComboBox();
+     ComboBox boxEndTime = new ComboBox();
+     Button btnUpdateTiming = new Button("Update Timing");
+     
      TextField fieldBuilding = new TextField(BUILDING);
      TextField fieldRoomNo = new TextField(ROOMNO);
      ComboBox boxType = new ComboBox(TYPE);
@@ -84,13 +95,15 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		leftLayout.addComponent(bottomLeftLayout);
 		//leftLayout.addComponent(roomList.createControls());
 		leftLayout.addComponent(roomList);
-		
+		rightLayout.addComponent(editorLayout);
+		rightLayout.addComponent(timingLayout);
 		
 		horizontalSplitPanel.setFirstComponent(leftLayout);
-		horizontalSplitPanel.setSecondComponent(editorLayout);
+		horizontalSplitPanel.setSecondComponent(rightLayout);
 		editorLayout.setMargin(true);
 		initCourseList();
 		initEditorForm();
+		initTimingLayout();
 	}
 	
 	private void initEditorForm() {
@@ -312,5 +325,25 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fieldRoomNo.setValidationVisible(true);
 	}
 	
+	private void initTimingLayout(){
+		timingEditLayout.addComponent(boxStartTime);
+		timingEditLayout.addComponent(boxEndTime);
+		timingEditLayout.addComponent(btnUpdateTiming);
+		timingEditLayout.setWidth("100%");
+		timingLayout.addComponent(timingEditLayout);
+		//Init timing table 
+		tableTiming.addContainerProperty(DAY, String.class, null);
+		tableTiming.addContainerProperty(START_TIME, String.class, null);
+		tableTiming.addContainerProperty(END_TIME, String.class, null);
+		tableTiming.setSelectable(true);
+		tableTiming.setNullSelectionItemId("");
+		tableTiming.setImmediate(true);
+		tableTiming.setHeightUndefined();
+		tableTiming.setWidth("100%");
+		timingLayout.addComponent(tableTiming);
+		
+		
+		
+	}
 		
 }

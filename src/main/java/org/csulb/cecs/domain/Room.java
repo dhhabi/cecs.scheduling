@@ -1,5 +1,6 @@
 package org.csulb.cecs.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -46,7 +47,7 @@ public class Room {
 	private boolean isAvailableAllDay;
 		
 	@ElementCollection(fetch=FetchType.EAGER)
-	private List<Timing> roomTimings;
+	private final List<DayTime> roomTimings = new ArrayList<DayTime>();
 	
 	@Column(name="small",nullable=false,columnDefinition="boolean default false")
 	private boolean small = false;
@@ -60,11 +61,8 @@ public class Room {
 	public void setRoomType(String roomType) {
 		this.roomType = roomType;
 	}
-	public List<Timing> getRoomTimings() {
+	public List<DayTime> getRoomTimings() {
 		return roomTimings;
-	}
-	public void setRoomTimings(List<Timing> roomTimings) {
-		this.roomTimings = roomTimings;
 	}
 	public boolean isSmall() {
 		return small;

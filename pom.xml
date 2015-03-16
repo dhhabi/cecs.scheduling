@@ -139,16 +139,22 @@
 		<!-- Apache Commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-  			<artifactId>commons-lang3</artifactId>
-  			<version>3.3.2</version>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
 		</dependency>
-		
+
 		<!-- Paged Table addon -->
 		<dependency>
-   <groupId>org.vaadin.addons</groupId>
-   <artifactId>pagedtable</artifactId>
-   <version>0.6.5</version>
-	</dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>pagedtable</artifactId>
+			<version>0.6.5</version>
+		</dependency>
+
+		<!-- Joda Time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 
 	</dependencies>
 
@@ -308,7 +314,7 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-				
+
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
