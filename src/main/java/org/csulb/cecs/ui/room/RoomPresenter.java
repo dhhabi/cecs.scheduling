@@ -3,6 +3,7 @@ package org.csulb.cecs.ui.room;
 import java.util.List;
 
 import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.domain.RoomPrimaryKey;
 import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.ui.ViewToken;
 import org.hibernate.HibernateException;
@@ -108,4 +109,9 @@ public class RoomPresenter extends AbstractMvpPresenterView<RoomPresenter.RoomVi
 		return 1;
 	}
 
+	@Override
+	public Room getRoom(RoomPrimaryKey roomId) {
+		return roomDAO.getRoom(roomId);
+	}
+	
 }

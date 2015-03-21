@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.csulb.cecs.domain.DayTime;
 import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.domain.RoomPrimaryKey;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -67,4 +70,16 @@ public class RoomDAOImpl implements RoomDAO {
 		getSession().delete(room);
 	}
 
+	@Override
+	public Room getRoom(RoomPrimaryKey roomId) {
+		Room room = (Room) getSession().createQuery("from Room where building =:building and roomNo =:roomNo")
+				.setParameter("building", roomId.getBuilding())
+				.setParameter("roomNo", roomId.getRoomNo())
+				.uniqueResult();
+		Hibernate.initialize(room);
+		room.getRoomTimings().size();
+		return room;
+	}
+
+		
 }

@@ -35,26 +35,29 @@ public class Room {
 	
 	@Id
 	@NotEmpty(message="Room No can not be blank")
-	@Column(name="roomno", nullable=false)
+	@Column(name="roomNo", nullable=false)
 	private String roomNo;
 	
 	@Column(name="type", columnDefinition = "varchar(255) default 'Medium'")
 	@NotEmpty(message="Type can not be blank")
 	private String roomType;
-	
-	
-	@Column(name="isavailableallday", nullable=false, columnDefinition="boolean default false")
-	private boolean isAvailableAllDay;
-		
-	@ElementCollection(fetch=FetchType.EAGER)
+			
+	@ElementCollection(fetch=FetchType.LAZY)
 	private final List<DayTime> roomTimings = new ArrayList<DayTime>();
 	
 	@Column(name="small",nullable=false,columnDefinition="boolean default false")
 	private boolean small = false;
 	
+	@Column(name="owned", nullable=false, columnDefinition="boolean default false")
+	private boolean owned = false;
 	
-	
-		
+			
+	public boolean isOwned() {
+		return owned;
+	}
+	public void setOwned(boolean owned) {
+		this.owned = owned;
+	}
 	public String getRoomType() {
 		return roomType;
 	}
@@ -85,16 +88,7 @@ public class Room {
 	public void setRoomNo(String roomNo) {
 		this.roomNo = roomNo;
 	}
-	
-	public boolean isAvailableAllDay() {
-		return isAvailableAllDay;
-	}
-	public void setAvailableAllDay(boolean isAvailableAllDay) {
-		this.isAvailableAllDay = isAvailableAllDay;
-	}
-	
-	
-	
+		
 	@Override
 	public String toString(){
 		return building +" "+roomNo;
