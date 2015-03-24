@@ -1,6 +1,5 @@
 package org.csulb.cecs.ui.room;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.csulb.cecs.domain.AvailableActivities;
@@ -81,7 +80,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      
      ComboBox boxStartTime = new ComboBox();
      ComboBox boxEndTime = new ComboBox();
-     Button btnUpdateTiming = new Button("Update Timing");
+     //Button btnUpdateTiming = new Button("Update Timing");
      
      TextField fieldBuilding = new TextField(BUILDING);
      TextField fieldRoomNo = new TextField(ROOMNO);
@@ -389,7 +388,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		timingEditLayout.addComponent(boxEndTime);
 		boxEndTime.setInputPrompt("End Time");
 		boxEndTime.setWidth("100%");
-		timingEditLayout.addComponent(btnUpdateTiming);
+		//timingEditLayout.addComponent(btnUpdateTiming);
 		timingEditLayout.setWidth("100%");
 		timingLayout.addComponent(timingEditLayout);
 		
@@ -417,7 +416,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			row.getItemProperty(DAY).setValue(day);
 		}
 		
-		btnUpdateTiming.addClickListener(new ClickListener() {
+		/*btnUpdateTiming.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				Object itemId = tableTiming.getValue();
@@ -426,6 +425,32 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
 					row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
 				}
+			}
+		});*/
+		
+		boxStartTime.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				Object itemId = tableTiming.getValue();
+				if(itemId!=null){
+					Item row = tableTiming.getItem(itemId);
+					row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
+					//row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
+				}			
+			}
+		});
+		
+		boxEndTime.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				Object itemId = tableTiming.getValue();
+				if(itemId!=null){
+					Item row = tableTiming.getItem(itemId);
+					//row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
+					row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
+				}				
 			}
 		});
 		
