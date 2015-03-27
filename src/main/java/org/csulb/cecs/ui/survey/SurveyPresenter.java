@@ -1,5 +1,8 @@
 package org.csulb.cecs.ui.survey;
 
+import org.csulb.cecs.domain.Survey;
+import org.csulb.cecs.dto.SurveyDAO;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
@@ -23,6 +26,9 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	Security security;
 	
 	@Autowired
+	private SurveyDAO surveyDAO;
+	
+	@Autowired
 	public SurveyPresenter(SurveyView view, EventBus eventBus) {
 		super(view, eventBus);
 		getView().setPresenterHandlers(this);
@@ -34,14 +40,24 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	}
 
 	@Override
-	public void saveSurvey() {
-		// TODO logic to add servay to database
-		
+	public void enter(ViewChangeEvent arg0) {
+		getView().initView();		
 	}
 
 	@Override
-	public void enter(ViewChangeEvent arg0) {
-		getView().initView();		
+	public boolean saveSurvey(Survey survey) {
+		try{
+			surveyDAO.saveSurvey(survey);
+			return true;
+		}catch(HibernateException ex){
+			ex.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public Survey getSurvey(String surveyId) {
+		return surveyDAO.getSurvey(surveyId);
 	}
 	
 }

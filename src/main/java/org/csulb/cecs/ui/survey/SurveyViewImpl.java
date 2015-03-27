@@ -41,10 +41,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	
 	private VerticalLayout container;
 	private FormLayout form;
-
-	
 	private Label infoLabel;
-	
 	private Button btnSubmit;
 	
 	private BeanFieldGroup<Survey> binder = new BeanFieldGroup<Survey>(Survey.class);
@@ -103,8 +100,10 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	       // name.setValue(sg.nextString(true) + " " + sg.nextString(true));
 	        name.setWidth("50%");
 	        form.addComponent(name);
+	        
+	        
 
-	        DateField birthday = new DateField("Birthday");
+	       /* DateField birthday = new DateField("Birthday");
 	        birthday.setValue(new Date(80, 0, 31));
 	        birthday.setLocale(new Locale("EN"));
 	        form.addComponent(birthday);
@@ -185,7 +184,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 
 	        form.setReadOnly(true);
 	        bio.setReadOnly(true);
-
+*/
 	        
 
 	        HorizontalLayout footer = new HorizontalLayout();
