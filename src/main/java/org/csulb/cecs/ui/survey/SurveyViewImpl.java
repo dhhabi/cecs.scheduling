@@ -1,8 +1,9 @@
 package org.csulb.cecs.ui.survey;
 
 import java.util.Date;
+import java.util.Locale;
 
-import org.csulb.cecs.domain.survey.Survey;
+import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
@@ -105,6 +106,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 
 	        DateField birthday = new DateField("Birthday");
 	        birthday.setValue(new Date(80, 0, 31));
+	        birthday.setLocale(new Locale("EN"));
 	        form.addComponent(birthday);
 
 	        TextField username = new TextField("Username");

@@ -1,6 +1,6 @@
 package org.csulb.cecs.ui.requestsurvey;
 
-import org.csulb.cecs.domain.survey.Survey;
+import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.ui.requestsurvey.SurveyRequestPresenter.SurveyRequestView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;

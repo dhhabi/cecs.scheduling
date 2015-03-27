@@ -168,12 +168,13 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				
 		MenuItem menuItemAdmin = menuBar.addItem("Admin", null);
 		
-		menuItemAdmin.addItem("Initiate Scheduling", new MenuBar.Command() {	
+		menuItemAdmin.addItem("New Scheduling Project", new MenuBar.Command() {	
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
-				UI.getCurrent().getNavigator().navigateTo(ViewToken.SURVEYREQUEST);				
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.PROJECT);				
 			}
 		});
+			
 		//Resource admin menuitem
 		MenuItem menuItemAdminResources = menuItemAdmin.addItem("Resources", null);
 		menuItemAdminResources.addItem("Instructors", new MenuBar.Command() {
