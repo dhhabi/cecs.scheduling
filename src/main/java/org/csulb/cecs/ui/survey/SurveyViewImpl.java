@@ -1,8 +1,5 @@
 package org.csulb.cecs.ui.survey;
 
-import java.util.Date;
-import java.util.Locale;
-
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.vaadin.spring.UIScope;
@@ -11,21 +8,14 @@ import org.vaadin.spring.mvp.view.AbstractMvpView;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.UserError;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
