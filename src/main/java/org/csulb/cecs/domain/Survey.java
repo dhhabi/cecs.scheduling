@@ -27,16 +27,16 @@ public class Survey {
 	@GeneratedValue
 	private Long surveyId; 
 	
-	@NotNull(message="Can not be null")
+	//@NotNull(message="Can not be null")
 	private String instructorEmailId;
 	
-	@NotNull(message="Can not be null")
+	//@NotNull(message="Can not be null")
 	private String semester;
 	
-	@NotNull(message="Can not be null")
+	//@NotNull(message="Can not be null")
 	private String year;
 	
-	@NotNull(message="Can not be null")
+	//@NotNull(message="Can not be null")
 	private int noOfCourseWantToTeach;
 	
 	@ElementCollection
@@ -46,7 +46,7 @@ public class Survey {
 	
 	@ElementCollection
 	@OneToMany
-	private List<Room> prefferredRooms = new ArrayList<Room>();
+	private List<Room> preferredRooms = new ArrayList<Room>();
 	
 	@Lob
 	Table<LocalTime, String, Boolean> availablityTable = HashBasedTable.create();
@@ -72,7 +72,7 @@ public class Survey {
 	}
 
 	public List<Room> getPrefferredRooms() {
-		return prefferredRooms;
+		return preferredRooms;
 	}
 
 	public Table<LocalTime, String, Boolean> getAvailablityTable() {

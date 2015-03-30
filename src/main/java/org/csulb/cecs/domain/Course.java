@@ -64,4 +64,9 @@ public class Course {
 		this.courseNo = courseNo;
 	}	
 	
+	@Override
+	public String toString(){
+		return title + ", "+ prefix +" "+ courseNo;
+	}
+	
 }

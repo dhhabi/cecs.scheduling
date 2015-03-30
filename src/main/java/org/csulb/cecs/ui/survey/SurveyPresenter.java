@@ -1,6 +1,10 @@
 package org.csulb.cecs.ui.survey;
 
+import java.util.List;
+
+import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.Survey;
+import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.dto.SurveyDAO;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,9 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	
 	@Autowired
 	private SurveyDAO surveyDAO;
+	
+	@Autowired
+	private CourseDAO courseDAO;
 	
 	@Autowired
 	public SurveyPresenter(SurveyView view, EventBus eventBus) {
@@ -58,6 +65,16 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	@Override
 	public Survey getSurvey(String surveyId) {
 		return surveyDAO.getSurvey(surveyId);
+	}
+
+	@Override
+	public List<Course> getAllCourses() {
+		try{
+			return courseDAO.getAllCourses();
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return null;
+		}
 	}
 	
 }

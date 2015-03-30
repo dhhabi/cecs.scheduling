@@ -1,11 +1,19 @@
 package org.csulb.cecs.ui.survey;
 
+import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.Day;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
@@ -13,10 +21,13 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -33,6 +44,18 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private FormLayout form;
 	private Label infoLabel;
 	private Button btnSubmit;
+	private HorizontalLayout infoSection;
+	private ComboBox boxAllCourses;
+	private Button btnAddToPreferredCourses;
+	private ListSelect listpreferredCourses;
+	private Button btnRemoveFromPrefrredCourses;
+	private ComboBox boxAllRooms;
+	private Button btnAddToPreferredRooms;
+	private ListSelect listPreferredRooms;
+	private Button btnRemoveFromPrefferedRooms;
+	private Table tableAvailability;
+	
+	DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter();
 	
 	private BeanFieldGroup<Survey> binder = new BeanFieldGroup<Survey>(Survey.class);
 	
@@ -55,14 +78,18 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		container.setSizeUndefined();
 		container.setSpacing(true);
 		layout.addComponent(container);
-		layout.setComponentAlignment(container, Alignment.MIDDLE_CENTER);
-		layout.setExpandRatio(container, 1);
+		//layout.setComponentAlignment(container, Alignment.MIDDLE_CENTER);
+		//layout.setExpandRatio(container, 1);
 						
 		form = new FormLayout();
 		form.setSpacing(true);
 		form.setMargin(false);
-        form.setWidth("800px");
-        form.addStyleName("light");
+        //form.setWidth("800px");
+		infoSection = new HorizontalLayout();
+		infoSection.setMargin(true);
+		infoSection.setSpacing(true);
+		
+		form.addComponent(infoSection);
         container.setSpacing(true);
 		container.setMargin(true);
 		container.addComponent(form);
@@ -80,109 +107,111 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private void buildForm() {
 		
 			
-		 Label section = new Label("Personal Info");
-	        section.addStyleName("h2");
-	        section.addStyleName("colored");
-	        //form.addComponent(section);
-	        //StringGenerator sg = new StringGenerator();
-
-	        TextField name = new TextField("Name");
-	       // name.setValue(sg.nextString(true) + " " + sg.nextString(true));
-	        name.setWidth("50%");
-	        form.addComponent(name);
+		 Label lblInstructorEmailId = new Label("Instructor Email Id");
+		    infoSection.addComponent(lblInstructorEmailId);
 	        
+	        Label lblSemester = new Label("Semester");
+	        infoSection.addComponent(lblSemester);
 	        
-
-	       /* DateField birthday = new DateField("Birthday");
-	        birthday.setValue(new Date(80, 0, 31));
-	        birthday.setLocale(new Locale("EN"));
-	        form.addComponent(birthday);
-
-	        TextField username = new TextField("Username");
-	       // username.setValue(sg.nextString(false) + sg.nextString(false));
-	        username.setRequired(true);
-	        form.addComponent(username);
-
-	        OptionGroup sex = new OptionGroup("Sex");
-	        sex.addItem("Female");
-	        sex.addItem("Male");
-	        sex.select("Male");
-	        sex.addStyleName("horizontal");
-	        form.addComponent(sex);
-
-	        section = new Label("Contact Info");
-	        section.addStyleName("h3");
-	        section.addStyleName("colored");
-	        //form.addComponent(section);
-
-	        TextField email = new TextField("Email");
-	        email.setValue("email id");
-	        //email.setValue(sg.nextString(false) + "@" + sg.nextString(false)  + ".com");
-	        email.setWidth("50%");
-	        email.setRequired(true);
-	        form.addComponent(email);
-
-	        TextField location = new TextField("Location");
-	       // location.setValue(sg.nextString(true) + ", " + sg.nextString(true));
-	        location.setWidth("50%");
-	        location.setComponentError(new UserError("This address doesn't exist"));
-	        form.addComponent(location);
-
-	        TextField phone = new TextField("Phone");
-	        phone.setWidth("50%");
-	        form.addComponent(phone);
-
-	        HorizontalLayout wrap = new HorizontalLayout();
-	        wrap.setSpacing(true);
-	        wrap.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-	        wrap.setCaption("Newsletter");
-	        CheckBox newsletter = new CheckBox("Subscribe to newsletter", true);
-	        wrap.addComponent(newsletter);
-
-	        ComboBox period = new ComboBox();
-	        period.setTextInputAllowed(true);
-	        period.addItem("Daily");
-	        period.addItem("Weekly");
-	        period.addItem("Monthly");
-	        period.setNullSelectionAllowed(false);
-	        period.select("Weekly");
-	        period.addStyleName("small");
-	        period.setWidth("10em");
-	        wrap.addComponent(period);
-	        form.addComponent(wrap);
-
-	        section = new Label("Additional Info");
-	        section.addStyleName("h4");
-	        section.addStyleName("colored");
-	        //form.addComponent(section);
-
-	        TextField website = new TextField("Website");
-	        website.setInputPrompt("http://");
-	        website.setWidth("100%");
-	        form.addComponent(website);
-
-	        TextArea shortbio = new TextArea("Short Bio");
-	        shortbio.setValue("");
-	        shortbio.setWidth("100%");
-	        shortbio.setRows(2);
-	        form.addComponent(shortbio);
-
-	        final RichTextArea bio = new RichTextArea("Bio");
-	        bio.setWidth("100%");
-	        bio.setValue("<div>Use Html here !</div>");
-	        form.addComponent(bio);
-
-	        form.setReadOnly(true);
-	        bio.setReadOnly(true);
-*/
+	        Label lblYear = new Label("Year");
+	        infoSection.addComponent(lblYear);
 	        
+	        form.addComponent(new Label("How many courses you anticipate teaching this semester?"));
+	        ComboBox boxNoOfCoursesWantToTeach = new ComboBox("Courses:");
+	        for(int i=1;i<11;i++)
+	        		boxNoOfCoursesWantToTeach.addItem(i);
+	        
+	        form.addComponent(boxNoOfCoursesWantToTeach);
 
+	        HorizontalLayout allCourseLayout = new HorizontalLayout();
+	        form.addComponent(allCourseLayout);
+	        boxAllCourses = new ComboBox();
+	        boxAllCourses.setNullSelectionAllowed(false);
+	        boxAllCourses.setInputPrompt("Select preferred courses");
+	        boxAllCourses.setWidth("300px");
+	        allCourseLayout.addComponent(boxAllCourses);
+	        
+	        btnAddToPreferredCourses = new Button("Add To Preferred");
+	        allCourseLayout.addComponent(btnAddToPreferredCourses);
+	        
+	        btnAddToPreferredCourses.addClickListener(new ClickListener() {
+				
+				@Override
+				public void buttonClick(ClickEvent event) {
+					// TODO add to preferred course listener
+					listpreferredCourses.addItem(boxAllCourses.getValue());
+					
+				}
+			});
+	        
+	        listpreferredCourses = new ListSelect("Preffered Courses");
+	        listpreferredCourses.setNullSelectionAllowed(false);
+	        listpreferredCourses.setWidth("300px");
+	        listpreferredCourses.setHeight("100px");
+	        form.addComponent(listpreferredCourses);
+	        
+	        btnRemoveFromPrefrredCourses = new Button("Remove from Preferred Courses");
+	        form.addComponent(btnRemoveFromPrefrredCourses);
+	        	        
+	        btnRemoveFromPrefrredCourses.addClickListener(new ClickListener() {
+				
+				@Override
+				public void buttonClick(ClickEvent event) {
+					// TODO remove frm preff list
+					listpreferredCourses.removeItem(listpreferredCourses.getValue());					
+				}
+			});
+	        
+	        HorizontalLayout preferredRoomslayout = new HorizontalLayout();
+	        boxAllRooms = new ComboBox();
+	        boxAllRooms.setWidth("300px");
+	        boxAllRooms.setInputPrompt("Select preferred rooms");
+	        boxAllRooms.setNullSelectionAllowed(false);
+	        preferredRoomslayout.addComponent(boxAllRooms);
+	        
+	        btnAddToPreferredRooms = new Button("Add to preferred rooms");
+	        preferredRoomslayout.addComponent(btnAddToPreferredRooms);
+	        btnAddToPreferredRooms.addClickListener(new ClickListener() {
+				
+				@Override
+				public void buttonClick(ClickEvent event) {
+					listPreferredRooms.addItem(boxAllRooms.getValue());					
+				}
+			});
+	        form.addComponent(preferredRoomslayout);
+	        
+	        listPreferredRooms  = new ListSelect("Preferred Rooms");
+	        listPreferredRooms.setNullSelectionAllowed(false);
+	        listPreferredRooms.setWidth("300px");
+	        listPreferredRooms.setHeight("100px");
+	        form.addComponent(listPreferredRooms);
+	        
+	        btnRemoveFromPrefferedRooms = new Button("Remove from preferred rooms");
+	        form.addComponent(btnRemoveFromPrefferedRooms);
+	        btnRemoveFromPrefferedRooms.addClickListener(new ClickListener() {
+				
+				@Override
+				public void buttonClick(ClickEvent event) {
+					listPreferredRooms.removeItem(listPreferredRooms.getValue());				
+				}
+			});
+	        
+	        form.addComponent(new Label("Availablity : Block the time (Check the box) when you are not available!"));
+	        
+	        tableAvailability = new Table();
+	        initTableAvailability();
+	        form.addComponent(tableAvailability);
+	        
 	        HorizontalLayout footer = new HorizontalLayout();
 	        footer.setMargin(new MarginInfo(true, false, true, false));
 	        footer.setSpacing(true);
 	        footer.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 	        form.addComponent(footer);
-	        		
+	        
+	        binder.bind(boxNoOfCoursesWantToTeach, "noOfCourseWantToTeach");
+	        //binder.bind(listpreferredCourses, "preferredCourses");
+	        //binder.bind(listPreferredRooms, "preferredRooms");
+	        
 	}
 
 	@Override
@@ -199,8 +228,22 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
-		
+		//TODO populate all course
+		 if(surveyPresenterHandlers.getAllCourses()!=null){
+				for(Course course:surveyPresenterHandlers.getAllCourses()){
+					boxAllCourses.addItem(course);
+				}					
+			}
+		 //value change listener for all course
+		 boxAllCourses.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				//TODO all course value change		
+				
+			}
+		});
+		 
 	}
 
 	@Override
@@ -208,5 +251,30 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void initTableAvailability(){
+		//tableAvailability.addContainerProperty("Time", LocalTime.class, null);
+		for(Day day:Day.values())
+			tableAvailability.addContainerProperty(day, CheckBox.class, null);
+	
+		
+		//int i=0;
+		LocalTime time = LocalTime.parse("08:00 AM", parseFormat);
+		
+		while(time.isBefore(LocalTime.parse("11:00 PM",parseFormat))){
+			Object itemId = tableAvailability.addItem();
+			Item row = tableAvailability.getItem(itemId);
+			for(Object column:row.getItemPropertyIds()){
+				CheckBox box = new CheckBox(time.toString(parseFormat));
+				box.setData(time);
+				row.getItemProperty(column).setValue(box);
+			}
+			time = time.plusMinutes(30);
+		}
+			
+	}
+	
+	
 
 }
