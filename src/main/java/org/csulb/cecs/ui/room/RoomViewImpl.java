@@ -3,7 +3,7 @@ package org.csulb.cecs.ui.room;
 import java.util.List;
 
 import org.csulb.cecs.domain.AvailableActivities;
-import org.csulb.cecs.domain.DayTime;
+import org.csulb.cecs.domain.Interval;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.RoomPrimaryKey;
 import org.csulb.cecs.domain.RoomType;
@@ -341,7 +341,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					boxIsOwned.setValue((Boolean)roomList.getContainerProperty(itemId, IS_OWNED).getValue());
 					Room room = mvpPresenterHandlers.getRoom(new RoomPrimaryKey((String)roomList.getContainerProperty(itemId,BUILDING).getValue(), (String)roomList.getContainerProperty(itemId, ROOMNO).getValue()));
 					int timingRowId = 1;
-					for(DayTime dayTime: room.getRoomTimings()){
+					for(Interval dayTime: room.getRoomTimings()){
 						tableTiming.getItem(timingRowId).getItemProperty(START_TIME).setValue(dayTime.getStartTime().toString(parseFormat));
 						tableTiming.getItem(timingRowId).getItemProperty(END_TIME).setValue(dayTime.getEndTime().toString(parseFormat));
 						timingRowId++;
@@ -470,14 +470,14 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		
 	}
 	
-	private void getRoomTimingFromTable(List<DayTime> roomTimingsList){
+	private void getRoomTimingFromTable(List<Interval> roomTimingsList){
 		if(roomTimingsList.size()>0){
 			roomTimingsList.clear();
 		}
 		Item row;
 		for(Object itemId:tableTiming.getItemIds()){
 			row = tableTiming.getItem(itemId);
-			DayTime dayTime = new DayTime();
+			Interval dayTime = new Interval();
 			dayTime.setStartTime(LocalTime.parse((String)row.getItemProperty(START_TIME).getValue(), parseFormat));
 			dayTime.setEndTime(LocalTime.parse((String)row.getItemProperty(END_TIME).getValue(),parseFormat));
 			roomTimingsList.add(dayTime);

@@ -3,7 +3,7 @@ package org.csulb.cecs.dto;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
-import org.csulb.cecs.domain.DayTime;
+import org.csulb.cecs.domain.Interval;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.RoomPrimaryKey;
 import org.hibernate.HibernateException;

@@ -43,7 +43,7 @@ public class Room {
 	private String roomType;
 			
 	@ElementCollection(fetch=FetchType.LAZY)
-	private final List<DayTime> roomTimings = new ArrayList<DayTime>();
+	private final List<Interval> roomTimings = new ArrayList<Interval>();
 	
 	@Column(name="small",nullable=false,columnDefinition="boolean default false")
 	private boolean small = false;
@@ -64,7 +64,7 @@ public class Room {
 	public void setRoomType(String roomType) {
 		this.roomType = roomType;
 	}
-	public List<DayTime> getRoomTimings() {
+	public List<Interval> getRoomTimings() {
 		return roomTimings;
 	}
 	public boolean isSmall() {

@@ -32,7 +32,7 @@ public class Section {
 	private Room labRoom;
 	
 		
-	private DayTime timing;
+	private Interval timing;
 	
 	public String getSemester() {
 		return semester;
@@ -82,11 +82,11 @@ public class Section {
 		this.labRoom = labRoom;
 	}
 
-	public DayTime getTiming() {
+	public Interval getTiming() {
 		return timing;
 	}
 
-	public void setTiming(DayTime timing) {
+	public void setTiming(Interval timing) {
 		this.timing = timing;
 	}
 

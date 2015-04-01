@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.csulb.cecs.domain.DayTime;
+import org.csulb.cecs.domain.Interval;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.RoomPrimaryKey;
 import org.hibernate.Hibernate;

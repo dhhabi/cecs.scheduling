@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import org.joda.time.LocalTime;
 
 @Embeddable
-public class DayTime {
+public class Interval {
 	
 	private LocalTime startTime;
 	private LocalTime endTime;
