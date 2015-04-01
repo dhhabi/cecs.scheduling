@@ -36,7 +36,7 @@ public class MainUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-    	setLocale(new Locale.Builder().setLanguage("sr").setScript("Latn").setRegion("RS").build());
+    	//setLocale(new Locale.Builder().setLanguage("sr").setScript("Latn").setRegion("RS").build());
     	
     	SecuredNavigator securedNavigator = new SecuredNavigator(MainUI.this, mainLayout, springViewProvider, security, eventBus);
         securedNavigator.addViewChangeListener(mainLayout);

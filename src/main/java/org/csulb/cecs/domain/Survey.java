@@ -27,13 +27,13 @@ public class Survey {
 	@GeneratedValue
 	private Long surveyId; 
 	
-	//@NotNull(message="Can not be null")
+	@NotNull(message="Can not be null")
 	private String instructorEmailId;
 	
-	//@NotNull(message="Can not be null")
+	@NotNull(message="Can not be null")
 	private String semester;
 	
-	//@NotNull(message="Can not be null")
+	@NotNull(message="Can not be null")
 	private String year;
 	
 	//@NotNull(message="Can not be null")
@@ -41,15 +41,19 @@ public class Survey {
 	
 	@ElementCollection
 	@OneToMany
-	private List<Course> preferredCourses = new ArrayList<Course>();
+	private final List<Course> preferredCourses = new ArrayList<Course>();
 	
 	
 	@ElementCollection
 	@OneToMany
-	private List<Room> preferredRooms = new ArrayList<Room>();
+	private final List<Room> preferredRooms = new ArrayList<Room>();
 	
 	@Lob
-	Table<LocalTime, String, Boolean> availablityTable = HashBasedTable.create();
+	private Table<LocalTime, String, Boolean> availablityTable;
+	
+	public Survey(){
+		this.availablityTable = HashBasedTable.create();
+	}
 
 	public String getInstructorEmailId() {
 		return instructorEmailId;

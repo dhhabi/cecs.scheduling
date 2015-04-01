@@ -3,12 +3,15 @@ package org.csulb.cecs.ui.survey;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.dto.CourseDAO;
+import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.dto.SurveyDAO;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.mvp.MvpHasPresenterHandlers;
@@ -36,19 +39,23 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	private CourseDAO courseDAO;
 	
 	@Autowired
+	private RoomDAO roomDAO;
+	
+	@Autowired
 	public SurveyPresenter(SurveyView view, EventBus eventBus) {
 		super(view, eventBus);
 		getView().setPresenterHandlers(this);
 	}
 
 	public interface SurveyView extends MvpView, MvpHasPresenterHandlers<SurveyPresenterHandlers> {
-		void initView();
+		void initView(String instructorId);
 		void setErrorMessage(String message);
 	}
 
 	@Override
 	public void enter(ViewChangeEvent arg0) {
-		getView().initView();		
+		Authentication a = security.getAuthentication();
+		getView().initView(a.getName());		
 	}
 
 	@Override
@@ -71,6 +78,16 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	public List<Course> getAllCourses() {
 		try{
 			return courseDAO.getAllCourses();
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<Room> getAllRooms() {
+		try{
+			return roomDAO.getAllRooms();
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return null;

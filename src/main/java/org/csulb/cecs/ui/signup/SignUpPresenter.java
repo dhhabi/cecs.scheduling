@@ -19,7 +19,7 @@ import com.vaadin.ui.Notification;
 
 @SuppressWarnings("serial")
 @UIScope
-@Secured({"ROLE_ADMIN"})
+//Secured({"ROLE_ADMIN"})
 @VaadinView(name=ViewToken.SIGNUP)
 public class SignUpPresenter extends AbstractMvpPresenterView<SignUpPresenter.SignUpView> implements SignUpPresenterHandlers {
 

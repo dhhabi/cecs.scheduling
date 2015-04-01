@@ -1,5 +1,6 @@
 package org.csulb.cecs.ui.room;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.csulb.cecs.domain.Room;
@@ -84,7 +85,7 @@ public class RoomPresenter extends AbstractMvpPresenterView<RoomPresenter.RoomVi
 			return roomDAO.getAllRooms();
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return null;
+			return new ArrayList<Room>();
 		}
 	}
 
@@ -94,7 +95,7 @@ public class RoomPresenter extends AbstractMvpPresenterView<RoomPresenter.RoomVi
 			return roomDAO.searchRoom(serchString);
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return null;
+			return new ArrayList<Room>();
 		}
 	}
 

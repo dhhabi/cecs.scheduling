@@ -2,6 +2,8 @@ package org.csulb.cecs.ui.survey;
 
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.Day;
+import org.csulb.cecs.domain.Days;
+import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.joda.time.LocalTime;
@@ -11,10 +13,12 @@ import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -27,6 +31,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -54,6 +59,9 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private ListSelect listPreferredRooms;
 	private Button btnRemoveFromPrefferedRooms;
 	private Table tableAvailability;
+	private Label lblSemester;
+	private Label lblYear;
+	private Label lblInstructorEmailId;
 	
 	DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter();
 	
@@ -107,13 +115,16 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private void buildForm() {
 		
 			
-		 Label lblInstructorEmailId = new Label("Instructor Email Id");
-		    infoSection.addComponent(lblInstructorEmailId);
+		 	lblInstructorEmailId = new Label("");
+		    infoSection.addComponent(new Label(" Instructor Email Id: "));
+		 	infoSection.addComponent(lblInstructorEmailId);
 	        
-	        Label lblSemester = new Label("Semester");
+	        lblSemester = new Label("");
+	        infoSection.addComponent(new Label(" Semester: "));
 	        infoSection.addComponent(lblSemester);
 	        
-	        Label lblYear = new Label("Year");
+	        lblYear = new Label("");
+	        infoSection.addComponent(new Label(" Year: "));
 	        infoSection.addComponent(lblYear);
 	        
 	        form.addComponent(new Label("How many courses you anticipate teaching this semester?"));
@@ -209,6 +220,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        form.addComponent(footer);
 	        
 	        binder.bind(boxNoOfCoursesWantToTeach, "noOfCourseWantToTeach");
+	        
 	        //binder.bind(listpreferredCourses, "preferredCourses");
 	        //binder.bind(listPreferredRooms, "preferredRooms");
 	        
@@ -216,7 +228,19 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 
 	@Override
 	public void buttonClick(ClickEvent event) {
-		// TODO Auto-generated method stub
+		try {
+			binder.commit();
+			Survey survey = binder.getItemDataSource().getBean();
+			
+			
+			//Get available time and initialize the table property 
+			getAvailablity(survey.getAvailablityTable());
+			
+			
+		} catch (CommitException e) {
+			Notification.show("Please correct the entered values!");
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -227,23 +251,25 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	}
 
 	@Override
-	public void initView() {
+	public void initView(String instructorId) {
+		lblInstructorEmailId.setValue(instructorId);
+		Survey survey = new Survey();
+		binder.setItemDataSource(survey);
+		
 		//TODO populate all course
 		 if(surveyPresenterHandlers.getAllCourses()!=null){
 				for(Course course:surveyPresenterHandlers.getAllCourses()){
 					boxAllCourses.addItem(course);
 				}					
 			}
-		 //value change listener for all course
-		 boxAllCourses.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				//TODO all course value change		
-				
-			}
-		});
 		 
+		//TODO populate all rooms
+		 if(surveyPresenterHandlers.getAllRooms()!=null){
+				for(Room room:surveyPresenterHandlers.getAllRooms()){
+					boxAllRooms.addItem(room);
+				}					
+			}
+				 
 	}
 
 	@Override
@@ -255,10 +281,8 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	@SuppressWarnings("unchecked")
 	public void initTableAvailability(){
 		//tableAvailability.addContainerProperty("Time", LocalTime.class, null);
-		for(Day day:Day.values())
-			tableAvailability.addContainerProperty(day, CheckBox.class, null);
-	
-		
+		for(String day:Days.daysOfTheWeek)
+			tableAvailability.addContainerProperty(day, CheckBox.class, null);		
 		//int i=0;
 		LocalTime time = LocalTime.parse("08:00 AM", parseFormat);
 		
@@ -274,7 +298,15 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		}
 			
 	}
-	
-	
+		
+	private void getAvailablity(com.google.common.collect.Table<LocalTime, String, Boolean> availablityTable){
+		for(Object itemId:tableAvailability.getItemIds()){
+			Item row = tableAvailability.getItem(itemId);
+			for(Object columnId:row.getItemPropertyIds()){
+				CheckBox timeBox = (CheckBox)row.getItemProperty(columnId).getValue();
+				availablityTable.put((LocalTime)timeBox.getData(), (String)columnId, timeBox.getValue());
+			}
+		}
+	}
 
 }

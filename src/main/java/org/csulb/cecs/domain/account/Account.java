@@ -15,8 +15,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "account")
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Account {
 	
 	public Account(){
@@ -45,17 +43,6 @@ public class Account {
 	@Column(name = "role", nullable = false)
 	private String role;
 	
-	@Column(name = "disabled")
-	private boolean disabled = false;
-
-	public boolean isDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-	}
-
 	public Account(String username, String password, String firstName, String lastName, String role) {
 		this.username = username;
 		this.password = password;
