@@ -1,5 +1,6 @@
 package org.csulb.cecs.ui.survey;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
@@ -22,6 +23,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -65,6 +67,12 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private Label lblSemester;
 	private Label lblYear;
 	private Label lblInstructorEmailId;
+	
+	final BeanItemContainer<Course> allCourseContainer =  new BeanItemContainer<Course>(Course.class);
+	final BeanItemContainer<Room> allRoomsContainer = new BeanItemContainer<Room>(Room.class);
+	
+	final BeanItemContainer<Course> preferredCourseContainer =  new BeanItemContainer<Course>(Course.class);
+	final BeanItemContainer<Room> preferredRoomsContainer = new BeanItemContainer<Room>(Room.class);
 	
 	DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter();
 	
@@ -143,7 +151,9 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        HorizontalLayout allCourseLayout = new HorizontalLayout();
 	        form.addComponent(allCourseLayout);
 	        boxAllCourses = new ComboBox();
+	        boxAllCourses.setContainerDataSource(allCourseContainer);	        
 	        boxAllCourses.setNullSelectionAllowed(false);
+	       // boxAllCourses.setItemCaptionPropertyId("title");
 	        boxAllCourses.setInputPrompt("Select preferred courses");
 	        boxAllCourses.setWidth("300px");
 	        allCourseLayout.addComponent(boxAllCourses);
@@ -156,12 +166,12 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				@Override
 				public void buttonClick(ClickEvent event) {
 					// TODO add to preferred course listener
-					listpreferredCourses.addItem(boxAllCourses.getItem(boxAllCourses.getValue()));
-					
+					//listpreferredCourses.addItem((Course)boxAllCourses.getItem(boxAllCourses.getValue()));
+					preferredCourseContainer.addItem(allCourseContainer.getItem(boxAllCourses.getValue()).getBean());
 				}
 			});
 	        
-	        listpreferredCourses = new ListSelect("Preffered Courses");
+	        listpreferredCourses = new ListSelect("Preffered Courses",preferredCourseContainer);
 	        listpreferredCourses.setNullSelectionAllowed(false);
 	        listpreferredCourses.setWidth("300px");
 	        listpreferredCourses.setHeight("100px");
@@ -181,6 +191,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        
 	        HorizontalLayout preferredRoomslayout = new HorizontalLayout();
 	        boxAllRooms = new ComboBox();
+	        boxAllRooms.setContainerDataSource(allRoomsContainer);
 	        boxAllRooms.setWidth("300px");
 	        boxAllRooms.setInputPrompt("Select preferred rooms");
 	        boxAllRooms.setNullSelectionAllowed(false);
@@ -192,12 +203,13 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				
 				@Override
 				public void buttonClick(ClickEvent event) {
-					listPreferredRooms.addItem(boxAllRooms.getItem(boxAllRooms.getValue()));					
+					//listPreferredRooms.addItem((Room)boxAllRooms.getItem(boxAllRooms.getValue()));					
+					preferredRoomsContainer.addItem(allRoomsContainer.getItem(boxAllRooms.getValue()).getBean());
 				}
 			});
 	        form.addComponent(preferredRoomslayout);
 	        
-	        listPreferredRooms  = new ListSelect("Preferred Rooms");
+	        listPreferredRooms  = new ListSelect("Preferred Rooms",preferredRoomsContainer);
 	        listPreferredRooms.setNullSelectionAllowed(false);
 	        listPreferredRooms.setWidth("300px");
 	        listPreferredRooms.setHeight("100px");
@@ -279,16 +291,18 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		binder.setItemDataSource(survey);
 		
 		//TODO populate all course
+		boxAllCourses.removeAllItems();
 		 if(surveyPresenterHandlers.getAllCourses()!=null){
 				for(Course course:surveyPresenterHandlers.getAllCourses()){
-					boxAllCourses.addItem(course);
+					allCourseContainer.addItem(course);
 				}					
 			}
 		 
 		//TODO populate all rooms
+		 boxAllRooms.removeAllItems();
 		 if(surveyPresenterHandlers.getAllRooms()!=null){
 				for(Room room:surveyPresenterHandlers.getAllRooms()){
-					boxAllRooms.addItem(room);
+					allRoomsContainer.addItem(room);
 				}					
 			}
 				 
@@ -332,14 +346,16 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	}
 
 	private void getPreferredCourse(List<Course> preferredCourses){
+		preferredCourses.removeAll(preferredCourses);
 		for(Object itemId:listpreferredCourses.getItemIds()){
-			preferredCourses.add((Course)listpreferredCourses.getItem(itemId));
+			preferredCourses.add(preferredCourseContainer.getItem(itemId).getBean());
 		}
 	}
 	
 	private void getPreferredRooms(List<Room> preferredRooms){
+		preferredRooms.removeAll(preferredRooms);
 		for(Object itemId:listPreferredRooms.getItemIds()){
-			preferredRooms.add((Room)listPreferredRooms.getItem(itemId));
+			preferredRooms.add(preferredRoomsContainer.getItem(itemId).getBean());
 		}
 	}
 	

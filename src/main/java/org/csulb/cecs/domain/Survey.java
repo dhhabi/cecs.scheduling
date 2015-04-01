@@ -3,12 +3,14 @@ package org.csulb.cecs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -47,7 +49,7 @@ public class Survey {
 	@OneToMany
 	private final List<Room> preferredRooms = new ArrayList<Room>();
 	
-	@Lob
+	@ElementCollection
 	private Table<LocalTime, String, Boolean> availablityTable;
 	
 	public Survey(){
