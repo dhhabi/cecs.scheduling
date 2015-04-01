@@ -14,6 +14,7 @@ import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
+import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
@@ -55,6 +56,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private FormLayout form;
 	private Label infoLabel;
 	private Button btnSubmit;
+	private Button btnUpdate;
 	private HorizontalLayout infoSection;
 	private ComboBox boxAllCourses;
 	private Button btnAddToPreferredCourses;
@@ -116,11 +118,17 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 			
 		buildForm();
 					
+		btnUpdate = new Button("Update", FontAwesome.FLOPPY_O);
 		btnSubmit = new Button("Submit", FontAwesome.FLOPPY_O);
+		
 		btnSubmit.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+		btnUpdate.addStyleName(ValoTheme.BUTTON_FRIENDLY);		
 		btnSubmit.addClickListener(this);
 		container.addComponent(btnSubmit);
+		container.addComponent(btnUpdate);
+		btnUpdate.setVisible(false);
 		container.setComponentAlignment(btnSubmit, Alignment.MIDDLE_CENTER);
+		container.setComponentAlignment(btnUpdate, Alignment.MIDDLE_CENTER);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -128,17 +136,17 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		
 			
 		 	lblInstructorEmailId = new Label();
-		    lblInstructorEmailId.setCaption("Instructor Email Id: ");
+		    //lblInstructorEmailId.setCaption("Instructor Email Id: ");
 		 	infoSection.addComponent(lblInstructorEmailId);
 		 	lblInstructorEmailId.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        lblSemester = new Label();
-	        lblSemester.setCaption("Semester: ");
+	        //lblSemester.setCaption("Semester: ");
 	        infoSection.addComponent(lblSemester);
 	        lblSemester.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        lblYear = new Label();
-	        lblYear.setCaption("Year");
+	        //lblYear.setCaption("Year");
 	        infoSection.addComponent(lblYear);
 	        lblYear.setStyleName(ValoTheme.LABEL_H4);
 	        
@@ -261,13 +269,36 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				getPreferredRooms(survey.getPreferredRooms());
 				//Get available time and initialize the table property 
 				getAvailablity(survey.getAvailabilityList());
-				
-				surveyPresenterHandlers.saveSurvey(survey);
-				Notification.show("Survey Added Successfully!", Notification.TYPE_TRAY_NOTIFICATION);
-				
+				if(surveyPresenterHandlers.saveSurvey(survey))
+					Notification.show("Survey Added Successfully!", Notification.TYPE_TRAY_NOTIFICATION);
+				else
+					Notification.show("Something went wronge please correct the data");
 			}else{
 				//TODO survey already exists 
-				Notification.show("Survey Already Exists!");
+				Notification.show("Survey Already Exists! Click!",Notification.TYPE_TRAY_NOTIFICATION);
+				btnUpdate.setVisible(true);
+				btnUpdate.addClickListener(new ClickListener() {
+					@Override
+					public void buttonClick(ClickEvent event) {
+						Survey survey = binder.getItemDataSource().getBean();
+						survey.setInstructorEmailId(lblInstructorEmailId.getValue());
+						survey.setSemester(lblSemester.getValue());
+						survey.setYear(lblYear.getValue());
+						//Set survey Id so it can update based on it
+						survey.setSurveyId(surveyPresenterHandlers.getSurveyId(survey.getInstructorEmailId(), survey.getSemester(), survey.getYear()));
+						//TODO get preferred Courses
+						getPreferredCourse(survey.getPreferredCourses());
+						//TODO get preferred Rooms
+						getPreferredRooms(survey.getPreferredRooms());
+						//Get available time and initialize the table property 
+						getAvailablity(survey.getAvailabilityList());
+						if(surveyPresenterHandlers.updateSurvey(survey))
+							Notification.show("Survey Updated Successfully!",Notification.TYPE_TRAY_NOTIFICATION);
+						else
+							Notification.show("Something went wronge please correct the data");
+					}
+				});
+				
 			}			
 						
 		} catch (CommitException e) {

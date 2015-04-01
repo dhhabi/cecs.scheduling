@@ -111,5 +111,16 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 			String year) {
 		return surveyDAO.getSurveyId(instructorEmailId, semester, year);
 	}
+
+	@Override
+	public boolean updateSurvey(Survey survey) {
+		try{
+			surveyDAO.updateSurvey(survey);
+			return true;
+		}catch(HibernateException ex){
+			ex.printStackTrace();
+			return false;
+		}
+	}
 	
 }

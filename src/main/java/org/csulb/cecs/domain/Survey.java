@@ -48,6 +48,11 @@ public class Survey {
 	public Survey(){
 		
 	}
+	
+	
+	public void setSurveyId(Long surveyId) {
+		this.surveyId = surveyId;
+	}
 
 	public String getInstructorEmailId() {
 		return instructorEmailId;

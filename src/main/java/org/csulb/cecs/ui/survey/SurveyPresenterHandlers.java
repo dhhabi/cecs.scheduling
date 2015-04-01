@@ -14,4 +14,5 @@ public interface SurveyPresenterHandlers extends MvpPresenterHandlers {
 	public List<Room> getAllRooms();
 	boolean isSurveyAlreadyExist(String instructorEmailId, String semester, String year);
 	Long getSurveyId(String instructorEmailId, String semester, String year);
+	public boolean updateSurvey(Survey survey);
 }

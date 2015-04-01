@@ -54,7 +54,17 @@ public class SurveyDAOImpl implements SurveyDAO{
 	@Override
 	public Long getSurveyId(String instructorEmailId, String semester,
 			String year) {
-		return (Long) getSession().createQuery("select surveyId from Survey s where s.instructorEmailId =:instructorEmailId and s.semester =:semester and s.year=:year").uniqueResult();
+		return (Long) getSession().createQuery("select surveyId from Survey s where s.instructorEmailId =:instructorEmailId and s.semester =:semester and s.year=:year")
+				.setParameter("instructorEmailId", instructorEmailId)
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.uniqueResult();
+	}
+
+
+	@Override
+	public void updateSurvey(Survey survey) {
+		getSession().update(survey);		
 	}
 
 }
