@@ -1,5 +1,6 @@
 package org.csulb.cecs.domain.account;
 
+import org.csulb.cecs.domain.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

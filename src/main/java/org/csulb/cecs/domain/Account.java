@@ -1,4 +1,4 @@
-package org.csulb.cecs.domain.account;
+package org.csulb.cecs.domain;
 /**
  * 
  */
@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
 	
 	public Account(){
@@ -22,7 +23,7 @@ public class Account {
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 	

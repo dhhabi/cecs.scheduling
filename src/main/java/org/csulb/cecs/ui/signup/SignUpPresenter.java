@@ -1,6 +1,6 @@
 package org.csulb.cecs.ui.signup;
 
-import org.csulb.cecs.domain.account.Account;
+import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.account.AccountRepository;
 import org.csulb.cecs.domain.account.UsernameAlreadyInUseException;
 import org.csulb.cecs.ui.ViewToken;

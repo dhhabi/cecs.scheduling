@@ -1,6 +1,6 @@
 package org.csulb.cecs.ui.signup;
 
-import org.csulb.cecs.domain.account.Account;
+import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.ui.signup.SignUpPresenter.SignUpView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;

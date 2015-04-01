@@ -1,6 +1,9 @@
 package org.csulb.cecs.ui.survey;
 
+import java.util.List;
+
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.CurrentSemester;
 import org.csulb.cecs.domain.Day;
 import org.csulb.cecs.domain.Days;
 import org.csulb.cecs.domain.Room;
@@ -115,17 +118,20 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private void buildForm() {
 		
 			
-		 	lblInstructorEmailId = new Label("");
+		 	lblInstructorEmailId = new Label();
 		    infoSection.addComponent(new Label(" Instructor Email Id: "));
 		 	infoSection.addComponent(lblInstructorEmailId);
+		 	lblInstructorEmailId.setStyleName(ValoTheme.LABEL_H4);
 	        
-	        lblSemester = new Label("");
+	        lblSemester = new Label();
 	        infoSection.addComponent(new Label(" Semester: "));
 	        infoSection.addComponent(lblSemester);
+	        lblSemester.setStyleName(ValoTheme.LABEL_H4);
 	        
-	        lblYear = new Label("");
+	        lblYear = new Label();
 	        infoSection.addComponent(new Label(" Year: "));
 	        infoSection.addComponent(lblYear);
+	        lblYear.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        form.addComponent(new Label("How many courses you anticipate teaching this semester?"));
 	        ComboBox boxNoOfCoursesWantToTeach = new ComboBox("Courses:");
@@ -150,7 +156,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				@Override
 				public void buttonClick(ClickEvent event) {
 					// TODO add to preferred course listener
-					listpreferredCourses.addItem(boxAllCourses.getValue());
+					listpreferredCourses.addItem(boxAllCourses.getItem(boxAllCourses.getValue()));
 					
 				}
 			});
@@ -186,7 +192,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				
 				@Override
 				public void buttonClick(ClickEvent event) {
-					listPreferredRooms.addItem(boxAllRooms.getValue());					
+					listPreferredRooms.addItem(boxAllRooms.getItem(boxAllRooms.getValue()));					
 				}
 			});
 	        form.addComponent(preferredRoomslayout);
@@ -220,23 +226,37 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        form.addComponent(footer);
 	        
 	        binder.bind(boxNoOfCoursesWantToTeach, "noOfCourseWantToTeach");
-	        
 	        //binder.bind(listpreferredCourses, "preferredCourses");
 	        //binder.bind(listPreferredRooms, "preferredRooms");
 	        
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void buttonClick(ClickEvent event) {
 		try {
 			binder.commit();
 			Survey survey = binder.getItemDataSource().getBean();
-			
-			
-			//Get available time and initialize the table property 
-			getAvailablity(survey.getAvailablityTable());
-			
-			
+			if(!surveyPresenterHandlers.isSurveyAlreadyExist(lblInstructorEmailId.getValue(), lblSemester.getValue()
+					, lblYear.getValue())){
+				survey.setInstructorEmailId(lblInstructorEmailId.getValue());
+				survey.setSemester(lblSemester.getValue());
+				survey.setYear(lblYear.getValue());
+				//TODO get preferred Courses
+				getPreferredCourse(survey.getPreferredCourses());
+				//TODO get preferred Rooms
+				getPreferredRooms(survey.getPrefferredRooms());
+				//Get available time and initialize the table property 
+				getAvailablity(survey.getAvailablityTable());
+				
+				surveyPresenterHandlers.saveSurvey(survey);
+				Notification.show("Survey Added Successfully!", Notification.TYPE_TRAY_NOTIFICATION);
+				
+			}else{
+				//TODO survey already exists 
+				Notification.show("Survey Already Exists!");
+			}			
+						
 		} catch (CommitException e) {
 			Notification.show("Please correct the entered values!");
 			e.printStackTrace();
@@ -251,8 +271,10 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	}
 
 	@Override
-	public void initView(String instructorId) {
+	public void initView(String instructorId, CurrentSemester currentSemester) {
 		lblInstructorEmailId.setValue(instructorId);
+		lblSemester.setValue(currentSemester.getSemester());
+		lblYear.setValue(currentSemester.getYear());
 		Survey survey = new Survey();
 		binder.setItemDataSource(survey);
 		
@@ -309,4 +331,16 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		}
 	}
 
+	private void getPreferredCourse(List<Course> preferredCourses){
+		for(Object itemId:listpreferredCourses.getItemIds()){
+			preferredCourses.add((Course)listpreferredCourses.getItem(itemId));
+		}
+	}
+	
+	private void getPreferredRooms(List<Room> preferredRooms){
+		for(Object itemId:listPreferredRooms.getItemIds()){
+			preferredRooms.add((Room)listPreferredRooms.getItem(itemId));
+		}
+	}
+	
 }

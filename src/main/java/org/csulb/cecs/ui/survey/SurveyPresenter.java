@@ -3,9 +3,11 @@ package org.csulb.cecs.ui.survey;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.CurrentSemester;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.dto.CourseDAO;
+import org.csulb.cecs.dto.CurrentSemesterDAO;
 import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.dto.SurveyDAO;
 import org.hibernate.HibernateException;
@@ -39,6 +41,9 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	private CourseDAO courseDAO;
 	
 	@Autowired
+	private CurrentSemesterDAO currentSemesterDAO;
+	
+	@Autowired
 	private RoomDAO roomDAO;
 	
 	@Autowired
@@ -48,14 +53,15 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	}
 
 	public interface SurveyView extends MvpView, MvpHasPresenterHandlers<SurveyPresenterHandlers> {
-		void initView(String instructorId);
+		void initView(String instructorId,CurrentSemester currentSemester);
 		void setErrorMessage(String message);
 	}
 
 	@Override
-	public void enter(ViewChangeEvent arg0) {
+	public void enter(ViewChangeEvent event) {
 		Authentication a = security.getAuthentication();
-		getView().initView(a.getName());		
+		
+		getView().initView(a.getName(),currentSemesterDAO.getCurrentSemester());		
 	}
 
 	@Override
@@ -92,6 +98,18 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 			he.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isSurveyAlreadyExist(String instructorEmailId,
+			String semester, String year) {
+		return surveyDAO.isAlreadyExist(instructorEmailId, semester, year);
+	}
+
+	@Override
+	public Long getSurveyId(String instructorEmailId, String semester,
+			String year) {
+		return surveyDAO.getSurveyId(instructorEmailId, semester, year);
 	}
 	
 }

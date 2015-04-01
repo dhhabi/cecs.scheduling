@@ -36,4 +36,22 @@ public class SurveyDAOImpl implements SurveyDAO{
 		return survey;
 	}
 
+
+	@Override
+	public boolean isAlreadyExist(String instructorEmailId, String semester,
+			String year) {
+		return (getSession().createQuery("select 1 from Survey s where s.instructorEmailId =:instructorEmailId and s.semester =:semester and s.year=:year")
+				.setParameter("instructorEmailId", instructorEmailId)
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.uniqueResult() != null);
+	}
+
+
+	@Override
+	public Long getSurveyId(String instructorEmailId, String semester,
+			String year) {
+		return (Long) getSession().createQuery("select surveyId from Survey s where s.instructorEmailId =:instructorEmailId and s.semester =:semester and s.year=:year").uniqueResult();
+	}
+
 }

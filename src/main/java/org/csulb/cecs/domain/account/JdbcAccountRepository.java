@@ -3,6 +3,7 @@ package org.csulb.cecs.domain.account;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.csulb.cecs.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
