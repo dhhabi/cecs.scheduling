@@ -3,23 +3,15 @@ package org.csulb.cecs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import org.joda.time.LocalTime;
-
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import org.hibernate.engine.internal.Cascade;
 
 @Entity
 public class Survey {
@@ -41,19 +33,20 @@ public class Survey {
 	private int noOfCourseWantToTeach;
 	
 	@ElementCollection
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private final List<Course> preferredCourses = new ArrayList<Course>();
 	
 	
 	@ElementCollection
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private final List<Room> preferredRooms = new ArrayList<Room>();
 	
 	@ElementCollection
-	private Table<LocalTime, String, Boolean> availablityTable;
-	
+	@OneToMany(cascade=CascadeType.ALL)
+	private final List<Availability> availabilityList = new ArrayList<Availability>();
+		
 	public Survey(){
-		this.availablityTable = HashBasedTable.create();
+		
 	}
 
 	public String getInstructorEmailId() {
@@ -76,13 +69,14 @@ public class Survey {
 		return preferredCourses;
 	}
 
-	public List<Room> getPrefferredRooms() {
+	public List<Availability> getAvailabilityList() {
+		return availabilityList;
+	}
+
+	public List<Room> getPreferredRooms() {
 		return preferredRooms;
 	}
 
-	public Table<LocalTime, String, Boolean> getAvailablityTable() {
-		return availablityTable;
-	}
 
 	public Long getSurveyId() {
 		return surveyId;

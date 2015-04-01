@@ -32,7 +32,10 @@ public class SurveyDAOImpl implements SurveyDAO{
 				.setParameter("surveyId", surveyId)
 				.uniqueResult();
 		Hibernate.initialize(survey);
-		survey.getAvailablityTable().size();
+		survey.getAvailabilityList().size();
+		survey.getPreferredCourses().size();
+		survey.getPreferredRooms().size();
+		//survey.getAvailablityTable().size();
 		return survey;
 	}
 

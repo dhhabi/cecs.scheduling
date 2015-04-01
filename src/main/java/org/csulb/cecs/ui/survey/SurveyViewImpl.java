@@ -3,6 +3,7 @@ package org.csulb.cecs.ui.survey;
 import java.util.Collection;
 import java.util.List;
 
+import org.csulb.cecs.domain.Availability;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.CurrentSemester;
 import org.csulb.cecs.domain.Day;
@@ -127,17 +128,17 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		
 			
 		 	lblInstructorEmailId = new Label();
-		    infoSection.addComponent(new Label(" Instructor Email Id: "));
+		    lblInstructorEmailId.setCaption("Instructor Email Id: ");
 		 	infoSection.addComponent(lblInstructorEmailId);
 		 	lblInstructorEmailId.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        lblSemester = new Label();
-	        infoSection.addComponent(new Label(" Semester: "));
+	        lblSemester.setCaption("Semester: ");
 	        infoSection.addComponent(lblSemester);
 	        lblSemester.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        lblYear = new Label();
-	        infoSection.addComponent(new Label(" Year: "));
+	        lblYear.setCaption("Year");
 	        infoSection.addComponent(lblYear);
 	        lblYear.setStyleName(ValoTheme.LABEL_H4);
 	        
@@ -225,7 +226,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				}
 			});
 	        
-	        form.addComponent(new Label("Availablity : Block the time (Check the box) when you are not available!"));
+	        form.addComponent(new Label("Availability : Block the time (Check the box) when you are not available!"));
 	        
 	        tableAvailability = new Table();
 	        initTableAvailability();
@@ -257,9 +258,9 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				//TODO get preferred Courses
 				getPreferredCourse(survey.getPreferredCourses());
 				//TODO get preferred Rooms
-				getPreferredRooms(survey.getPrefferredRooms());
+				getPreferredRooms(survey.getPreferredRooms());
 				//Get available time and initialize the table property 
-				getAvailablity(survey.getAvailablityTable());
+				getAvailablity(survey.getAvailabilityList());
 				
 				surveyPresenterHandlers.saveSurvey(survey);
 				Notification.show("Survey Added Successfully!", Notification.TYPE_TRAY_NOTIFICATION);
@@ -335,12 +336,15 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 			
 	}
 		
-	private void getAvailablity(com.google.common.collect.Table<LocalTime, String, Boolean> availablityTable){
+	private void getAvailablity(List<Availability> availablityList){
+		availablityList.removeAll(availablityList);
 		for(Object itemId:tableAvailability.getItemIds()){
 			Item row = tableAvailability.getItem(itemId);
 			for(Object columnId:row.getItemPropertyIds()){
 				CheckBox timeBox = (CheckBox)row.getItemProperty(columnId).getValue();
-				availablityTable.put((LocalTime)timeBox.getData(), (String)columnId, timeBox.getValue());
+				Availability availability = new Availability((String)columnId,(LocalTime)timeBox.getData(),timeBox.getValue());
+				//availablityTable.put((LocalTime)timeBox.getData(), (String)columnId, timeBox.getValue());
+				availablityList.add(availability);
 			}
 		}
 	}
