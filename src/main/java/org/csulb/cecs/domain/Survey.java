@@ -8,6 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -33,12 +34,12 @@ public class Survey {
 	private int noOfCourseWantToTeach;
 	
 	@ElementCollection
-	@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Course> preferredCourses = new ArrayList<Course>();
 	
 	
 	@ElementCollection
-	@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Room> preferredRooms = new ArrayList<Room>();
 	
 	@ElementCollection

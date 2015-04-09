@@ -1,5 +1,7 @@
 package org.csulb.cecs.ui.project;
 
+import javax.naming.NameAlreadyBoundException;
+
 import org.csulb.cecs.ui.project.ProjectPresenter.ProjectView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
@@ -9,6 +11,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
@@ -24,7 +27,7 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 	Panel panel;
 	TabSheet tabSheet = new TabSheet();
 	VerticalLayout layout = new VerticalLayout();
-	HorizontalLayout tabOne = new HorizontalLayout();
+	FormLayout tabNameAndProfessors = new FormLayout();
 	HorizontalLayout tabTwo = new HorizontalLayout();
 	HorizontalLayout tabThree = new HorizontalLayout();
 	Button btnNextTab = new Button("Next");
@@ -40,9 +43,9 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 		
 		layout.addComponent(tabSheet);
 		//Add tabs to tabsheet
-		tabSheet.addTab(tabOne,"Naming");
-		tabSheet.addTab(tabTwo,"TabTwo");
-		tabSheet.addTab(tabThree,"TabThree");
+		tabSheet.addTab(tabNameAndProfessors,"Initialize");
+		tabSheet.addTab(tabTwo,"Courses");
+		tabSheet.addTab(tabThree,"Rooms");
 		
 		btnNextTab.addClickListener(new ClickListener() {
 			
@@ -52,7 +55,6 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 			}
 		});
 		
-		tabOne.addComponent(btnNextTab);
 	}
 	
 	

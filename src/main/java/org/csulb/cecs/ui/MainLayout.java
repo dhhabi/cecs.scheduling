@@ -184,6 +184,13 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 			}
 		});
 		
+		menuItemAdminResources.addItem("Curriculum", new MenuBar.Command() {
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.CURRICULUM);				
+			}
+		});
+		
 		menuItemAdminResources.addItem("Courses", new MenuBar.Command() {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {

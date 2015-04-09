@@ -1,12 +1,10 @@
 package org.csulb.cecs.ui.survey;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.csulb.cecs.domain.Availability;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.CurrentSemester;
-import org.csulb.cecs.domain.Day;
 import org.csulb.cecs.domain.Days;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
@@ -14,15 +12,11 @@ import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
-import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
 
-import com.vaadin.data.Container;
 import com.vaadin.data.Item;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItemContainer;
@@ -70,6 +64,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private Label lblSemester;
 	private Label lblYear;
 	private Label lblInstructorEmailId;
+	private ComboBox boxNoOfCoursesWantToTeach;
 	
 	final BeanItemContainer<Course> allCourseContainer =  new BeanItemContainer<Course>(Course.class);
 	final BeanItemContainer<Room> allRoomsContainer = new BeanItemContainer<Room>(Room.class);
@@ -151,7 +146,8 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        lblYear.setStyleName(ValoTheme.LABEL_H4);
 	        
 	        form.addComponent(new Label("How many courses you anticipate teaching this semester?"));
-	        ComboBox boxNoOfCoursesWantToTeach = new ComboBox("Courses:");
+	        boxNoOfCoursesWantToTeach = new ComboBox("Courses:");
+	        boxNoOfCoursesWantToTeach.setNullSelectionAllowed(false);
 	        for(int i=1;i<11;i++)
 	        		boxNoOfCoursesWantToTeach.addItem(i);
 	        
@@ -321,6 +317,9 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 		lblYear.setValue(currentSemester.getYear());
 		Survey survey = new Survey();
 		binder.setItemDataSource(survey);
+		
+		boxNoOfCoursesWantToTeach.setValue(3);
+		
 		
 		//TODO populate all course
 		boxAllCourses.removeAllItems();
