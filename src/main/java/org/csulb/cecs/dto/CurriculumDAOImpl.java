@@ -1,11 +1,18 @@
 package org.csulb.cecs.dto;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.csulb.cecs.domain.Curriculum;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@Transactional
 public class CurriculumDAOImpl implements CurriculumDAO {
 
 	@Autowired
@@ -35,6 +42,13 @@ public class CurriculumDAOImpl implements CurriculumDAO {
 		Hibernate.initialize(curriculum);
 		curriculum.getCurriculumCourseList().size();
 		return curriculum;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Curriculum> getAllCurriculum() {
+		return getSession().createCriteria(Curriculum.class)
+				.list();
 	}
 
 }

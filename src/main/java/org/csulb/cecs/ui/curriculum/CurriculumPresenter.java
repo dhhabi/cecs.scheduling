@@ -1,9 +1,12 @@
 package org.csulb.cecs.ui.curriculum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.Curriculum;
 import org.csulb.cecs.dto.CourseDAO;
+import org.csulb.cecs.dto.CurriculumDAO;
 import org.csulb.cecs.ui.ViewToken;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class CurriculumPresenter extends AbstractMvpPresenterView<CurriculumPres
 	
 	@Autowired
 	private CourseDAO courseDAO;
+	@Autowired
+	private CurriculumDAO curriculumDAO;
 	
 	@Autowired
 	public CurriculumPresenter(CurriculumView view, EventBus eventBus) {
@@ -49,8 +54,34 @@ public class CurriculumPresenter extends AbstractMvpPresenterView<CurriculumPres
 			return courseDAO.getAllCourses();
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return null;
+			return new ArrayList<Course>();
 		}
+	}
+
+	@Override
+	public List<Curriculum> getAllCurriculum() {
+		try{
+			return curriculumDAO.getAllCurriculum();
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return new ArrayList<Curriculum>();
+		}
+	}
+
+	@Override
+	public boolean saveCurriculum(Curriculum curriculum) {
+		try{
+			curriculumDAO.saveCurriculum(curriculum);
+			return true;
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isAlreadyExist(String curriculumName) {
+		return curriculumDAO.isAlreadyExist(curriculumName);
 	}
 
 }
