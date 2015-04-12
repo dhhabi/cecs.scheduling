@@ -8,6 +8,7 @@ import org.csulb.cecs.domain.CurrentSemester;
 import org.csulb.cecs.domain.Days;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
+import org.csulb.cecs.domain.TwoDayScheduleImportance;
 import org.csulb.cecs.ui.survey.SurveyPresenter.SurveyView;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -65,6 +66,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	private Label lblYear;
 	private Label lblInstructorEmailId;
 	private ComboBox boxNoOfCoursesWantToTeach;
+	private ComboBox boxTwoDayImportance;
 	
 	final BeanItemContainer<Course> allCourseContainer =  new BeanItemContainer<Course>(Course.class);
 	final BeanItemContainer<Room> allRoomsContainer = new BeanItemContainer<Room>(Room.class);
@@ -159,7 +161,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        boxAllCourses.setContainerDataSource(allCourseContainer);	        
 	        boxAllCourses.setNullSelectionAllowed(false);
 	       // boxAllCourses.setItemCaptionPropertyId("title");
-	        boxAllCourses.setInputPrompt("Select preferred courses");
+	        boxAllCourses.setInputPrompt("Select upto 5 preferred courses");
 	        boxAllCourses.setWidth("300px");
 	        allCourseLayout.addComponent(boxAllCourses);
 	        
@@ -172,7 +174,11 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 				public void buttonClick(ClickEvent event) {
 					// TODO add to preferred course listener
 					//listpreferredCourses.addItem((Course)boxAllCourses.getItem(boxAllCourses.getValue()));
-					preferredCourseContainer.addItem(allCourseContainer.getItem(boxAllCourses.getValue()).getBean());
+					if(preferredCourseContainer.size()>4){
+						Notification.show("You can only select 5 courses",Notification.TYPE_WARNING_MESSAGE);
+					}else{
+						preferredCourseContainer.addItem(allCourseContainer.getItem(boxAllCourses.getValue()).getBean());
+					}
 				}
 			});
 	        
@@ -212,16 +218,16 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 					preferredRoomsContainer.addItem(allRoomsContainer.getItem(boxAllRooms.getValue()).getBean());
 				}
 			});
-	        form.addComponent(preferredRoomslayout);
+	       // form.addComponent(preferredRoomslayout);
 	        
 	        listPreferredRooms  = new ListSelect("Preferred Rooms",preferredRoomsContainer);
 	        listPreferredRooms.setNullSelectionAllowed(false);
 	        listPreferredRooms.setWidth("300px");
 	        listPreferredRooms.setHeight("100px");
-	        form.addComponent(listPreferredRooms);
+	       // form.addComponent(listPreferredRooms);
 	        
 	        btnRemoveFromPrefferedRooms = new Button("Remove from preferred rooms");
-	        form.addComponent(btnRemoveFromPrefferedRooms);
+	       // form.addComponent(btnRemoveFromPrefferedRooms);
 	        btnRemoveFromPrefferedRooms.addClickListener(new ClickListener() {
 				
 				@Override
@@ -229,6 +235,13 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 					listPreferredRooms.removeItem(listPreferredRooms.getValue());				
 				}
 			});
+	        
+	        boxTwoDayImportance = new ComboBox();
+	        boxTwoDayImportance.setCaption("How Important is two day schedule?");
+	        boxTwoDayImportance.setNullSelectionAllowed(false);
+	        //boxTwoDayImportance.setWidth("300px");
+	        
+	        form.addComponent(boxTwoDayImportance);
 	        
 	        form.addComponent(new Label("Availability : Block the time (Check the box) when you are not available!"));
 	        
@@ -243,6 +256,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        form.addComponent(footer);
 	        
 	        binder.bind(boxNoOfCoursesWantToTeach, "noOfCourseWantToTeach");
+	        binder.bind(boxTwoDayImportance, "twoDayScheduleImportance");
 	        //binder.bind(listpreferredCourses, "preferredCourses");
 	        //binder.bind(listPreferredRooms, "preferredRooms");
 	        
@@ -330,12 +344,19 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 			}
 		 
 		//TODO populate all rooms
-		 boxAllRooms.removeAllItems();
+		/* boxAllRooms.removeAllItems();
 		 if(surveyPresenterHandlers.getAllRooms()!=null){
 				for(Room room:surveyPresenterHandlers.getAllRooms()){
 					allRoomsContainer.addItem(room);
 				}					
-			}
+			}*/
+		 
+		 //TODO populate Two Day Importance combobox 
+		 boxTwoDayImportance.removeAllItems();
+		 for(TwoDayScheduleImportance tdi : TwoDayScheduleImportance.values()){
+			 boxTwoDayImportance.addItem(tdi);
+		 }
+		 boxTwoDayImportance.select(TwoDayScheduleImportance.NOT_IMPORTANT);
 				 
 	}
 
@@ -348,12 +369,12 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	@SuppressWarnings("unchecked")
 	public void initTableAvailability(){
 		//tableAvailability.addContainerProperty("Time", LocalTime.class, null);
-		for(String day:Days.daysOfTheWeek)
-			tableAvailability.addContainerProperty(day, CheckBox.class, null);		
-		//int i=0;
+		for(String day:Days.daysOfTheWeek){
+			tableAvailability.addContainerProperty(day, CheckBox.class, null);
+		}//int i=0;
 		LocalTime time = LocalTime.parse("08:00 AM", parseFormat);
 		
-		while(time.isBefore(LocalTime.parse("11:00 PM",parseFormat))){
+		while(time.isBefore(LocalTime.parse("10:00 PM",parseFormat))){
 			Object itemId = tableAvailability.addItem();
 			Item row = tableAvailability.getItem(itemId);
 			for(Object column:row.getItemPropertyIds()){

@@ -31,6 +31,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
@@ -61,7 +62,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		"07:00 PM","07:30 PM","08:00 PM","08:30 PM","09:00 PM","09:30 PM","10:00 PM","10:30 PM","11:00 PM","11:30 PM",	};
 	
 	private Table roomList = new Table();
-	private Table tableTiming = new Table();
+	private Table fallTiming = new Table();
+	private Table springTiming = new Table();
 	//private PagedTable roomList = new PagedTable();
     private TextField searchField = new TextField();
      private Button addNewRoomButton = new Button("New");
@@ -80,6 +82,10 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      
      ComboBox boxStartTime = new ComboBox();
      ComboBox boxEndTime = new ComboBox();
+     
+     ComboBox boxStartTimeSpring = new ComboBox();
+     ComboBox bosEndTimeSpring = new ComboBox();
+     OptionGroup timingOptions = new OptionGroup();
      //Button btnUpdateTiming = new Button("Update Timing");
      
      TextField fieldBuilding = new TextField(BUILDING);
@@ -154,6 +160,22 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		editorLayout.addComponent(boxIsSmall);
 		editorLayout.addComponent(boxIsOwned);
 		
+		editorLayout.addComponent(timingOptions);
+		timingOptions.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// TODO timing Value change listener
+				if(timingOptions.getValue().equals("Fall Timing")){
+					springTiming.setVisible(false);
+					fallTiming.setVisible(true);
+				}else{
+					fallTiming.setVisible(false);
+					springTiming.setVisible(true);
+				}
+			}
+		});
+		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addRoomButton);
 		buttons.addComponent(updateRoomButton);
@@ -172,7 +194,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					Room room = binder.getItemDataSource().getBean();
 					//Add timing for room
 					if(!room.isOwned())
-						getRoomTimingFromTable(room.getRoomTimings());
+						getRoomTimingFromTable(room.getFallTimings());
 					
 					int status = mvpPresenterHandlers.updateRoom(room);
 					if(status==1){
@@ -228,7 +250,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					
 					//Add timing for room
 					if(!room.isOwned())
-						getRoomTimingFromTable(room.getRoomTimings());
+						getRoomTimingFromTable(room.getFallTimings());
 					
 					int status = mvpPresenterHandlers.saveRoom(room);
 					if(status==1){
@@ -291,6 +313,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	public void initView() {
 		Room room = new Room();
 		binder.setItemDataSource(room);
+		
+		timingOptions.addItems("Spring Timing","Fall Timing");
 	}
 	
 	@Override
@@ -341,9 +365,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					boxIsOwned.setValue((Boolean)roomList.getContainerProperty(itemId, IS_OWNED).getValue());
 					Room room = mvpPresenterHandlers.getRoom(new RoomPrimaryKey((String)roomList.getContainerProperty(itemId,BUILDING).getValue(), (String)roomList.getContainerProperty(itemId, ROOMNO).getValue()));
 					int timingRowId = 1;
-					for(Interval dayTime: room.getRoomTimings()){
-						tableTiming.getItem(timingRowId).getItemProperty(START_TIME).setValue(dayTime.getStartTime().toString(parseFormat));
-						tableTiming.getItem(timingRowId).getItemProperty(END_TIME).setValue(dayTime.getEndTime().toString(parseFormat));
+					for(Interval dayTime: room.getFallTimings()){
+						fallTiming.getItem(timingRowId).getItemProperty(START_TIME).setValue(dayTime.getStartTime().toString(parseFormat));
+						fallTiming.getItem(timingRowId).getItemProperty(END_TIME).setValue(dayTime.getEndTime().toString(parseFormat));
 						timingRowId++;
 					}
 				}				
@@ -400,28 +424,28 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		}
 		
 		//Init timing table 
-		tableTiming.addContainerProperty(DAY, String.class, null);
-		tableTiming.addContainerProperty(START_TIME, String.class, "12:00 AM");
-		tableTiming.addContainerProperty(END_TIME, String.class, "12:00 PM");
-		tableTiming.setSelectable(true);
-		tableTiming.setNullSelectionItemId("");
-		tableTiming.setImmediate(true);
-		tableTiming.setHeightUndefined();
-		tableTiming.setWidth("100%");
-		timingLayout.addComponent(tableTiming);
+		fallTiming.addContainerProperty(DAY, String.class, null);
+		fallTiming.addContainerProperty(START_TIME, String.class, "12:00 AM");
+		fallTiming.addContainerProperty(END_TIME, String.class, "12:00 PM");
+		fallTiming.setSelectable(true);
+		fallTiming.setNullSelectionItemId("");
+		fallTiming.setImmediate(true);
+		fallTiming.setHeightUndefined();
+		fallTiming.setWidth("100%");
+		timingLayout.addComponent(fallTiming);
 		
 		for(String day:dayList){
-			Object itemId = tableTiming.addItem();
-			Item row = tableTiming.getItem(itemId);
+			Object itemId = fallTiming.addItem();
+			Item row = fallTiming.getItem(itemId);
 			row.getItemProperty(DAY).setValue(day);
 		}
 		
 		/*btnUpdateTiming.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				Object itemId = tableTiming.getValue();
+				Object itemId = fallTiming.getValue();
 				if(itemId!=null){
-					Item row = tableTiming.getItem(itemId);
+					Item row = fallTiming.getItem(itemId);
 					row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
 					row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
 				}
@@ -432,9 +456,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				Object itemId = tableTiming.getValue();
+				Object itemId = fallTiming.getValue();
 				if(itemId!=null){
-					Item row = tableTiming.getItem(itemId);
+					Item row = fallTiming.getItem(itemId);
 					row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
 					//row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
 				}			
@@ -445,22 +469,22 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				Object itemId = tableTiming.getValue();
+				Object itemId = fallTiming.getValue();
 				if(itemId!=null){
-					Item row = tableTiming.getItem(itemId);
+					Item row = fallTiming.getItem(itemId);
 					//row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
 					row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
 				}				
 			}
 		});
 		
-		tableTiming.addValueChangeListener(new ValueChangeListener() {
+		fallTiming.addValueChangeListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				// TODO Table value change
-				Object itemId = tableTiming.getValue();
+				Object itemId = fallTiming.getValue();
 				if(itemId!=null){
-					Item row = tableTiming.getItem(itemId);
+					Item row = fallTiming.getItem(itemId);
 					boxStartTime.select(row.getItemProperty(START_TIME).getValue());
 					boxEndTime.select(row.getItemProperty(END_TIME).getValue());
 				
@@ -475,8 +499,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			roomTimingsList.clear();
 		}
 		Item row;
-		for(Object itemId:tableTiming.getItemIds()){
-			row = tableTiming.getItem(itemId);
+		for(Object itemId:fallTiming.getItemIds()){
+			row = fallTiming.getItem(itemId);
 			Interval dayTime = new Interval();
 			dayTime.setStartTime(LocalTime.parse((String)row.getItemProperty(START_TIME).getValue(), parseFormat));
 			dayTime.setEndTime(LocalTime.parse((String)row.getItemProperty(END_TIME).getValue(),parseFormat));

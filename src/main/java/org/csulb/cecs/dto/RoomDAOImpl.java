@@ -77,7 +77,7 @@ public class RoomDAOImpl implements RoomDAO {
 				.setParameter("roomNo", roomId.getRoomNo())
 				.uniqueResult();
 		Hibernate.initialize(room);
-		room.getRoomTimings().size();
+		room.getFallTimings().size();
 		return room;
 	}
 

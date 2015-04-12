@@ -43,7 +43,10 @@ public class Room {
 	private String roomType;
 			
 	@ElementCollection(fetch=FetchType.LAZY)
-	private final List<Interval> roomTimings = new ArrayList<Interval>();
+	private final List<Interval> fallTimings = new ArrayList<Interval>();
+	
+	@ElementCollection(fetch=FetchType.LAZY)
+	private final List<Interval> springTimings = new ArrayList<Interval>();
 	
 	@Column(name="small",nullable=false,columnDefinition="boolean default false")
 	private boolean small = false;
@@ -64,9 +67,13 @@ public class Room {
 	public void setRoomType(String roomType) {
 		this.roomType = roomType;
 	}
-	public List<Interval> getRoomTimings() {
-		return roomTimings;
+	public List<Interval> getFallTimings() {
+		return fallTimings;
 	}
+	public List<Interval> getSpringTimings(){
+		return springTimings;
+	}
+	
 	public boolean isSmall() {
 		return small;
 	}
