@@ -1,11 +1,17 @@
 package org.csulb.cecs.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
 import org.joda.time.LocalTime;
 
 @Embeddable
-public class Interval {
+public class Interval implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private LocalTime startTime;
 	private LocalTime endTime;

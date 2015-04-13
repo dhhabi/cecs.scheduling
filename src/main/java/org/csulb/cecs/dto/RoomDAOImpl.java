@@ -78,6 +78,7 @@ public class RoomDAOImpl implements RoomDAO {
 				.uniqueResult();
 		Hibernate.initialize(room);
 		room.getFallTimings().size();
+		room.getSpringTimings().size();
 		return room;
 	}
 
