@@ -85,9 +85,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      
      ComboBox boxStartTimeSpring = new ComboBox();
      ComboBox bosEndTimeSpring = new ComboBox();
-     OptionGroup timingOptions = new OptionGroup();
-     //Button btnUpdateTiming = new Button("Update Timing");
-     
+          
      TextField fieldBuilding = new TextField(BUILDING);
      TextField fieldRoomNo = new TextField(ROOMNO);
      ComboBox boxType = new ComboBox(TYPE);
@@ -160,21 +158,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		editorLayout.addComponent(boxIsSmall);
 		editorLayout.addComponent(boxIsOwned);
 		
-		editorLayout.addComponent(timingOptions);
-		timingOptions.addValueChangeListener(new ValueChangeListener() {
-			
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				// TODO timing Value change listener
-				if(timingOptions.getValue().equals("Fall Timing")){
-					springTiming.setVisible(false);
-					fallTiming.setVisible(true);
-				}else{
-					fallTiming.setVisible(false);
-					springTiming.setVisible(true);
-				}
-			}
-		});
 		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addRoomButton);
@@ -191,7 +174,12 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			public void buttonClick(ClickEvent event) {
 				try {
 					binder.commit();
-					Room room = binder.getItemDataSource().getBean();
+					Room room = new Room();
+					room.setBuilding(fieldBuilding.getValue());
+					room.setRoomNo(fieldRoomNo.getValue());
+					room.setOwned(boxIsOwned.getValue());
+					room.setRoomType((String)boxType.getValue());
+					room.setSmall(boxIsSmall.getValue());
 					//Add timing for room
 					if(!room.isOwned())
 						getRoomTimingFromTable(room.getFallTimings());
@@ -246,7 +234,12 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			public void buttonClick(ClickEvent event) {
 				try {
 					binder.commit();
-					Room room = binder.getItemDataSource().getBean();
+					Room room = new Room();
+					room.setBuilding(fieldBuilding.getValue());
+					room.setRoomNo(fieldRoomNo.getValue());
+					room.setOwned(boxIsOwned.getValue());
+					room.setRoomType((String)boxType.getValue());
+					room.setSmall(boxIsSmall.getValue());
 					
 					//Add timing for room
 					if(!room.isOwned())
@@ -314,7 +307,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		Room room = new Room();
 		binder.setItemDataSource(room);
 		
-		timingOptions.addItems("Spring Timing","Fall Timing");
 	}
 	
 	@Override
@@ -439,19 +431,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			Item row = fallTiming.getItem(itemId);
 			row.getItemProperty(DAY).setValue(day);
 		}
-		
-		/*btnUpdateTiming.addClickListener(new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				Object itemId = fallTiming.getValue();
-				if(itemId!=null){
-					Item row = fallTiming.getItem(itemId);
-					row.getItemProperty(START_TIME).setValue(boxStartTime.getValue());
-					row.getItemProperty(END_TIME).setValue(boxEndTime.getValue());
-				}
-			}
-		});*/
-		
+				
 		boxStartTime.addValueChangeListener(new ValueChangeListener() {
 			
 			@Override
