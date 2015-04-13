@@ -219,9 +219,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			public void valueChange(ValueChangeEvent event) {
 				// TODO boxIsOwned listener
 				if(boxIsOwned.getValue())
-					timingLayout.setVisible(false);
+					bottomRightLayout.setVisible(false);
 				else
-					timingLayout.setVisible(true);
+					bottomRightLayout.setVisible(true);
 			}
 		});
 		

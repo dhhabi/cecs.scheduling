@@ -15,6 +15,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -42,6 +43,7 @@ public class CurriculumViewImpl extends AbstractMvpView implements
 	private Button btnSubmit;
 	private Button btnUpdate;
 	private Button btnRemove;
+	private CheckBox boxEssential;
 
 	private BeanFieldGroup<Curriculum> binder = new BeanFieldGroup<Curriculum>(
 			Curriculum.class);
@@ -132,6 +134,8 @@ public class CurriculumViewImpl extends AbstractMvpView implements
 			}
 		});
 		
+		boxEssential = new CheckBox("Is Essential");
+		curriculumForm.addComponent(boxEssential);
 		btnSubmit = new Button("Submit");
 		curriculumForm.addComponent(btnSubmit);
 
@@ -198,7 +202,7 @@ public class CurriculumViewImpl extends AbstractMvpView implements
 		});
 
 		binder.bind(txtName, "name");
-
+		binder.bind(boxEssential, "essential");
 		setSizeFull();
 	}
 

@@ -17,6 +17,8 @@ public class Curriculum {
 	@NotNull(message="Name can not be null!")
 	private String name;
 	
+	private boolean essential;
+	
 	@ElementCollection
 	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Course> curriculumCourseList = new ArrayList<Course>();
@@ -31,6 +33,14 @@ public class Curriculum {
 
 	public List<Course> getCurriculumCourseList() {
 		return curriculumCourseList;
+	}
+
+	public boolean isEssential() {
+		return essential;
+	}
+
+	public void setEssential(boolean essential) {
+		this.essential = essential;
 	} 
 		
 }
