@@ -31,7 +31,6 @@ public class Section {
 	@OneToOne
 	private Room labRoom;
 	
-		
 	private Interval timing;
 	
 	public String getSemester() {

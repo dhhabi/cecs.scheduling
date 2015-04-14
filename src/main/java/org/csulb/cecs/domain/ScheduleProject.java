@@ -1,20 +1,78 @@
 package org.csulb.cecs.domain;
 
-import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
-@Deprecated
-public class ScheduleProject {
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+@Entity
+public class ScheduleProject{
 	
 	@Id
+	@GeneratedValue
 	private Long id;
+
+	private String year;
 	
-	// year and semester 
-	// courses 
-	// instructors
-	// rooms
-	// labs
+	private String semester;
 	
-	// Course Sections
+	@ElementCollection
+	@ManyToMany
+	private final List<Instructor> instructorList = new ArrayList<Instructor>();
+	
+	@ElementCollection
+	@ManyToMany
+	private final List<Course> courseList = new ArrayList<Course>();
+
+	@ElementCollection
+	@ManyToMany
+	private final List<Room> roomList = new ArrayList<Room>();
+	
+	@ElementCollection
+	@OneToMany
+	private final List<Section> sections = new ArrayList<Section>();
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+
+	public List<Instructor> getInstructorList() {
+		return instructorList;
+	}
+
+	public List<Course> getCourseList() {
+		return courseList;
+	}
+
+	public List<Room> getRoomList() {
+		return roomList;
+	}
+
+	public List<Section> getSections() {
+		return sections;
+	}
+	
+	
 	
 	
 }
