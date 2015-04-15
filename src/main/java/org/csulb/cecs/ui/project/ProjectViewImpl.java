@@ -1,6 +1,11 @@
 package org.csulb.cecs.ui.project;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Const;
@@ -9,6 +14,7 @@ import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.ui.project.ProjectPresenter.ProjectView;
+import org.csulb.cecs.utility.SendEmail;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
@@ -125,6 +131,16 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 					getSelectedCoursesAndSections(scheduleProject.getSections(),scheduleProject.getCourseList(), courseContainer);
 					getSelectedRooms(scheduleProject.getRoomList(), roomContainer);
 					
+					InternetAddress[] emailAddresses = new InternetAddress[scheduleProject.getInstructorList().size()];
+					int index = 0;
+					for(Account instructor:scheduleProject.getInstructorList()){
+						InternetAddress address = new InternetAddress(instructor.getUsername());
+						emailAddresses[index] = address;
+					}
+					
+					
+					SendEmail.sendMail(emailAddresses, Const.emailSubject, Const.emailMessage);
+					
 					if(mvpPresenterHandlers.isAlreadyExits(scheduleProject.getSemester(), scheduleProject.getYear())){
 						Notification.show("Schedule Already Exists!",Notification.TYPE_WARNING_MESSAGE);
 						
@@ -139,6 +155,12 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 				} catch (CommitException e) {
 					boxSemester.setValidationVisible(true);
 					boxYear.setValidationVisible(true);
+					e.printStackTrace();
+				} catch (AddressException e) {
+					Notification.show("Email Id of selected Instructor is not valid ",Notification.TYPE_ERROR_MESSAGE);
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					Notification.show("Can not send email to all instructors, Please see the log",Notification.TYPE_ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 				

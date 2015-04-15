@@ -12,5 +12,12 @@ public class Const {
 		"01:30 PM","02:00 PM","02:30 PM","03:00 PM","03:30 PM","04:00 PM","04:30 PM","05:00 PM","05:30 PM","06:00 PM","06:30 PM",
 		"07:00 PM","07:30 PM","08:00 PM","08:30 PM","09:00 PM","09:30 PM","10:00 PM","10:30 PM","11:00 PM","11:30 PM",	};
 	
+	public static final String emailSubject = "Request: Instructor Survey Request";
+	public static final String emailMessage = "Please follow the below Instructions<br>"
+			+ "Login using your username and passsword<br>"
+			+ "Your username is your email id and password is firstName.lastName<br>"
+			+ "Click on User menu<br>"
+			+ "Click on Survey<br>"
+			+ "Fill the survey form and Click Submit";
 
 }
