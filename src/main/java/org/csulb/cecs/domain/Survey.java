@@ -34,16 +34,13 @@ public class Survey {
 	//@NotNull(message="Can not be null")
 	private int noOfCourseWantToTeach;
 	
-	@ElementCollection
 	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Course> preferredCourses = new ArrayList<Course>();
 	
-	
-	@ElementCollection
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Room> preferredRooms = new ArrayList<Room>();
 	
-	@ElementCollection
 	@OneToMany(cascade=CascadeType.ALL)
 	private final List<Availability> availabilityList = new ArrayList<Availability>();
 	

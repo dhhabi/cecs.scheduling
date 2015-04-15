@@ -41,6 +41,15 @@ public class Section {
 			@AttributeOverride(name="endTime",column=@Column(name="labEndTime"))})
 	private Interval labTiming;
 	
+	
+	public Section(){
+		
+	}
+	
+	public Section(Course course){
+		this.course = course;
+	}
+	
 	public Interval getMeetingTiming() {
 		return meetingTiming;
 	}

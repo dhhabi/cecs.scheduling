@@ -7,6 +7,7 @@ import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
+import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.ui.project.ProjectPresenter.ProjectView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
@@ -28,6 +29,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @UIScope
@@ -56,6 +58,7 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 	private static final String EMAILID = "Email";
 	private static final String COURSE = "Course";
 	private static final String ROOM = "Room";
+	private static final String NOOFSECTION = "No of Sections";
 	
 	Container instructorContainer = new IndexedContainer();
 	Container courseContainer = new IndexedContainer();
@@ -115,11 +118,11 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 				// TODO Submit Click
 				try {
 					binder.commit();
-					ScheduleProject scheduleProject = binder.getItemDataSource().getBean();
+					ScheduleProject scheduleProject = new ScheduleProject();
 					scheduleProject.setSemester((String)boxSemester.getValue());
 					scheduleProject.setYear((String)boxYear.getValue());
 					getSelectedInstructors(scheduleProject.getInstructorList(), instructorContainer);
-					getSelectedCourses(scheduleProject.getCourseList(), courseContainer);
+					getSelectedCoursesAndSections(scheduleProject.getSections(),scheduleProject.getCourseList(), courseContainer);
 					getSelectedRooms(scheduleProject.getRoomList(), roomContainer);
 					
 					if(mvpPresenterHandlers.isAlreadyExits(scheduleProject.getSemester(), scheduleProject.getYear())){
@@ -170,6 +173,12 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 			Item row = courseContainer.getItem(itemId);
 			row.getItemProperty(SELECT).setValue(new CheckBox());
 			row.getItemProperty(COURSE).setValue(course);
+			ComboBox noOfSection = new ComboBox();
+			for(int i=1;i<10;i++)
+				noOfSection.addItem(i);
+			
+			noOfSection.select(1);
+			row.getItemProperty(NOOFSECTION).setValue(noOfSection);
 		}
 		//Populate room list
 		roomContainer.removeAllItems();
@@ -208,7 +217,7 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 		tableInstructors.setContainerDataSource(instructorContainer);
 		tableInstructors.setNullSelectionItemId("");
 		tableInstructors.setImmediate(true);
-		tableInstructors.setHeightUndefined();
+		tableInstructors.setHeight("500px");	
 		
 	}
 	
@@ -218,17 +227,18 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 		tableRooms.setContainerDataSource(roomContainer);
 		tableRooms.setNullSelectionItemId("");
 		tableRooms.setImmediate(true);
-		tableRooms.setSizeUndefined();
+		tableRooms.setHeight("500px");	
 	}
 
 
 	private void initCourseTable() {
 		courseContainer.addContainerProperty(SELECT, CheckBox.class, null);
 		courseContainer.addContainerProperty(COURSE, Course.class,null);
+		courseContainer.addContainerProperty(NOOFSECTION, ComboBox.class, null);
 		tableCourses.setContainerDataSource(courseContainer);
 		tableCourses.setNullSelectionItemId("");
 		tableCourses.setImmediate(true);
-		tableCourses.setSizeUndefined();		
+		tableCourses.setHeight("500px");	
 	}
 
 	private void getSelectedInstructors(List<Account> instructorList,Container instructorContainer){
@@ -241,12 +251,17 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 		}
 	}
 	
-	private void getSelectedCourses(List<Course> courseList,Container courseContainer){
+	private void getSelectedCoursesAndSections(List<Section> sectionList,List<Course> courseList,Container courseContainer){
 		//TODO get selected Course
 		for(Object rowId:courseContainer.getItemIds()){
 			Item row = courseContainer.getItem(rowId);
 			if(((CheckBox)row.getItemProperty(SELECT).getValue()).getValue()){
-				courseList.add((Course)row.getItemProperty(COURSE).getValue());
+				Course course = (Course)row.getItemProperty(COURSE).getValue();
+				courseList.add(course);
+				for(int i=0;i<(int)((ComboBox)row.getItemProperty(NOOFSECTION).getValue()).getValue();i++){
+					Section section = new Section(course);
+					sectionList.add(section);
+				}
 			}
 		}
 	}

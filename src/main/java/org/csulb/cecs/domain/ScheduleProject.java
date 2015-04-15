@@ -3,6 +3,7 @@ package org.csulb.cecs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,20 +21,17 @@ public class ScheduleProject{
 	
 	private String semester;
 	
-	@ElementCollection
+
 	@ManyToMany
 	private final List<Account> instructorList = new ArrayList<Account>();
 	
-	@ElementCollection
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Course> courseList = new ArrayList<Course>();
 
-	@ElementCollection
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Room> roomList = new ArrayList<Room>();
 	
-	@ElementCollection
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private final List<Section> sections = new ArrayList<Section>();
 
 	public Long getId() {
