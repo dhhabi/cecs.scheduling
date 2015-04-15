@@ -1,11 +1,16 @@
 package org.csulb.cecs.dto;
 
+import javax.transaction.Transactional;
+
 import org.csulb.cecs.domain.ScheduleProject;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@Transactional
 public class ProjectDAOImpl implements ProjectDAO{
 
 	@Autowired
@@ -26,6 +31,10 @@ public class ProjectDAOImpl implements ProjectDAO{
 				.setParameter("semester", semester)
 				.setParameter("year", year)
 				.uniqueResult();
+		Hibernate.initialize(scheduleProject);
+		scheduleProject.getCourseList().size();
+		scheduleProject.getInstructorList().size();
+		scheduleProject.getRoomList().size();
 		return scheduleProject;
 	}
 
@@ -75,6 +84,14 @@ public class ProjectDAOImpl implements ProjectDAO{
 		Hibernate.initialize(scheduleProject);
 		scheduleProject.getInstructorList().size();
 		return scheduleProject;
+	}
+
+	@Override
+	public boolean isAlreadyExists(String semester, String year) {
+		return (getSession().createQuery("select 1 from ScheduleProject p where p.semester =:semester and p.year =:year")
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.uniqueResult() != null);
 	}
 	
 

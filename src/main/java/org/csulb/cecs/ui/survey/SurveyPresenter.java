@@ -1,13 +1,16 @@
 package org.csulb.cecs.ui.survey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.CurrentSemester;
 import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.dto.CurrentSemesterDAO;
+import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.dto.SurveyDAO;
 import org.hibernate.HibernateException;
@@ -36,15 +39,17 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	
 	@Autowired
 	private SurveyDAO surveyDAO;
-	
-	@Autowired
-	private CourseDAO courseDAO;
-	
+		
 	@Autowired
 	private CurrentSemesterDAO currentSemesterDAO;
 	
 	@Autowired
-	private RoomDAO roomDAO;
+	private ProjectDAO projectDAO;
+	
+	
+	private CurrentSemester getCurrentSemester(){
+		return currentSemesterDAO.getCurrentSemester();
+	}
 	
 	@Autowired
 	public SurveyPresenter(SurveyView view, EventBus eventBus) {
@@ -83,20 +88,22 @@ public class SurveyPresenter extends AbstractMvpPresenterView<SurveyPresenter.Su
 	@Override
 	public List<Course> getAllCourses() {
 		try{
-			return courseDAO.getAllCourses();
+			CurrentSemester currentSemester = getCurrentSemester();
+			return projectDAO.getScheduleProject(currentSemester.getSemester(), currentSemester.getYear()).getCourseList();
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return null;
+			return new ArrayList<Course>();
 		}
 	}
 
 	@Override
 	public List<Room> getAllRooms() {
 		try{
-			return roomDAO.getAllRooms();
+			CurrentSemester currentSemester = getCurrentSemester();
+			return projectDAO.getScheduleProject(currentSemester.getSemester(), currentSemester.getYear()).getRoomList();
 		}catch(HibernateException he){
 			he.printStackTrace();
-			return null;
+			return new ArrayList<Room>();
 		}
 	}
 

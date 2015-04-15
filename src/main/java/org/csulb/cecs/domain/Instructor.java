@@ -32,5 +32,5 @@ public class Instructor extends Account{
 		this.qualificaiton = qualificaiton;
 	}
 	
-	
+		
 }

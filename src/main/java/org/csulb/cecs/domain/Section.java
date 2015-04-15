@@ -1,8 +1,13 @@
 package org.csulb.cecs.domain;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -13,40 +18,47 @@ public class Section {
 	@GeneratedValue
 	private Long sectionId;
 	
-	@NotNull(message="Semester cannot be null")
-	private String semester;
-	
-	@NotNull(message="Year can not be null")
-	private String year;
-	
-	@OneToOne
+	@ManyToOne
 	private Course course;
 	
-	@OneToOne
+	@ManyToOne
 	private Instructor instructor;
 	
-	@OneToOne
+	@ManyToOne
 	private Room meetingRoom;
 	
-	@OneToOne
+	@ManyToOne
 	private Room labRoom;
 	
-	private Interval timing;
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name="startTime",column=@Column(name="meetingStartTime")),
+			@AttributeOverride(name="endTime",column=@Column(name="meetingEndTime"))})
+	private Interval meetingTiming;
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name="startTime",column=@Column(name="labStartTime")),
+			@AttributeOverride(name="endTime",column=@Column(name="labEndTime"))})
+	private Interval labTiming;
 	
-	public String getSemester() {
-		return semester;
+	public Interval getMeetingTiming() {
+		return meetingTiming;
 	}
 
-	public void setSemester(String semester) {
-		this.semester = semester;
+	public void setMeetingTiming(Interval meetingTiming) {
+		this.meetingTiming = meetingTiming;
 	}
 
-	public String getYear() {
-		return year;
+	public Interval getLabTiming() {
+		return labTiming;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setLabTiming(Interval labTiming) {
+		this.labTiming = labTiming;
+	}
+
+	public Long getSectionId() {
+		return sectionId;
 	}
 
 	public Course getCourse() {
@@ -81,12 +93,5 @@ public class Section {
 		this.labRoom = labRoom;
 	}
 
-	public Interval getTiming() {
-		return timing;
-	}
-
-	public void setTiming(Interval timing) {
-		this.timing = timing;
-	}
 
 }

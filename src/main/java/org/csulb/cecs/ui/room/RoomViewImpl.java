@@ -3,6 +3,7 @@ package org.csulb.cecs.ui.room;
 import java.util.List;
 
 import org.csulb.cecs.domain.AvailableActivities;
+import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Interval;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.RoomPrimaryKey;
@@ -52,13 +53,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	private static final String DAY = "Day";
 	private static final String IS_OWNED = "Is Owned";
 	
-	private static final String [] dayList = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
-	
-	private static final String [] timeList = {"12:00 AM","12:30 AM","01:00 AM","01:30 AM","02:00 AM","02:30 AM",
-		"03:00 AM","03:30 AM","04:00 AM","04:30 AM","05:00 AM","05:30 AM","06:00 AM","06:30 AM","07:00 AM","07:30 AM",
-		"08:00 AM","08:30 AM","09:00 AM","09:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","01:00 PM",
-		"01:30 PM","02:00 PM","02:30 PM","03:00 PM","03:30 PM","04:00 PM","04:30 PM","05:00 PM","05:30 PM","06:00 PM","06:30 PM",
-		"07:00 PM","07:30 PM","08:00 PM","08:30 PM","09:00 PM","09:30 PM","10:00 PM","10:30 PM","11:00 PM","11:30 PM",	};
 	
 	private Table roomList = new Table();
 	private Table fallTiming = new Table("Fall Timings");
@@ -431,7 +425,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		timingLayout.addComponent(timingEditLayout);
 		
 		//Populate the start time list
-		for(String time:timeList)
+		for(String time:Const.timeList)
 		{
 			boxStartTime.addItem(time);
 			boxEndTime.addItem(time);
@@ -448,7 +442,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fallTiming.setWidth("100%");
 		timingLayout.addComponent(fallTiming);
 		
-		for(String day:dayList){
+		for(String day:Const.dayList){
 			Object itemId = fallTiming.addItem();
 			Item row = fallTiming.getItem(itemId);
 			row.getItemProperty(DAY).setValue(day);
@@ -525,7 +519,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		timingLayoutSpring.addComponent(timingEditLayoutSpring);
 		
 		//Populate the start time list
-		for(String time:timeList)
+		for(String time:Const.timeList)
 		{
 			boxStartTimeSpring.addItem(time);
 			boxEndTimeSpring.addItem(time);
@@ -542,7 +536,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		springTiming.setWidth("100%");
 		timingLayoutSpring.addComponent(springTiming);
 		
-		for(String day:dayList){
+		for(String day:Const.dayList){
 			Object itemId = springTiming.addItem();
 			Item row = springTiming.getItem(itemId);
 			row.getItemProperty(DAY).setValue(day);

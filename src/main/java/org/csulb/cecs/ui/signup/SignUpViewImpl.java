@@ -89,14 +89,20 @@ public class SignUpViewImpl extends AbstractMvpView implements SignUpView, Click
 		binder.setItemDataSource(account);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void buttonClick(ClickEvent event) {
 		try {
 			binder.commit();
 			Account account = binder.getItemDataSource().getBean();
 			boolean success = mvpPresenterHandlers.tryCreateAccount(account);				
-			if(success)
-				Notification.show("User Added Successfully");
+			if(success){
+				Notification.show("User Added Successfully",Notification.TYPE_TRAY_NOTIFICATION);
+				username.setValue("");
+				password.setValue("");
+				firstName.setValue("");
+				lastName.setValue("");
+			}
 		} catch (CommitException e) {
 			username.setValidationVisible(true);
 			password.setValidationVisible(true);

@@ -100,5 +100,8 @@ public class Account {
 		this.id = id;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return firstName +" "+lastName;
+	}
 }

@@ -9,4 +9,6 @@ public interface ProjectDAO {
 	public ScheduleProject getScheduleProjectWithRoomListInit(String semester, String year);
 	public ScheduleProject getScheduleProjectWithSectionListInit(String semester, String year);
 	public ScheduleProject getScheduleProjectWithInstructorListInit(String semester, String year);
+	public boolean isAlreadyExists(String semester,String year);
+	
 }

@@ -22,7 +22,7 @@ public class ScheduleProject{
 	
 	@ElementCollection
 	@ManyToMany
-	private final List<Instructor> instructorList = new ArrayList<Instructor>();
+	private final List<Account> instructorList = new ArrayList<Account>();
 	
 	@ElementCollection
 	@ManyToMany
@@ -56,7 +56,7 @@ public class ScheduleProject{
 		this.semester = semester;
 	}
 
-	public List<Instructor> getInstructorList() {
+	public List<Account> getInstructorList() {
 		return instructorList;
 	}
 

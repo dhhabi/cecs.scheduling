@@ -169,7 +169,6 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        allCourseLayout.addComponent(btnAddToPreferredCourses);
 	        
 	        btnAddToPreferredCourses.addClickListener(new ClickListener() {
-				
 				@Override
 				public void buttonClick(ClickEvent event) {
 					// TODO add to preferred course listener
@@ -177,7 +176,8 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 					if(preferredCourseContainer.size()>4){
 						Notification.show("You can only select 5 courses",Notification.TYPE_WARNING_MESSAGE);
 					}else{
-						preferredCourseContainer.addItem(allCourseContainer.getItem(boxAllCourses.getValue()).getBean());
+						if(boxAllCourses.getValue()!=null)
+							preferredCourseContainer.addItem(allCourseContainer.getItem(boxAllCourses.getValue()).getBean());
 					}
 				}
 			});
@@ -326,6 +326,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 
 	@Override
 	public void initView(String instructorId, CurrentSemester currentSemester) {
+		
 		lblInstructorEmailId.setValue(instructorId);
 		lblSemester.setValue(currentSemester.getSemester());
 		lblYear.setValue(currentSemester.getYear());
