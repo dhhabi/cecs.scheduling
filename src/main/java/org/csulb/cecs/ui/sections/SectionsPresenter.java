@@ -1,4 +1,4 @@
-package org.csulb.cecs.ui.requestsurvey;
+package org.csulb.cecs.ui.sections;
 
 import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +18,18 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 @UIScope
 @VaadinView(name=ViewToken.SURVEYREQUEST)
 //@Secured({"ROLE_ADMIN"})
-public class SurveyRequestPresenter extends AbstractMvpPresenterView<SurveyRequestPresenter.SurveyRequestView> implements SurveyRequestPresenterHandlers  {
+public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresenter.SurveyRequestView> implements SectionsPresenterHandlers  {
 
 	@Autowired
 	Security security;
 	
 	@Autowired
-	public SurveyRequestPresenter(SurveyRequestView view, EventBus eventBus) {
+	public SectionsPresenter(SurveyRequestView view, EventBus eventBus) {
 		super(view, eventBus);
 		getView().setPresenterHandlers(this);
 	}
 
-	public interface SurveyRequestView extends MvpView, MvpHasPresenterHandlers<SurveyRequestPresenterHandlers> {
+	public interface SurveyRequestView extends MvpView, MvpHasPresenterHandlers<SectionsPresenterHandlers> {
 		void initView();
 		void setErrorMessage(String message);
 	}

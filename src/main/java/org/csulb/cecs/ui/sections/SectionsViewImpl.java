@@ -1,7 +1,7 @@
-package org.csulb.cecs.ui.requestsurvey;
+package org.csulb.cecs.ui.sections;
 
 import org.csulb.cecs.domain.Survey;
-import org.csulb.cecs.ui.requestsurvey.SurveyRequestPresenter.SurveyRequestView;
+import org.csulb.cecs.ui.sections.SectionsPresenter.SurveyRequestView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
@@ -19,9 +19,9 @@ import com.vaadin.ui.themes.ValoTheme;
 @SuppressWarnings("serial")
 @UIScope
 @VaadinComponent
-public class SurveyRequestViewImpl extends AbstractMvpView implements SurveyRequestView, ClickListener {
+public class SectionsViewImpl extends AbstractMvpView implements SurveyRequestView, ClickListener {
 
-	private SurveyRequestPresenterHandlers surveyRequestPresenterHandlers;
+	private SectionsPresenterHandlers surveyRequestPresenterHandlers;
 	
 	private VerticalLayout layout;
 	
@@ -73,7 +73,7 @@ public class SurveyRequestViewImpl extends AbstractMvpView implements SurveyRequ
 	}
 
 	@Override
-	public void setPresenterHandlers(SurveyRequestPresenterHandlers surveyRequestPresenterHandlers) {
+	public void setPresenterHandlers(SectionsPresenterHandlers surveyRequestPresenterHandlers) {
 		this.surveyRequestPresenterHandlers = surveyRequestPresenterHandlers;
 	}
 
