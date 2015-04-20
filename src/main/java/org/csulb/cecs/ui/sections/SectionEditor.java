@@ -283,9 +283,9 @@ public class SectionEditor extends CustomField<Section> {
     }
     
     private void getSectionValues(){
-    	if(instructorContainer.getItem(boxInstructor.getValue()).getBean()!=null)
+    	if(instructorContainer.getItem(boxInstructor.getValue())!=null)
     		section.setInstructor(instructorContainer.getItem(boxInstructor.getValue()).getBean());
-    	if(roomContainer.getItem(boxRoom.getValue()).getBean()!=null)
+    	if(roomContainer.getItem(boxRoom.getValue())!=null)
     		section.setMeetingRoom(roomContainer.getItem(boxRoom.getValue()).getBean());
     	if(boxMeetingStartTime.getValue()!=null)
     		if(boxMeetingEndTime.getValue()!=null)
@@ -295,7 +295,7 @@ public class SectionEditor extends CustomField<Section> {
     	for(Object itemId:selectedMeetingDaysContainer.getItemIds()){
     		section.getMeetingDaysOfWeek().add(selectedMeetingDaysContainer.getItem(itemId).getBean());
     	}
-    	if(labContainer.getItem(boxLab.getValue()).getBean()!=null)
+    	if(labContainer.getItem(boxLab.getValue())!=null)
     		section.setLabRoom(labContainer.getItem(boxLab.getValue()).getBean());
     	if(boxLabStartTime.getValue()!=null)
     		if(boxLabEndTime.getValue()!=null)
