@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.csulb.cecs.domain.Account;
+import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
+import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.dto.SectionDAO;
+import org.csulb.cecs.dto.SurveyDAO;
 import org.csulb.cecs.ui.ViewToken;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	
 	@Autowired
 	private SectionDAO sectionDAO;
+	
+	@Autowired
+	private SurveyDAO surveyDAO;
 	
 	@Autowired
 	public SectionsPresenter(SectionsView view, EventBus eventBus) {
@@ -83,6 +89,24 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 			he.printStackTrace();
 			return new ArrayList<Section>();
 		}
+	}
+
+	@Override
+	public List<Course> getPreferredCourses(String instructorEmailId,
+			String semester, String year) {
+		try{
+			return surveyDAO.getSurveyWithPreferredCourses(instructorEmailId, semester, year).getPreferredCourses(); 
+			//return survey.getPreferredCourses();
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return new ArrayList<Course>();
+		}
+	}
+
+	@Override
+	public boolean checkSurveyExistence(String instructorEmailId,
+			String semester, String year) {
+		return surveyDAO.isAlreadyExist(instructorEmailId, semester, year);
 	}
 		
 }

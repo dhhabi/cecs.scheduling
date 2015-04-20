@@ -49,6 +49,9 @@ public class SectionEditor extends CustomField<Section> {
 	private List<Room> roomList;
 	private List<Account> instructorList;
 	
+	private String semester;
+	private String year;
+	
 	private Label lblSectionId;
 	private Label lblCourse;
 	
@@ -81,11 +84,13 @@ public class SectionEditor extends CustomField<Section> {
 	private Section section;
 	
 	protected Component editSection(SectionsPresenterHandlers sectionPresenterHandler,Section section,
-			List<Room> roomList,List<Account> instructorList){
+			List<Room> roomList,List<Account> instructorList,String semester, String year){
 		this.sectionPresenterHandler=sectionPresenterHandler;
 		this.section = section;
 		this.instructorList=instructorList;
 		this.roomList=roomList;
+		this.semester=semester;
+		this.year=year;
 		
 		return initContent();
 	}
@@ -116,6 +121,13 @@ public class SectionEditor extends CustomField<Section> {
 				// TODO Instructor Value Change 
 				if(boxInstructor.getValue()!=null)
 					System.out.print(sectionPresenterHandler.getSections(instructorContainer.getItem(boxInstructor.getValue()).getBean()).get(0).getCourse().toString());
+				
+				if(boxInstructor.getValue()!=null){
+					if(sectionPresenterHandler.checkSurveyExistence(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year)){
+						System.out.println(sectionPresenterHandler.getPreferredCourses(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year).get(0).toString());
+					}
+				}
+				
 			}
 		}); 
         

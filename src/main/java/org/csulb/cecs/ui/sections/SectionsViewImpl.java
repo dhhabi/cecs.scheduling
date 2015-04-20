@@ -185,7 +185,7 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			firstLine.addComponent(new Label(labRoom));
 			firstLine.addComponent(new Label(labTiming));
 			firstLine.addComponent(new Label(labDays));
-			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, scheduleProject.getRoomList(), scheduleProject.getInstructorList()));			
+			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, scheduleProject.getRoomList(), scheduleProject.getInstructorList(),semester,year));			
 			
 		}
 	}

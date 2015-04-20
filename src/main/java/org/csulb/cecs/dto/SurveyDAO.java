@@ -9,5 +9,6 @@ public interface SurveyDAO {
 	boolean isAlreadyExist(String instructorEmailId,String semester,String year);
 	Long getSurveyId(String instructorEmailId,String semester,String year);
 	public void updateSurvey(Survey survey);
+	public Survey getSurveyWithPreferredCourses(String instructorEmailId,String semester,String year);
 	
 }

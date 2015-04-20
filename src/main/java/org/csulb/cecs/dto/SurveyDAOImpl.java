@@ -67,4 +67,21 @@ public class SurveyDAOImpl implements SurveyDAO{
 		getSession().update(survey);		
 	}
 
+
+	@Override
+	public Survey getSurveyWithPreferredCourses(String instructorEmailId, String semester,
+			String year) {
+		Survey survey = (Survey) getSession().createQuery("from Survey where instructorEmailId =:instructorEmailId and semester=:semester and year=:year")
+				.setParameter("instructorEmailId", instructorEmailId)
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.uniqueResult();
+		Hibernate.initialize(survey);
+		//survey.getAvailabilityList().size();
+		survey.getPreferredCourses().size();
+		//survey.getPreferredRooms().size();
+		//survey.getAvailablityTable().size();
+		return survey;
+	}
+
 }
