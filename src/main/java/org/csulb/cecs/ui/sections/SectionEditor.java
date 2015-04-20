@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Const;
+import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.Day;
 import org.csulb.cecs.domain.Interval;
 import org.csulb.cecs.domain.Room;
@@ -12,7 +13,6 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 
-import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
@@ -113,23 +113,38 @@ public class SectionEditor extends CustomField<Section> {
         for(Account instructor:instructorList)
         	instructorContainer.addBean(instructor);
         
+        HorizontalLayout instructorLayout = new HorizontalLayout();
+        instructorLayout.setSpacing(true);
+        final ListSelect listPreferredCourses = new ListSelect("Preferred Course");
+        listPreferredCourses.setHeight("50px");
+        final ListSelect listAssignedSections = new ListSelect("Assigned Sections");
+        listAssignedSections.setHeight("50px");
+        instructorLayout.addComponent(listPreferredCourses);
+        instructorLayout.addComponent(listAssignedSections);
+        layout.addComponent(instructorLayout);
+        
         boxInstructor.addValueChangeListener(new ValueChangeListener() {
 			
 			@Override
 			public void valueChange(
 					com.vaadin.data.Property.ValueChangeEvent event) {
 				// TODO Instructor Value Change 
-				if(boxInstructor.getValue()!=null)
-					System.out.print(sectionPresenterHandler.getSections(instructorContainer.getItem(boxInstructor.getValue()).getBean()).get(0).getCourse().toString());
-				
+				listAssignedSections.removeAllItems();
+				listPreferredCourses.removeAllItems();
 				if(boxInstructor.getValue()!=null){
-					if(sectionPresenterHandler.checkSurveyExistence(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year)){
-						System.out.println(sectionPresenterHandler.getPreferredCourses(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year).get(0).toString());
+					for(Section section: sectionPresenterHandler.getSections(instructorContainer.getItem(boxInstructor.getValue()).getBean())){
+						listAssignedSections.addItem(section);
 					}
-				}
-				
+					if(sectionPresenterHandler.checkSurveyExistence(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year)){
+						for(Course course:sectionPresenterHandler.getPreferredCourses(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year)){
+							listPreferredCourses.addItem(course);
+						}
+					}
+				}				
 			}
 		}); 
+        
+       
         
         HorizontalLayout roomLayout = new HorizontalLayout();
         roomLayout.setSpacing(true);
