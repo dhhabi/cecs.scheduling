@@ -23,9 +23,10 @@ public interface ViewToken extends Serializable {
 	public static final String LABS="/labs";
 	public static final String PROJECT="/project";
 	public static final String CURRICULUM="/curriculum";
+	public static final String SECTIONS="/sections";
 	
 	public static final List<String> VALID_TOKENS = Arrays.asList(new String[] {HOME, USER, ADMIN, ADMIN_HIDDEN, SIGNIN, SIGNUP,SURVEY,SURVEYREQUEST, 
 			COURSE,ROOMS,
-			LABS, PROJECT,CURRICULUM
+			LABS, PROJECT,CURRICULUM, SECTIONS
 			});		
 }

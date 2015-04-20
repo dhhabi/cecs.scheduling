@@ -16,6 +16,14 @@ public class Interval implements Serializable {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	
+	public Interval(){
+		
+	}
+	public Interval(LocalTime startTime,LocalTime endTime){
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
 	public LocalTime getStartTime() {
 		return startTime;
 	}
@@ -28,5 +36,8 @@ public class Interval implements Serializable {
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
-	
+	@Override
+	public String toString(){
+		return startTime.toString()+" to "+ endTime.toString();
+	}
 }

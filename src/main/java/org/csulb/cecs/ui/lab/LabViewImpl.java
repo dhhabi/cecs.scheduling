@@ -111,7 +111,7 @@ public class LabViewImpl extends AbstractMvpView implements LabView, ClickListen
 		
 				
 		
-		for(String lab:LabType.type){
+		for(String lab:LabType.allTypes){
 			boxType.addItem(lab);
 		}
 		boxType.setNullSelectionAllowed(false);

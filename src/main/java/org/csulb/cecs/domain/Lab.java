@@ -9,7 +9,7 @@ public class Lab extends Room{
 	
 	public Lab(){
 		//Pass roomType as none 
-		super("none");
+		//super("none");
 	}
 	
 	@Column(name="labtype", nullable=false, columnDefinition = "varchar(255) default 'none'")

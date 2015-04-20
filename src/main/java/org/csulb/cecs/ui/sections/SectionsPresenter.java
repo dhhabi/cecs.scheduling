@@ -1,35 +1,41 @@
 package org.csulb.cecs.ui.sections;
 
+import org.csulb.cecs.domain.ScheduleProject;
+import org.csulb.cecs.domain.Section;
+import org.csulb.cecs.dto.ProjectDAO;
+import org.csulb.cecs.dto.SectionDAO;
 import org.csulb.cecs.ui.ViewToken;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.mvp.MvpHasPresenterHandlers;
 import org.vaadin.spring.mvp.MvpView;
 import org.vaadin.spring.mvp.presenter.AbstractMvpPresenterView;
 import org.vaadin.spring.navigator.VaadinView;
-import org.vaadin.spring.security.Security;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 
 @SuppressWarnings("serial")
 @UIScope
-@VaadinView(name=ViewToken.SURVEYREQUEST)
+@VaadinView(name=ViewToken.SECTIONS)
 //@Secured({"ROLE_ADMIN"})
-public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresenter.SurveyRequestView> implements SectionsPresenterHandlers  {
+public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresenter.SectionsView> implements SectionsPresenterHandlers  {
 
 	@Autowired
-	Security security;
+	private ProjectDAO projectDAO;
 	
 	@Autowired
-	public SectionsPresenter(SurveyRequestView view, EventBus eventBus) {
+	private SectionDAO sectionDAO;
+	
+	@Autowired
+	public SectionsPresenter(SectionsView view, EventBus eventBus) {
 		super(view, eventBus);
 		getView().setPresenterHandlers(this);
 	}
 
-	public interface SurveyRequestView extends MvpView, MvpHasPresenterHandlers<SectionsPresenterHandlers> {
+	public interface SectionsView extends MvpView, MvpHasPresenterHandlers<SectionsPresenterHandlers> {
 		void initView();
 		void setErrorMessage(String message);
 	}
@@ -37,6 +43,27 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	@Override
 	public void enter(ViewChangeEvent arg0) {
 		getView().initView();		
+	}
+
+	@Override
+	public ScheduleProject getScheduleProject(String semester, String year) {
+		try{
+			return projectDAO.getScheduleProject(semester, year);
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public boolean updateSection(Section section) {
+		try{
+			sectionDAO.updateSection(section);
+			return true;
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return false;
+		}
 	}
 		
 }

@@ -19,10 +19,6 @@ public class Room {
 	public Room(){
 		
 	}
-	public Room(String roomType){
-		this.roomType=roomType;
-	}
-
 	public Room(String building,String roomNo){
 		this.building=building;
 		this.roomNo=roomNo;
@@ -39,8 +35,11 @@ public class Room {
 	private String roomNo;
 	
 	@Column(name="type", columnDefinition = "varchar(255) default 'Medium'")
-	@NotEmpty(message="Type can not be blank")
-	private String roomType;
+	//@NotEmpty(message="Type can not be blank")
+	private String labType;
+	
+	@Column(name="lab",nullable=false,columnDefinition="boolean default false")
+	private boolean lab = false;
 			
 	@ElementCollection(fetch=FetchType.LAZY)
 	private final List<Interval> fallTimings = new ArrayList<Interval>();
@@ -61,11 +60,18 @@ public class Room {
 	public void setOwned(boolean owned) {
 		this.owned = owned;
 	}
-	public String getRoomType() {
-		return roomType;
+	
+	public String getLabType() {
+		return labType;
 	}
-	public void setRoomType(String roomType) {
-		this.roomType = roomType;
+	public void setLabType(String labType) {
+		this.labType = labType;
+	}
+	public boolean isLab() {
+		return lab;
+	}
+	public void setLab(boolean lab) {
+		this.lab = lab;
 	}
 	public List<Interval> getFallTimings() {
 		return fallTimings;

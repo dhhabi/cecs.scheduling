@@ -174,6 +174,15 @@ public class MainLayout extends VerticalLayout implements ViewDisplay, ClickList
 				UI.getCurrent().getNavigator().navigateTo(ViewToken.PROJECT);				
 			}
 		});
+		
+		menuItemAdmin.addItem("Generate Clara Program", new MenuBar.Command() {
+			
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				// TODO Sections Menu
+				UI.getCurrent().getNavigator().navigateTo(ViewToken.SECTIONS);
+			}
+		});
 			
 		//Resource admin menuitem
 		MenuItem menuItemAdminResources = menuItemAdmin.addItem("Resources", null);

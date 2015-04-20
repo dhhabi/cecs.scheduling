@@ -1,5 +1,7 @@
 package org.csulb.cecs.dto;
 
+import java.util.List;
+
 import org.csulb.cecs.domain.ScheduleProject;
 
 public interface ProjectDAO {

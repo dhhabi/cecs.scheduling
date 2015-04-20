@@ -5,6 +5,7 @@ import java.util.List;
 import org.csulb.cecs.domain.AvailableActivities;
 import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Interval;
+import org.csulb.cecs.domain.LabType;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.RoomPrimaryKey;
 import org.csulb.cecs.domain.RoomType;
@@ -51,7 +52,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	private static final String START_TIME = "Start Time";
 	private static final String END_TIME="End Time";
 	private static final String DAY = "Day";
-	private static final String IS_OWNED = "Is Owned";
+	private static final String IS_OWNED = "Is Owned?";
+	private static final String IS_LAB = "Is Lab?";
 	
 	
 	private Table roomList = new Table();
@@ -91,7 +93,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      ComboBox boxType = new ComboBox(TYPE);
      CheckBox boxIsSmall = new CheckBox(IS_SMALL);
      CheckBox boxIsOwned = new CheckBox(IS_OWNED);
-     
+     CheckBox boxIsLab = new CheckBox("Is Lab?");
      	
 	private BeanFieldGroup<Room> binder = new BeanFieldGroup<Room>(Room.class);
 	
@@ -147,20 +149,34 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fieldRoomNo.setNullRepresentation("");
 		fieldRoomNo.setInputPrompt("Room Number");
 		
-		for(String room:RoomType.rooms){
-			boxType.addItem(room);
+		editorLayout.addComponent(fieldBuilding);
+		editorLayout.addComponent(fieldRoomNo);
+		
+		boxType.select(RoomType.LECTURE_ROOM);
+		HorizontalLayout boxLayout = new HorizontalLayout();
+		editorLayout.addComponent(boxLayout);
+		boxLayout.addComponent(boxIsSmall);
+		boxLayout.addComponent(boxIsOwned);
+		boxLayout.addComponent(boxIsLab);
+		boxType.setVisible(false);
+		
+		boxIsLab.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				if(boxIsLab.getValue())
+					boxType.setVisible(true);
+				else
+					boxType.setVisible(false);
+			}
+		});
+		
+		for(String labType:LabType.allTypes){
+			boxType.addItem(labType);
 		}
 		boxType.setNullSelectionAllowed(false);
 		boxType.setValidationVisible(false);
-		
-		
-		editorLayout.addComponent(fieldBuilding);
-		editorLayout.addComponent(fieldRoomNo);
 		editorLayout.addComponent(boxType);
-		boxType.select(RoomType.LECTURE_ROOM);
-		editorLayout.addComponent(boxIsSmall);
-		editorLayout.addComponent(boxIsOwned);
-		
 		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addRoomButton);
@@ -181,8 +197,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					room.setBuilding(fieldBuilding.getValue());
 					room.setRoomNo(fieldRoomNo.getValue());
 					room.setOwned(boxIsOwned.getValue());
-					room.setRoomType((String)boxType.getValue());
+					room.setLabType((String)boxType.getValue());
 					room.setSmall(boxIsSmall.getValue());
+					room.setLab(boxIsLab.getValue());
 					//Add timing for room
 					if(!room.isOwned()){
 						getRoomTimingFromTable(room.getFallTimings(),fallTiming);
@@ -244,9 +261,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					room.setBuilding(fieldBuilding.getValue());
 					room.setRoomNo(fieldRoomNo.getValue());
 					room.setOwned(boxIsOwned.getValue());
-					room.setRoomType((String)boxType.getValue());
+					room.setLabType((String)boxType.getValue());
 					room.setSmall(boxIsSmall.getValue());
-					
+					room.setLab(boxIsLab.getValue());
 					//Add timing for room
 					if(!room.isOwned()){
 						getRoomTimingFromTable(room.getFallTimings(),fallTiming);
@@ -305,9 +322,10 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		
 		binder.bind(fieldBuilding, "building");
 		binder.bind(fieldRoomNo, "roomNo");
-		binder.bind(boxType, "roomType");
+		binder.bind(boxType, "labType");
 		binder.bind(boxIsSmall, "small");
 		binder.bind(boxIsOwned, "owned");
+		binder.bind(boxIsLab, "lab");
 		
 	}
 
@@ -342,6 +360,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		roomList.addContainerProperty(TYPE, String.class, null);
 		roomList.addContainerProperty(IS_SMALL, Boolean.class, false);
 		roomList.addContainerProperty(IS_OWNED, Boolean.class, false);
+		roomList.addContainerProperty(IS_LAB,Boolean.class,false);
 		roomList.setSelectable(true);
 		roomList.setNullSelectionItemId("");
 		roomList.setImmediate(true);
@@ -364,6 +383,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					boxType.setValue((String)roomList.getContainerProperty(itemId, TYPE).getValue());
 					boxIsSmall.setValue((Boolean)roomList.getContainerProperty(itemId, IS_SMALL).getValue());
 					boxIsOwned.setValue((Boolean)roomList.getContainerProperty(itemId, IS_OWNED).getValue());
+					boxIsLab.setValue((Boolean)roomList.getContainerProperty(itemId, IS_LAB).getValue());
 					Room room = mvpPresenterHandlers.getRoom(new RoomPrimaryKey((String)roomList.getContainerProperty(itemId,BUILDING).getValue(), (String)roomList.getContainerProperty(itemId, ROOMNO).getValue()));
 					int timingRowId = 1;
 					for(Interval dayTime: room.getFallTimings()){
@@ -389,9 +409,10 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		Item row = roomList.getItem(itemId);
 		row.getItemProperty(BUILDING).setValue(room.getBuilding());
 		row.getItemProperty(ROOMNO).setValue(room.getRoomNo());
-		row.getItemProperty(TYPE).setValue(room.getRoomType());
+		row.getItemProperty(TYPE).setValue(room.getLabType());
 		row.getItemProperty(IS_SMALL).setValue(room.isSmall());
 		row.getItemProperty(IS_OWNED).setValue(room.isOwned());
+		row.getItemProperty(IS_LAB).setValue(room.isLab());
 		return itemId;
 	}
 	
@@ -400,9 +421,10 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		Item row = roomList.getItem(itemId);
 		row.getItemProperty(BUILDING).setValue(room.getBuilding());
 		row.getItemProperty(ROOMNO).setValue(room.getRoomNo());
-		row.getItemProperty(TYPE).setValue(room.getRoomType());
+		row.getItemProperty(TYPE).setValue(room.getLabType());
 		row.getItemProperty(IS_SMALL).setValue(room.isSmall());
 		row.getItemProperty(IS_OWNED).setValue(room.isOwned());
+		row.getItemProperty(IS_LAB).setValue(room.isLab());
 		roomList.select(itemId);
 	}
 	

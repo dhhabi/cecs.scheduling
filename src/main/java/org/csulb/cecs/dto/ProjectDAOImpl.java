@@ -35,6 +35,7 @@ public class ProjectDAOImpl implements ProjectDAO{
 		scheduleProject.getCourseList().size();
 		scheduleProject.getInstructorList().size();
 		scheduleProject.getRoomList().size();
+		scheduleProject.getSections().size();
 		return scheduleProject;
 	}
 

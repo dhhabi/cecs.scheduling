@@ -7,5 +7,5 @@ public class LabType {
 	public static final String NETWORKLAB="Network Lab";
 	public static final String OTHER="Other";
 	
-	public static final String[] type = {MAC, WINDOWS, LINUX, OTHER,NETWORKLAB};
+	public static final String[] allTypes = {MAC, WINDOWS, LINUX, NETWORKLAB, OTHER};
 }

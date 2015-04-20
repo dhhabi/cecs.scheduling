@@ -1,10 +1,17 @@
 package org.csulb.cecs.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -22,7 +29,7 @@ public class Section {
 	private Course course;
 	
 	@ManyToOne
-	private Instructor instructor;
+	private Account instructor;
 	
 	@ManyToOne
 	private Room meetingRoom;
@@ -42,6 +49,17 @@ public class Section {
 	private Interval labTiming;
 	
 	
+	@ElementCollection(targetClass=Day.class, fetch=FetchType.EAGER)
+	@Column(name = "meetingDaysOfWeek", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private final List<Day> meetingDaysOfWeek = new ArrayList<Day>();
+	
+	@ElementCollection(targetClass=Day.class,fetch=FetchType.EAGER)
+	@Column(name = "labDaysOfWeek", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private final List<Day> labDaysOfWeek = new ArrayList<Day>();
+	
+	
 	public Section(){
 		
 	}
@@ -50,6 +68,14 @@ public class Section {
 		this.course = course;
 	}
 	
+	public List<Day> getMeetingDaysOfWeek() {
+		return meetingDaysOfWeek;
+	}
+
+	public List<Day> getLabDaysOfWeek() {
+		return labDaysOfWeek;
+	}
+
 	public Interval getMeetingTiming() {
 		return meetingTiming;
 	}
@@ -78,11 +104,11 @@ public class Section {
 		this.course = course;
 	}
 
-	public Instructor getInstructor() {
+	public Account getInstructor() {
 		return instructor;
 	}
 
-	public void setInstructor(Instructor instructor) {
+	public void setInstructor(Account instructor) {
 		this.instructor = instructor;
 	}
 
