@@ -18,6 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 public class Section {
 		
@@ -49,14 +52,16 @@ public class Section {
 	private Interval labTiming;
 	
 	
-	@ElementCollection(targetClass=Day.class, fetch=FetchType.EAGER)
+	@ElementCollection(targetClass=Day.class)
 	@Column(name = "meetingDaysOfWeek", nullable = false)
 	@Enumerated(EnumType.STRING)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private final List<Day> meetingDaysOfWeek = new ArrayList<Day>();
 	
-	@ElementCollection(targetClass=Day.class,fetch=FetchType.EAGER)
+	@ElementCollection(targetClass=Day.class)
 	@Column(name = "labDaysOfWeek", nullable = false)
 	@Enumerated(EnumType.STRING)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private final List<Day> labDaysOfWeek = new ArrayList<Day>();
 	
 	
@@ -128,5 +133,9 @@ public class Section {
 		this.labRoom = labRoom;
 	}
 
+	@Override
+	public String toString(){
+		return sectionId +" "+ course.toString();
+	}
 
 }

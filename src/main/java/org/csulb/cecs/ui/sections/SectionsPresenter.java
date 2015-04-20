@@ -1,5 +1,9 @@
 package org.csulb.cecs.ui.sections;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.dto.ProjectDAO;
@@ -69,6 +73,16 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	@Override
 	public boolean isCheckIfProjectExists(String semester, String year) {
 		return projectDAO.isAlreadyExists(semester, year);
+	}
+
+	@Override
+	public List<Section> getSections(Account account) {
+		try{
+			return sectionDAO.getSections(account);
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return new ArrayList<Section>();
+		}
 	}
 		
 }

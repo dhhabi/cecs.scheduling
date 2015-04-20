@@ -12,6 +12,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
@@ -29,7 +30,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -108,7 +108,17 @@ public class SectionEditor extends CustomField<Section> {
         for(Account instructor:instructorList)
         	instructorContainer.addBean(instructor);
         
-               
+        boxInstructor.addValueChangeListener(new ValueChangeListener() {
+			
+			@Override
+			public void valueChange(
+					com.vaadin.data.Property.ValueChangeEvent event) {
+				// TODO Instructor Value Change 
+				if(boxInstructor.getValue()!=null)
+					System.out.print(sectionPresenterHandler.getSections(instructorContainer.getItem(boxInstructor.getValue()).getBean()).get(0).getCourse().toString());
+			}
+		}); 
+        
         HorizontalLayout roomLayout = new HorizontalLayout();
         roomLayout.setSpacing(true);
         layout.addComponent(roomLayout);
