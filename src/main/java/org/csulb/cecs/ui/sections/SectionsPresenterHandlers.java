@@ -7,4 +7,5 @@ import org.vaadin.spring.mvp.MvpPresenterHandlers;
 public interface SectionsPresenterHandlers extends MvpPresenterHandlers {
 	public ScheduleProject getScheduleProject(String semester,String year);
 	public boolean updateSection(Section section);
+	public boolean isCheckIfProjectExists(String semester,String year);
 }

@@ -65,5 +65,10 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 			return false;
 		}
 	}
+
+	@Override
+	public boolean isCheckIfProjectExists(String semester, String year) {
+		return projectDAO.isAlreadyExists(semester, year);
+	}
 		
 }

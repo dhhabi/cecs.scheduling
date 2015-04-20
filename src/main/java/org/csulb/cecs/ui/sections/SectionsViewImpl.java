@@ -1,19 +1,29 @@
 package org.csulb.cecs.ui.sections;
 
+import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.ui.sections.SectionsPresenter.SectionsView;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
+
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseListener;
 
 @SuppressWarnings("serial")
 @UIScope
@@ -50,9 +60,74 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 
 	@Override
 	public void initView() {
+		
+		final Window dialog = new Window("Select semester and year");
+		FormLayout dialogLayout = new FormLayout();
+		dialog.setContent(dialogLayout);
+		final ComboBox boxSemester = new ComboBox("Semester");
+		boxSemester.setNullSelectionAllowed(false);
+		dialogLayout.addComponent(boxSemester);
+		for(String semester:Const.semesterList)
+			boxSemester.addItem(semester);
+		
+		final ComboBox boxYear = new ComboBox("Year");
+		boxYear.setNullSelectionAllowed(false);
+		dialogLayout.addComponent(boxYear);
+		for(String year:Const.yearList)
+			boxYear.addItem(year);
+		
+		Button btnSubmit = new Button("Submit");
+		dialogLayout.addComponent(btnSubmit);
+		btnSubmit.addClickListener(new ClickListener() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void buttonClick(ClickEvent event) {
+				// TODO Dialog Submit Click
+				if(sectionsPresenterHandlers.isCheckIfProjectExists((String)boxSemester.getValue(), (String)boxYear.getValue())){
+					dialog.close();
+					displaySections((String)boxSemester.getValue(), (String)boxYear.getValue());
+				}else{
+					Notification.show("No schedule exists for selected values!",Notification.TYPE_WARNING_MESSAGE);
+				}
+			}
+		});
+		dialog.addCloseListener(new CloseListener() {
+			
+			@Override
+			public void windowClose(CloseEvent e) {
+				// TODO Dialog Close
+				if(sectionsPresenterHandlers.isCheckIfProjectExists((String)boxSemester.getValue(), (String)boxYear.getValue())){
+					//dialog.close();
+					displaySections((String)boxSemester.getValue(), (String)boxYear.getValue());
+				}else{
+					UI.getCurrent().addWindow(dialog);
+					Notification.show("No schedule exists for selected values!",Notification.TYPE_WARNING_MESSAGE);
+				}
+			}
+		});
+		dialog.setSizeUndefined();
+		dialog.center();
+		dialog.setWidth(null);
+		dialogLayout.setWidth(null);
+		UI.getCurrent().addWindow(dialog);
+	}
+
+	@Override
+	public void setErrorMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPresenterHandlers(SectionsPresenterHandlers surveyRequestPresenterHandlers) {
+		this.sectionsPresenterHandlers = surveyRequestPresenterHandlers;
+	}
+
+	private void displaySections(String semester,String year){
 		// Get All Sections and display them
 		layout.removeAllComponents();
-		ScheduleProject scheduleProject = sectionsPresenterHandlers.getScheduleProject("Spring", "2015");
+		ScheduleProject scheduleProject = sectionsPresenterHandlers.getScheduleProject(semester,year);
 		for(Section section: scheduleProject.getSections()){
 			Panel sectionPanel = new Panel(section.getCourse().toString());
 			layout.addComponent(sectionPanel);
@@ -114,16 +189,4 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			
 		}
 	}
-
-	@Override
-	public void setErrorMessage(String message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setPresenterHandlers(SectionsPresenterHandlers surveyRequestPresenterHandlers) {
-		this.sectionsPresenterHandlers = surveyRequestPresenterHandlers;
-	}
-
 }
