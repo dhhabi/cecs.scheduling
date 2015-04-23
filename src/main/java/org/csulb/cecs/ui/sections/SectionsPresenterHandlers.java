@@ -15,4 +15,5 @@ public interface SectionsPresenterHandlers extends MvpPresenterHandlers {
 	public List<Section> getSections(Account account);
 	public List<Course> getPreferredCourses(String instructorEmailId,String semester,String year);
 	public boolean checkSurveyExistence(String instructorEmailId,String semester,String year);
+	public List<Section> getSectionList(String semester, String year,Account instructor);
 }

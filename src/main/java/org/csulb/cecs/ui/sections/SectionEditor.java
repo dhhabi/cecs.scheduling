@@ -107,6 +107,7 @@ public class SectionEditor extends CustomField<Section> {
         layout.addComponent(lblCourse);     
         
         boxInstructor = new ComboBox("Instructor");
+        boxInstructor.setNullSelectionAllowed(true);
         boxInstructor.setWidth("300px");
         layout.addComponent(boxInstructor);
         boxInstructor.setContainerDataSource(instructorContainer);
@@ -116,8 +117,10 @@ public class SectionEditor extends CustomField<Section> {
         HorizontalLayout instructorLayout = new HorizontalLayout();
         instructorLayout.setSpacing(true);
         final ListSelect listPreferredCourses = new ListSelect("Preferred Course");
+        listPreferredCourses.setNullSelectionAllowed(false);
         listPreferredCourses.setHeight("50px");
         final ListSelect listAssignedSections = new ListSelect("Assigned Sections");
+        listAssignedSections.setNullSelectionAllowed(false);
         listAssignedSections.setHeight("50px");
         instructorLayout.addComponent(listPreferredCourses);
         instructorLayout.addComponent(listAssignedSections);
@@ -132,7 +135,7 @@ public class SectionEditor extends CustomField<Section> {
 				listAssignedSections.removeAllItems();
 				listPreferredCourses.removeAllItems();
 				if(boxInstructor.getValue()!=null){
-					for(Section section: sectionPresenterHandler.getSections(instructorContainer.getItem(boxInstructor.getValue()).getBean())){
+					for(Section section: sectionPresenterHandler.getSectionList(semester,year,instructorContainer.getItem(boxInstructor.getValue()).getBean())){
 						listAssignedSections.addItem(section);
 					}
 					if(sectionPresenterHandler.checkSurveyExistence(instructorContainer.getItem(boxInstructor.getValue()).getBean().getUsername(), semester, year)){
@@ -155,6 +158,7 @@ public class SectionEditor extends CustomField<Section> {
         roomLayout.addComponent(roomRightLayout);
         
         boxRoom = new ComboBox("Meeting Room");
+        boxRoom.setNullSelectionAllowed(true);
        // boxRoom.setWidth("300px");
         roomLeftLayout.addComponent(boxRoom);
         boxRoom.setContainerDataSource(roomContainer);
@@ -162,10 +166,10 @@ public class SectionEditor extends CustomField<Section> {
         	roomContainer.addBean(room);
         
         boxMeetingStartTime = new ComboBox("Meeting StartTime");
-        boxMeetingStartTime.setNullSelectionAllowed(false);
+        boxMeetingStartTime.setNullSelectionAllowed(true);
         roomLeftLayout.addComponent(boxMeetingStartTime);
         boxMeetingEndTime = new ComboBox("Meeting EndTime");
-        boxMeetingEndTime.setNullSelectionAllowed(false);
+        boxMeetingEndTime.setNullSelectionAllowed(true);
         roomLeftLayout.addComponent(boxMeetingEndTime);
         for(String time:Const.timeList){
         	boxMeetingStartTime.addItem(time);
@@ -322,11 +326,21 @@ public class SectionEditor extends CustomField<Section> {
     private void getSectionValues(){
     	if(instructorContainer.getItem(boxInstructor.getValue())!=null)
     		section.setInstructor(instructorContainer.getItem(boxInstructor.getValue()).getBean());
+    	else
+    		section.setInstructor(null);
+    	
     	if(roomContainer.getItem(boxRoom.getValue())!=null)
     		section.setMeetingRoom(roomContainer.getItem(boxRoom.getValue()).getBean());
-    	if(boxMeetingStartTime.getValue()!=null)
+    	else
+    		section.setMeetingRoom(null);
+    	
+    	if(boxMeetingStartTime.getValue()!=null){
     		if(boxMeetingEndTime.getValue()!=null)
     			section.setMeetingTiming(new Interval(LocalTime.parse((String)boxMeetingStartTime.getValue()), LocalTime.parse((String)boxMeetingEndTime.getValue())));
+    	}else{
+    		section.setMeetingTiming(null);
+    	}
+    		
     	
     	section.getMeetingDaysOfWeek().removeAll(section.getMeetingDaysOfWeek());
     	for(Object itemId:selectedMeetingDaysContainer.getItemIds()){
@@ -334,9 +348,13 @@ public class SectionEditor extends CustomField<Section> {
     	}
     	if(labContainer.getItem(boxLab.getValue())!=null)
     		section.setLabRoom(labContainer.getItem(boxLab.getValue()).getBean());
-    	if(boxLabStartTime.getValue()!=null)
+    	if(boxLabStartTime.getValue()!=null){
     		if(boxLabEndTime.getValue()!=null)
     			section.setLabTiming(new Interval(LocalTime.parse((String)boxLabStartTime.getValue()), LocalTime.parse((String)boxLabEndTime.getValue())));
+    	
+    	}else{
+    		section.setLabTiming(null);
+    	}
     	section.getLabDaysOfWeek().removeAll(section.getLabDaysOfWeek());
     	for(Object itemId:selectedLabDaysContainer.getItemIds()){
     		section.getLabDaysOfWeek().add(selectedLabDaysContainer.getItem(itemId).getBean());

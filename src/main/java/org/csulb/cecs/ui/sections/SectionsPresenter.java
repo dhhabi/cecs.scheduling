@@ -108,5 +108,23 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 			String semester, String year) {
 		return surveyDAO.isAlreadyExist(instructorEmailId, semester, year);
 	}
-		
+
+	@Override
+	public List<Section> getSectionList(String semester, String year,
+			Account instructor) {
+		List<Section> sectionList = new ArrayList<Section>();
+		try{
+			ScheduleProject sp = projectDAO.getScheduleProjectWithSectionListInit(semester, year);
+			for(Section section:sp.getSections()){
+				if(section.getInstructor().getUsername().equals(instructor.getUsername()))
+					sectionList.add(section);
+			}
+			return sectionList;
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return sectionList;
+		}
+	}
+
+	
 }
