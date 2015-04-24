@@ -3,12 +3,13 @@ package org.csulb.cecs.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -41,11 +42,14 @@ public class Room {
 	@Column(name="lab",nullable=false,columnDefinition="boolean default false")
 	private boolean lab = false;
 			
-	@ElementCollection(fetch=FetchType.LAZY)
-	private final List<Interval> fallTimings = new ArrayList<Interval>();
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="fallAvailability")
+	private final List<Availability> fallAvailability = new ArrayList<Availability>();
 	
-	@ElementCollection(fetch=FetchType.LAZY)
-	private final List<Interval> springTimings = new ArrayList<Interval>();
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="springAvailability")
+	private final List<Availability> springAvailability = new ArrayList<Availability>();
+	
 	
 	@Column(name="small",nullable=false,columnDefinition="boolean default false")
 	private boolean small = false;
@@ -73,13 +77,13 @@ public class Room {
 	public void setLab(boolean lab) {
 		this.lab = lab;
 	}
-	public List<Interval> getFallTimings() {
-		return fallTimings;
-	}
-	public List<Interval> getSpringTimings(){
-		return springTimings;
-	}
 	
+	public List<Availability> getFallAvailability() {
+		return fallAvailability;
+	}
+	public List<Availability> getSpringAvailability() {
+		return springAvailability;
+	}
 	public boolean isSmall() {
 		return small;
 	}

@@ -16,7 +16,7 @@ public class Availability {
 	private Boolean available;
 	
 	public Availability(){
-		
+		this.available=false;
 	}
 	public Availability(String day,LocalTime time,Boolean available){
 		this.day = day;

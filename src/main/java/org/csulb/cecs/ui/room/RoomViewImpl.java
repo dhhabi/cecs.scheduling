@@ -2,6 +2,8 @@ package org.csulb.cecs.ui.room;
 
 import java.util.List;
 
+import javax.swing.plaf.ButtonUI;
+
 import org.csulb.cecs.domain.AvailableActivities;
 import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Interval;
@@ -47,7 +49,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	
 	private static final String BUILDING = "Building";
 	private static final String ROOMNO = "Room No.";
-	private static final String TYPE = "Room Type";
+	private static final String TYPE = "Lab Type";
 	private static final String IS_SMALL = "Is Small?";
 	private static final String START_TIME = "Start Time";
 	private static final String END_TIME="End Time";
@@ -57,8 +59,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	
 	
 	private Table roomList = new Table();
-	private Table fallTiming = new Table("Fall Timings");
-	private Table springTiming = new Table("Spring Timings");
+	//private Table fallTiming = new Table("Fall Timings");
+	//private Table springTiming = new Table("Spring Timings");
 	//private PagedTable roomList = new PagedTable();
     private TextField searchField = new TextField();
      private Button addNewRoomButton = new Button("New");
@@ -70,17 +72,19 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      private VerticalLayout leftLayout = new VerticalLayout();
      private HorizontalLayout bottomLeftLayout = new HorizontalLayout();
      private VerticalLayout rightLayout = new VerticalLayout();
+     private HorizontalLayout timingPanelLayout = new HorizontalLayout();
      
      private HorizontalLayout bottomRightLayout = new HorizontalLayout();
      
-     private HorizontalLayout timingEditLayout = new HorizontalLayout();
-     private VerticalLayout timingLayout = new VerticalLayout();
+     //private HorizontalLayout timingEditLayout = new HorizontalLayout();
+     //private VerticalLayout timingLayout = new VerticalLayout();
      
-     private HorizontalLayout timingEditLayoutSpring = new HorizontalLayout();
-     private VerticalLayout timingLayoutSpring = new VerticalLayout();
-     
+     //private HorizontalLayout timingEditLayoutSpring = new HorizontalLayout();
+     //private VerticalLayout timingLayoutSpring = new VerticalLayout();
+          
      DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter();
-		
+	
+     
      
      ComboBox boxStartTime = new ComboBox();
      ComboBox boxEndTime = new ComboBox();
@@ -94,7 +98,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
      CheckBox boxIsSmall = new CheckBox(IS_SMALL);
      CheckBox boxIsOwned = new CheckBox(IS_OWNED);
      CheckBox boxIsLab = new CheckBox("Is Lab?");
-     	
+     private Room room;
+     
 	private BeanFieldGroup<Room> binder = new BeanFieldGroup<Room>(Room.class);
 	
 	@Override
@@ -122,17 +127,17 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		//leftLayout.addComponent(roomList.createControls());
 		leftLayout.addComponent(roomList);
 		rightLayout.addComponent(editorLayout);
-		rightLayout.addComponent(bottomRightLayout);
-		bottomRightLayout.addComponent(timingLayout);
-		bottomRightLayout.addComponent(timingLayoutSpring);
+		//rightLayout.addComponent(bottomRightLayout);
+		//bottomRightLayout.addComponent(timingLayout);
+		//bottomRightLayout.addComponent(timingLayoutSpring);
 		
 		horizontalSplitPanel.setFirstComponent(leftLayout);
 		horizontalSplitPanel.setSecondComponent(rightLayout);
 		editorLayout.setMargin(true);
 		initCourseList();
 		initEditorForm();
-		initTimingLayout();
-		initTimingLayoutSpring();
+		//initTimingLayout();
+		//initTimingLayoutSpring();
 	}
 	
 	private void initEditorForm() {
@@ -143,7 +148,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fieldBuilding.setNullRepresentation("");
 		fieldBuilding.setInputPrompt("Room Prefix");
 		
-		
 		fieldRoomNo.setWidth("300px");
 		fieldRoomNo.setValidationVisible(false);
 		fieldRoomNo.setNullRepresentation("");
@@ -152,7 +156,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		editorLayout.addComponent(fieldBuilding);
 		editorLayout.addComponent(fieldRoomNo);
 		
-		boxType.select(RoomType.LECTURE_ROOM);
+		boxType.select(LabType.MAC);
 		HorizontalLayout boxLayout = new HorizontalLayout();
 		editorLayout.addComponent(boxLayout);
 		boxLayout.addComponent(boxIsSmall);
@@ -164,27 +168,39 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if(boxIsLab.getValue())
+				if(boxIsLab.getValue()){
 					boxType.setVisible(true);
-				else
+				}else{
 					boxType.setVisible(false);
+					boxType.select(null);
+				}
 			}
 		});
 		
 		for(String labType:LabType.allTypes){
 			boxType.addItem(labType);
 		}
-		boxType.setNullSelectionAllowed(false);
+		//boxType.setNullSelectionAllowed(false);
 		boxType.setValidationVisible(false);
 		editorLayout.addComponent(boxType);
 		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addRoomButton);
 		buttons.addComponent(updateRoomButton);
-		buttons.setMargin(true);
+		buttons.setSpacing(true);
 	
 				
 		editorLayout.addComponent(buttons);
+		
+		final Panel timingPanel = new Panel("Room Availablity");
+		timingPanel.setContent(timingPanelLayout);
+		timingPanelLayout.setSpacing(true);
+		editorLayout.addComponent(timingPanel);
+		timingPanel.setSizeUndefined();
+		timingPanelLayout.setSizeUndefined();
+		timingPanelLayout.setVisible(false);
+		//timingPanelLayout.addComponent(new RoomTimingEditor().editAvailablity(room, "Spring", roomPresenterHandlers, "Spring"));
+		
 		
 		updateRoomButton.setVisible(false);
 		updateRoomButton.addClickListener(new ClickListener() {
@@ -193,20 +209,16 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			public void buttonClick(ClickEvent event) {
 				try {
 					binder.commit();
-					Room room = new Room();
-					room.setBuilding(fieldBuilding.getValue());
-					room.setRoomNo(fieldRoomNo.getValue());
+					Room room = mvpPresenterHandlers.getRoom(new RoomPrimaryKey(fieldBuilding.getValue(), fieldRoomNo.getValue()));
 					room.setOwned(boxIsOwned.getValue());
 					room.setLabType((String)boxType.getValue());
 					room.setSmall(boxIsSmall.getValue());
 					room.setLab(boxIsLab.getValue());
 					//Add timing for room
 					if(!room.isOwned()){
-						getRoomTimingFromTable(room.getFallTimings(),fallTiming);
-						getRoomTimingFromTable(room.getSpringTimings(), springTiming);
+						//getRoomTimingFromTable(room.getFallTimings(),fallTiming);
+						//getRoomTimingFromTable(room.getSpringTimings(), springTiming);
 					}
-						
-					
 					int status = mvpPresenterHandlers.updateRoom(room);
 					if(status==1){
 						Notification.show("Room Updated Successfully", Notification.TYPE_TRAY_NOTIFICATION);				
@@ -246,6 +258,8 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 				fieldBuilding.setEnabled(true);
 				fieldRoomNo.setEnabled(true);
 				boxType.setValue(AvailableActivities.NO_ACTIVITY);
+				updateRoomButton.setVisible(false);
+				timingPanelLayout.setVisible(false);
 				fieldBuilding.focus();
 			}
 		});
@@ -265,16 +279,16 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					room.setSmall(boxIsSmall.getValue());
 					room.setLab(boxIsLab.getValue());
 					//Add timing for room
-					if(!room.isOwned()){
-						getRoomTimingFromTable(room.getFallTimings(),fallTiming);
-						getRoomTimingFromTable(room.getSpringTimings(), springTiming);
-					}
+					//if(!room.isOwned()){
+						//getRoomTimingFromTable(room.getFallTimings(),fallTiming);
+						//getRoomTimingFromTable(room.getSpringTimings(), springTiming);
+					//}
 						
 					
 					int status = mvpPresenterHandlers.saveRoom(room);
 					if(status==1){
 						Notification.show("Room Added Successfully", Notification.TYPE_TRAY_NOTIFICATION);				
-						Object row = addCourseToList(room);
+						Object row = addRoomToList(room);
 						roomList.select(row);
 					}else if(status==0){
 						Notification.show("Already Exists !","A room is already exists with this information", Notification.TYPE_TRAY_NOTIFICATION);						
@@ -296,7 +310,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 				if(roomList.removeAllItems()){
 					if(mvpPresenterHandlers.getAllRooms()!=null){
 						for(Room room:mvpPresenterHandlers.getAllRooms())
-							addCourseToList(room);
+							addRoomToList(room);
 					}
 				}else{
 					Notification.show("Something went wrong please see the log",Notification.TYPE_TRAY_NOTIFICATION);
@@ -312,7 +326,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 				if(roomList.removeAllItems()){
 					if(mvpPresenterHandlers.getAllRooms()!=null){
 						for(Room room:mvpPresenterHandlers.searchRoom(searchField.getValue()))
-							addCourseToList(room);
+							addRoomToList(room);
 					}
 				}else{
 					Notification.show("Something went wrong please see the log",Notification.TYPE_TRAY_NOTIFICATION);
@@ -355,6 +369,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 	}
 	
 	private void initCourseList(){
+		
 		roomList.addContainerProperty(BUILDING, String.class, null);
 		roomList.addContainerProperty(ROOMNO, String.class, null);
 		roomList.addContainerProperty(TYPE, String.class, null);
@@ -384,8 +399,13 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 					boxIsSmall.setValue((Boolean)roomList.getContainerProperty(itemId, IS_SMALL).getValue());
 					boxIsOwned.setValue((Boolean)roomList.getContainerProperty(itemId, IS_OWNED).getValue());
 					boxIsLab.setValue((Boolean)roomList.getContainerProperty(itemId, IS_LAB).getValue());
+					timingPanelLayout.removeAllComponents();
 					Room room = mvpPresenterHandlers.getRoom(new RoomPrimaryKey((String)roomList.getContainerProperty(itemId,BUILDING).getValue(), (String)roomList.getContainerProperty(itemId, ROOMNO).getValue()));
-					int timingRowId = 1;
+					timingPanelLayout.addComponent(new RoomTimingEditor().editAvailablity(room, "Spring", mvpPresenterHandlers, "Spring"));
+					timingPanelLayout.addComponent(new RoomTimingEditor().editAvailablity(room, "Fall", mvpPresenterHandlers, "Fall"));
+					timingPanelLayout.setVisible(true);
+					//selectedRoom = room;
+					/*int timingRowId = 1;
 					for(Interval dayTime: room.getFallTimings()){
 						fallTiming.getItem(timingRowId).getItemProperty(START_TIME).setValue(dayTime.getStartTime().toString(parseFormat));
 						fallTiming.getItem(timingRowId).getItemProperty(END_TIME).setValue(dayTime.getEndTime().toString(parseFormat));
@@ -397,14 +417,14 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 						springTiming.getItem(timingRowIdSpring).getItemProperty(START_TIME).setValue(dayTimeSpring.getStartTime().toString(parseFormat));
 						springTiming.getItem(timingRowIdSpring).getItemProperty(END_TIME).setValue(dayTimeSpring.getEndTime().toString(parseFormat));
 						timingRowIdSpring++;
-					}
+					}*/
 				}				
 			}
 		});
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Object addCourseToList(Room room){
+	private Object addRoomToList(Room room){
 		Object itemId = roomList.addItem();
 		Item row = roomList.getItem(itemId);
 		row.getItemProperty(BUILDING).setValue(room.getBuilding());
@@ -434,7 +454,7 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		fieldRoomNo.setValidationVisible(true);
 	}
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	private void initTimingLayout(){
 		timingEditLayout.addComponent(boxStartTime);
 		boxStartTime.setInputPrompt("Start Time");
@@ -510,9 +530,9 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			}
 		});
 		
-	}
+	}*/
 	
-	private void getRoomTimingFromTable(List<Interval> roomTimingsList, Table vaadinTable){
+	/*private void getRoomTimingFromTable(List<Interval> roomTimingsList, Table vaadinTable){
 		if(roomTimingsList.size()>0){
 			roomTimingsList.clear();
 		}
@@ -524,11 +544,11 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			dayTime.setEndTime(LocalTime.parse((String)row.getItemProperty(END_TIME).getValue(),parseFormat));
 			roomTimingsList.add(dayTime);
 		}
-	}
+	}*/
 	
 ////////Spring timings 
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	private void initTimingLayoutSpring(){
 		timingEditLayoutSpring.addComponent(boxStartTimeSpring);
 		boxStartTimeSpring.setInputPrompt("Start Time");
@@ -604,6 +624,6 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 			}
 		});
 		
-	}
+	}*/
 	
 }
