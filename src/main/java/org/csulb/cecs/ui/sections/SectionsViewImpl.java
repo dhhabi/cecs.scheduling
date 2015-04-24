@@ -166,8 +166,8 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			sectionLayout.addComponent(firstLine);
 			firstLine.setSpacing(true);
 			//firstLine.setMargin(true);
-			firstLine.addComponent(new Label("<b>SectionId:</b>",ContentMode.HTML));
-			firstLine.addComponent(new Label(section.getSectionId().toString()));
+			//firstLine.addComponent(new Label("<b>SectionId:</b>",ContentMode.HTML));
+			firstLine.addComponent(new Label("<b>"+section.getSectionId().toString()+",</b>",ContentMode.HTML));
 			//firstLine.addComponent(new Label("<b>Course:</b>",ContentMode.HTML));
 			//firstLine.addComponent(new Label(course));
 			firstLine.addComponent(new Label("<b>Instructor:</b>",ContentMode.HTML));

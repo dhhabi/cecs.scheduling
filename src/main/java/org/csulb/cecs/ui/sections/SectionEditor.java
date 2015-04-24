@@ -19,6 +19,7 @@ import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -67,6 +68,7 @@ public class SectionEditor extends CustomField<Section> {
 	private ComboBox boxLabEndTime;
 	private ComboBox boxLabDays;
 	private ListSelect listLabDays;
+	private Button btnUpdate;
 	
 	 DateTimeFormatter parseFormat = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter();
 	
@@ -269,6 +271,28 @@ public class SectionEditor extends CustomField<Section> {
  				listLabDays.removeItem(listLabDays.getValue());
  			}
  		});
+         btnUpdate = new Button("Update");
+         layout.addComponent(btnUpdate);
+         layout.setComponentAlignment(btnUpdate, Alignment.BOTTOM_CENTER);
+         btnUpdate.addClickListener(new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				// TODO Update button Click 
+				 try {
+	                    fieldGroup.commit();
+	                    //TODO get section  values and try to save it 
+	                    getSectionValues();
+	                    if(sectionPresenterHandler.updateSection(section)){
+	                    	Notification.show("Section Updated Successfully !",Notification.TYPE_TRAY_NOTIFICATION);
+	                    	
+	                    }else{
+	                    	Notification.show("Database Exception",Notification.TYPE_ERROR_MESSAGE);
+	                    }
+	                } catch (CommitException ex) {
+	                    ex.printStackTrace();
+	                }
+			}
+		});
          //TODO set section valuese 
          setSectionValues();
         /*fieldGroup.bind(street, "street");
@@ -289,19 +313,7 @@ public class SectionEditor extends CustomField<Section> {
         window.addCloseListener(new CloseListener() {
             @SuppressWarnings("deprecation")
 			public void windowClose(CloseEvent e) {
-                try {
-                    fieldGroup.commit();
-                    //TODO get section  values and try to save it 
-                    getSectionValues();
-                    if(sectionPresenterHandler.updateSection(section)){
-                    	Notification.show("Section Updated Successfully !",Notification.TYPE_TRAY_NOTIFICATION);
-                    	
-                    }else{
-                    	Notification.show("Database Exception",Notification.TYPE_ERROR_MESSAGE);
-                    }
-                } catch (CommitException ex) {
-                    ex.printStackTrace();
-                }
+               window.close();
             }
         });
 

@@ -116,8 +116,10 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 		try{
 			ScheduleProject sp = projectDAO.getScheduleProjectWithSectionListInit(semester, year);
 			for(Section section:sp.getSections()){
-				if(section.getInstructor().getUsername().equals(instructor.getUsername()))
-					sectionList.add(section);
+				if(section.getInstructor()!=null){
+					if(section.getInstructor().getUsername().equals(instructor.getUsername()))
+						sectionList.add(section);
+				}
 			}
 			return sectionList;
 		}catch(HibernateException he){
