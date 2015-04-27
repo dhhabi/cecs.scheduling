@@ -32,13 +32,23 @@ public class Course {
 	@Column(name="units")
 	private int units;
 	
-	private Long hours;
+	private Long lectureHours;
 	
-	public Long getHours() {
-		return hours;
+	private Long activityHours;
+	
+	
+	public Long getLectureHours() {
+		return lectureHours;
 	}
-	public void setHours(Long hours) {
-		this.hours = hours;
+	public void setLectureHours(Long lectureHours) {
+		this.lectureHours = lectureHours;
+	}
+	public Long getActivityHours() {
+		return activityHours;
+	}
+	
+	public void setActivityHours(Long activityHours) {
+		this.activityHours = activityHours;
 	}
 	public String getTitle() {
 		return title;
