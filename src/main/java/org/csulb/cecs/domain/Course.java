@@ -32,22 +32,24 @@ public class Course {
 	@Column(name="units")
 	private int units;
 	
-	private Long lectureHours;
+	@NotEmpty(message="Can not be null")
+	private String lectureHours;
 	
-	private Long activityHours;
+	@NotEmpty(message="Can not be null")
+	private String activityHours;
 	
 	
-	public Long getLectureHours() {
+	public String getLectureHours() {
 		return lectureHours;
 	}
-	public void setLectureHours(Long lectureHours) {
+	public void setLectureHours(String lectureHours) {
 		this.lectureHours = lectureHours;
 	}
-	public Long getActivityHours() {
+	public String getActivityHours() {
 		return activityHours;
 	}
 	
-	public void setActivityHours(Long activityHours) {
+	public void setActivityHours(String activityHours) {
 		this.activityHours = activityHours;
 	}
 	public String getTitle() {

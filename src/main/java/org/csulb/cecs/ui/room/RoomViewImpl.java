@@ -372,10 +372,10 @@ public class RoomViewImpl extends AbstractMvpView implements RoomView, ClickList
 		
 		roomList.addContainerProperty(BUILDING, String.class, null);
 		roomList.addContainerProperty(ROOMNO, String.class, null);
-		roomList.addContainerProperty(TYPE, String.class, null);
 		roomList.addContainerProperty(IS_SMALL, Boolean.class, false);
 		roomList.addContainerProperty(IS_OWNED, Boolean.class, false);
 		roomList.addContainerProperty(IS_LAB,Boolean.class,false);
+		roomList.addContainerProperty(TYPE, String.class, null);
 		roomList.setSelectable(true);
 		roomList.setNullSelectionItemId("");
 		roomList.setImmediate(true);

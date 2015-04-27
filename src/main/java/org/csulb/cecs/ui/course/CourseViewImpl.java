@@ -1,6 +1,7 @@
 package org.csulb.cecs.ui.course;
 
 import org.csulb.cecs.domain.AvailableActivities;
+import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.ui.course.CoursePresenter.CourseView;
 import org.vaadin.spring.UIScope;
@@ -12,6 +13,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -39,6 +41,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 	private static final String TITLE = "Course Title";
 	private static final String UNITS = "Units";
 	private static final String ACTIVITY = "Activity";
+	private static final String COURSEHOURS = "Course Hours";
+	private static final String ACTIVITYHOURS = "Activity Hours";
 	
 	
 	 private Table courseList = new Table();
@@ -58,6 +62,9 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
      ComboBox activityBox = new ComboBox("Activity");
      TextField fieldTitle = new TextField("Title");
      ComboBox boxUnits = new ComboBox("Units");
+     ComboBox boxLectureHours = new ComboBox("Lecture Hours");
+     ComboBox boxActivityHours = new ComboBox("Activity Hours");
+     
      
      	
 	private BeanFieldGroup<Course> binder = new BeanFieldGroup<Course>(Course.class);
@@ -133,6 +140,19 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		editorLayout.addComponent(boxUnits);
 		editorLayout.addComponent(activityBox);
 		
+		boxLectureHours.setValidationVisible(false);
+		boxActivityHours.setValidationVisible(false);
+		
+		boxLectureHours.setNullSelectionAllowed(false);
+		boxActivityHours.setNullSelectionAllowed(false);
+		
+		for(String hour:Const.hoursList){
+			boxLectureHours.addItem(hour);
+			boxActivityHours.addItem(hour);
+		}
+		editorLayout.addComponent(boxLectureHours);
+		editorLayout.addComponent(boxActivityHours);
+		
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(addCourseButton);
 		buttons.addComponent(updateCourseButton);
@@ -175,6 +195,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 				courseNoField.setValue("");
 				fieldTitle.setValue("");
 				boxUnits.setValue(3);
+				boxActivityHours.setValue("2.0");
+				boxLectureHours.setValue("5.0");
 				activityBox.setValue(AvailableActivities.NO_ACTIVITY);
 				prefixField.focus();
 				//Enable primary key fields
@@ -244,12 +266,17 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		binder.bind(activityBox, "activity");
 		binder.bind(boxUnits, "units");
 		binder.bind(fieldTitle, "title");
+		binder.bind(boxLectureHours, "lectureHours");
+		binder.bind(boxActivityHours, "activityHours");
+		
 	}
 
 	@Override
 	public void initView() {
 		Course course = new Course();
 		binder.setItemDataSource(course);
+		
+		
 	}
 	
 	@Override
@@ -276,6 +303,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		courseList.addContainerProperty(TITLE, String.class, null);
 		courseList.addContainerProperty(UNITS, Integer.class, null);
 		courseList.addContainerProperty(ACTIVITY, String.class, null);
+		courseList.addContainerProperty(COURSEHOURS,String.class,null);
+		courseList.addContainerProperty(ACTIVITYHOURS, String.class,null);
 		courseList.setSelectable(true);
 		courseList.setNullSelectionItemId("");
 		courseList.setImmediate(true);
@@ -298,6 +327,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 					activityBox.setValue((String)courseList.getContainerProperty(itemId, ACTIVITY).getValue());
 					fieldTitle.setValue((String)courseList.getContainerProperty(itemId, TITLE).getValue());
 					boxUnits.setValue(courseList.getContainerProperty(itemId, UNITS).getValue());
+					boxActivityHours.setValue(courseList.getContainerProperty(itemId, ACTIVITYHOURS).getValue());
+					boxLectureHours.setValue(courseList.getContainerProperty(itemId, COURSEHOURS).getValue());
 				}
 				
 			}
@@ -313,6 +344,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		row.getItemProperty(TITLE).setValue(course.getTitle());
 		row.getItemProperty(UNITS).setValue(course.getUnits());
 		row.getItemProperty(ACTIVITY).setValue(course.getActivity());
+		row.getItemProperty(COURSEHOURS).setValue(course.getLectureHours());
+		row.getItemProperty(ACTIVITYHOURS).setValue(course.getActivityHours());
 		courseList.select(itemId);
 	}
 	
@@ -324,6 +357,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		row.getItemProperty(TITLE).setValue(course.getTitle());
 		row.getItemProperty(UNITS).setValue(course.getUnits());
 		row.getItemProperty(ACTIVITY).setValue(course.getActivity());
+		row.getItemProperty(COURSEHOURS).setValue(course.getLectureHours());
+		row.getItemProperty(ACTIVITYHOURS).setValue(course.getActivityHours());
 		courseList.select(itemId);
 	}
 	
@@ -333,6 +368,8 @@ public class CourseViewImpl extends AbstractMvpView implements CourseView, Click
 		courseNoField.setValidationVisible(true);
 		fieldTitle.setValidationVisible(true);
 		boxUnits.setValidationVisible(true);
+		boxLectureHours.setValidationVisible(true);
+		boxActivityHours.setValidationVisible(true);
 	}
 	
 		
