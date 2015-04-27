@@ -10,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.Curriculum;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
@@ -56,6 +57,7 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 	Table tableInstructors;
 	Table tableCourses;
 	Table tableRooms;
+	Table tableCurriculums;
 	Button btnSubmit;
 	
 	
@@ -65,10 +67,11 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 	private static final String COURSE = "Course";
 	private static final String ROOM = "Room";
 	private static final String NOOFSECTION = "No of Sections";
-	
+	private static final String CURRICULUM = "Curriculum";
 	Container instructorContainer = new IndexedContainer();
 	Container courseContainer = new IndexedContainer();
 	Container roomContainer = new IndexedContainer();
+	Container curriculumContainer = new IndexedContainer();
 	
 	private BeanFieldGroup<ScheduleProject> binder = new BeanFieldGroup<ScheduleProject>(ScheduleProject.class);
 	
@@ -111,8 +114,12 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 		tablesLayout.addComponent(tableCourses);
 		
 		tableRooms = new Table("Select Rooms");
-		initRoomTable();
-		tablesLayout.addComponent(tableRooms);
+		//initRoomTable();
+		//tablesLayout.addComponent(tableRooms);
+		
+		tableCurriculums = new Table("Select Curriculums");
+		initCurriculumTable();
+		tablesLayout.addComponent(tableCurriculums);
 		
 		btnSubmit = new Button("Start Scheduling");
 		
@@ -173,6 +180,18 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 	}
 	
 
+	private void initCurriculumTable() {
+		// TODO Init Curriculum Table
+		curriculumContainer.addContainerProperty(SELECT, CheckBox.class, null);
+		curriculumContainer.addContainerProperty(CURRICULUM, Curriculum.class,null);
+		tableCurriculums.setContainerDataSource(curriculumContainer);
+		tableCurriculums.setNullSelectionItemId("");
+		tableCurriculums.setImmediate(true);
+		tableCurriculums.setHeight("500px");
+		
+	}
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
@@ -202,14 +221,22 @@ public class ProjectViewImpl extends AbstractMvpView implements ProjectView, Cli
 			noOfSection.select(1);
 			row.getItemProperty(NOOFSECTION).setValue(noOfSection);
 		}
-		//Populate room list
+		/*//Populate room list
 		roomContainer.removeAllItems();
 		for(Room room:mvpPresenterHandlers.getAllRooms()){
 			Object itemId = roomContainer.addItem();
 			Item row = roomContainer.getItem(itemId);
 			row.getItemProperty(SELECT).setValue(new CheckBox());
 			row.getItemProperty(ROOM).setValue(room);
-		}
+		}*/
+		//Populate CurriculumList
+				curriculumContainer.removeAllItems();
+				for(Curriculum curriculum :mvpPresenterHandlers.getAllCurriculums()){
+					Object itemId = curriculumContainer.addItem();
+					Item row = curriculumContainer.getItem(itemId);
+					row.getItemProperty(SELECT).setValue(new CheckBox());
+					row.getItemProperty(CURRICULUM).setValue(curriculum);
+				}
 	}
 
 

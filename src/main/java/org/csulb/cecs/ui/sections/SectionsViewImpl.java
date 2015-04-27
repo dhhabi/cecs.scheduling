@@ -1,6 +1,9 @@
 package org.csulb.cecs.ui.sections;
 
+import java.util.List;
+
 import org.csulb.cecs.domain.Const;
+import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.ui.sections.SectionsPresenter.SectionsView;
@@ -35,6 +38,8 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 	private Panel panel;
 	
 	private VerticalLayout layout;
+	
+	private List<Room> roomList;
 		
 
 	//private BeanFieldGroup<Survey> binder = new BeanFieldGroup<Survey>(Survey.class);
@@ -61,6 +66,7 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 	@Override
 	public void initView() {
 		
+			
 		final Window dialog = new Window("Select semester and year");
 		FormLayout dialogLayout = new FormLayout();
 		dialog.setContent(dialogLayout);
@@ -126,6 +132,7 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 
 	private void displaySections(String semester,String year){
 		// Get All Sections and display them
+		roomList = sectionsPresenterHandlers.getAllRooms();
 		layout.removeAllComponents();
 		ScheduleProject scheduleProject = sectionsPresenterHandlers.getScheduleProject(semester,year);
 		for(Section section: scheduleProject.getSections()){
@@ -185,7 +192,7 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			firstLine.addComponent(new Label(labRoom));
 			firstLine.addComponent(new Label(labTiming));
 			firstLine.addComponent(new Label(labDays));
-			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, scheduleProject.getRoomList(), scheduleProject.getInstructorList(),semester,year));			
+			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, roomList, scheduleProject.getInstructorList(),semester,year));			
 			
 		}
 	}

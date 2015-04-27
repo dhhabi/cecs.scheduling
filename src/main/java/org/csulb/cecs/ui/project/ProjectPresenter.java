@@ -6,11 +6,13 @@ import java.util.List;
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.CurrentSemester;
+import org.csulb.cecs.domain.Curriculum;
 import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.dto.AccountDAO;
 import org.csulb.cecs.dto.CourseDAO;
 import org.csulb.cecs.dto.CurrentSemesterDAO;
+import org.csulb.cecs.dto.CurriculumDAO;
 import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.ui.ViewToken;
@@ -45,6 +47,8 @@ public class ProjectPresenter extends AbstractMvpPresenterView<ProjectPresenter.
 	private CourseDAO courseDAO;
 	@Autowired
 	private CurrentSemesterDAO currentSemesterDAO;
+	@Autowired
+	private CurriculumDAO curriculumDAO;
 	
 	@Autowired
 	public ProjectPresenter(ProjectView view, EventBus eventBus) {
@@ -102,6 +106,17 @@ public class ProjectPresenter extends AbstractMvpPresenterView<ProjectPresenter.
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return new ArrayList<Room>();
+		}
+	}
+
+	@Override
+	public List<Curriculum> getAllCurriculums() {
+		try{
+			return curriculumDAO.getAllCurriculum();
+		
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return new ArrayList<Curriculum>();
 		}
 	}
 

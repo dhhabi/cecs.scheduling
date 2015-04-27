@@ -42,5 +42,10 @@ public class Curriculum {
 	public void setEssential(boolean essential) {
 		this.essential = essential;
 	} 
+	
+	@Override
+	public String toString(){
+		return name;
+	}
 		
 }

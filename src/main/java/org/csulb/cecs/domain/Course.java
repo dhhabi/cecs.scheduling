@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.Hours;
 
 @Entity
 @IdClass(CoursePrimaryKey.class)
@@ -30,7 +31,15 @@ public class Course {
 	
 	@Column(name="units")
 	private int units;
-		
+	
+	private Long hours;
+	
+	public Long getHours() {
+		return hours;
+	}
+	public void setHours(Long hours) {
+		this.hours = hours;
+	}
 	public String getTitle() {
 		return title;
 	}

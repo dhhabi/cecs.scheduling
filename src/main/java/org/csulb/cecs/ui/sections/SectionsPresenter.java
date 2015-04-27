@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Course;
+import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.dto.ProjectDAO;
+import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.dto.SectionDAO;
 import org.csulb.cecs.dto.SurveyDAO;
 import org.csulb.cecs.ui.ViewToken;
@@ -38,6 +40,8 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	
 	@Autowired
 	private SurveyDAO surveyDAO;
+	@Autowired
+	private RoomDAO roomDAO;
 	
 	@Autowired
 	public SectionsPresenter(SectionsView view, EventBus eventBus) {
@@ -125,6 +129,16 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 		}catch(HibernateException he){
 			he.printStackTrace();
 			return sectionList;
+		}
+	}
+
+	@Override
+	public List<Room> getAllRooms() {
+		try{
+			return roomDAO.getAllRooms();
+		}catch(HibernateException he){
+			he.printStackTrace();
+			return new ArrayList<Room>();
 		}
 	}
 

@@ -32,6 +32,9 @@ public class ScheduleProject{
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	private final List<Section> sections = new ArrayList<Section>();
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	private final List<Curriculum> curriculums = new ArrayList<Curriculum>();
 
 	public Long getId() {
 		return id;
