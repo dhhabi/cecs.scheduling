@@ -13,6 +13,7 @@ import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.dto.RoomDAO;
 import org.csulb.cecs.dto.SectionDAO;
 import org.csulb.cecs.dto.SurveyDAO;
+import org.csulb.cecs.service.ClaraService;
 import org.csulb.cecs.ui.ViewToken;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.vaadin.spring.mvp.presenter.AbstractMvpPresenterView;
 import org.vaadin.spring.navigator.VaadinView;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.StreamResource;
 
 
 @SuppressWarnings("serial")
@@ -42,6 +44,9 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	private SurveyDAO surveyDAO;
 	@Autowired
 	private RoomDAO roomDAO;
+	
+	@Autowired
+	private ClaraService claraService;
 	
 	@Autowired
 	public SectionsPresenter(SectionsView view, EventBus eventBus) {
@@ -140,6 +145,11 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 			he.printStackTrace();
 			return new ArrayList<Room>();
 		}
+	}
+
+	@Override
+	public StreamResource createClaraProgram() {
+		return claraService.createProgram();
 	}
 
 	

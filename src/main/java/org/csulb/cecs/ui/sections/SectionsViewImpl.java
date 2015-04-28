@@ -11,6 +11,8 @@ import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;
 
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
@@ -40,7 +42,7 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 	private VerticalLayout layout;
 	
 	private List<Room> roomList;
-		
+	
 
 	//private BeanFieldGroup<Survey> binder = new BeanFieldGroup<Survey>(Survey.class);
 	
@@ -103,13 +105,13 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			@Override
 			public void windowClose(CloseEvent e) {
 				// TODO Dialog Close
-				if(sectionsPresenterHandlers.isCheckIfProjectExists((String)boxSemester.getValue(), (String)boxYear.getValue())){
+				/*if(sectionsPresenterHandlers.isCheckIfProjectExists((String)boxSemester.getValue(), (String)boxYear.getValue())){
 					//dialog.close();
 					displaySections((String)boxSemester.getValue(), (String)boxYear.getValue());
 				}else{
 					UI.getCurrent().addWindow(dialog);
 					Notification.show("No schedule exists for selected values!",Notification.TYPE_WARNING_MESSAGE);
-				}
+				}*/
 			}
 		});
 		dialog.setSizeUndefined();
@@ -193,7 +195,14 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			firstLine.addComponent(new Label(labTiming));
 			firstLine.addComponent(new Label(labDays));
 			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, roomList, scheduleProject.getInstructorList(),semester,year));			
-			
 		}
+		
+		Button downloadButton = new Button("Download Clara Program");
+		StreamResource clara = sectionsPresenterHandlers.createClaraProgram();
+        FileDownloader fileDownloader = new FileDownloader(clara);
+        fileDownloader.extend(downloadButton);
+        
+        layout.addComponent(downloadButton);
+        layout.setComponentAlignment(downloadButton, Alignment.BOTTOM_CENTER);
 	}
 }

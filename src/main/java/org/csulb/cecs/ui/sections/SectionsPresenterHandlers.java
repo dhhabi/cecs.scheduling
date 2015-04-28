@@ -9,6 +9,8 @@ import org.csulb.cecs.domain.ScheduleProject;
 import org.csulb.cecs.domain.Section;
 import org.vaadin.spring.mvp.MvpPresenterHandlers;
 
+import com.vaadin.server.StreamResource;
+
 public interface SectionsPresenterHandlers extends MvpPresenterHandlers {
 	public ScheduleProject getScheduleProject(String semester,String year);
 	public boolean updateSection(Section section);
@@ -18,5 +20,5 @@ public interface SectionsPresenterHandlers extends MvpPresenterHandlers {
 	public boolean checkSurveyExistence(String instructorEmailId,String semester,String year);
 	public List<Section> getSectionList(String semester, String year,Account instructor);
 	public List<Room> getAllRooms();
-	
+	public StreamResource createClaraProgram();	
 }
