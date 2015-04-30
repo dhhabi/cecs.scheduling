@@ -4,6 +4,6 @@ import com.vaadin.server.StreamResource;
 
 public interface ClaraService {
 	
-	public StreamResource createProgram();
+	public StreamResource createProgram(String semester,String year);
 	
 }

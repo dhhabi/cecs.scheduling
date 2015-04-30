@@ -148,8 +148,8 @@ public class SectionsPresenter extends AbstractMvpPresenterView<SectionsPresente
 	}
 
 	@Override
-	public StreamResource createClaraProgram() {
-		return claraService.createProgram();
+	public StreamResource createClaraProgram(String semester,String year) {
+		return claraService.createProgram(semester,year);
 	}
 
 	

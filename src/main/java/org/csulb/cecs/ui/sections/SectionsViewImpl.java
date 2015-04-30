@@ -197,12 +197,12 @@ public class SectionsViewImpl extends AbstractMvpView implements SectionsView, C
 			firstLine.addComponent(new SectionEditor().editSection(sectionsPresenterHandlers, section, roomList, scheduleProject.getInstructorList(),semester,year));			
 		}
 		
-		Button downloadButton = new Button("Download Clara Program");
-		StreamResource clara = sectionsPresenterHandlers.createClaraProgram();
-        FileDownloader fileDownloader = new FileDownloader(clara);
-        fileDownloader.extend(downloadButton);
+		//Button downloadButton = new Button("Download Clara Program");
+		//StreamResource clara = sectionsPresenterHandlers.createClaraProgram(semester,year);
+        //FileDownloader fileDownloader = new FileDownloader(clara);
+        //fileDownloader.extend(downloadButton);
         
-        layout.addComponent(downloadButton);
-        layout.setComponentAlignment(downloadButton, Alignment.BOTTOM_CENTER);
+        //layout.addComponent(downloadButton);
+        //layout.setComponentAlignment(downloadButton, Alignment.BOTTOM_CENTER);
 	}
 }

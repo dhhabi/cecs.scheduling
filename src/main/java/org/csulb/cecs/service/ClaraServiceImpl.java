@@ -4,10 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 
 import org.csulb.cecs.domain.AvailableActivities;
+import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.LabType;
 import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.dto.CurrentSemesterDAO;
 import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.dto.RoomDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +26,17 @@ public class ClaraServiceImpl implements ClaraService {
 	private ProjectDAO projectDAO;
 	@Autowired
 	private RoomDAO roomDAO;
+	@Autowired
+	private CurrentSemesterDAO currentSemesterDAO;
+	
+	public ClaraServiceImpl() {
+		// TODO Auto-generated constructor stub
+	}
+	
 
 	@SuppressWarnings("serial")
 	@Override
-	public StreamResource createProgram() {
+	public StreamResource createProgram(String semester,String year) {
 		return new StreamResource(new StreamSource() {
 
 			@Override
@@ -129,7 +139,7 @@ public class ClaraServiceImpl implements ClaraService {
 				claraString.append("\n");
 				
 				
-				
+								
 				writer.write(claraString.toString());
 				writer.flush();
 				return new ByteArrayInputStream(bos.toByteArray());

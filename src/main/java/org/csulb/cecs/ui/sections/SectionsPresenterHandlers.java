@@ -20,5 +20,5 @@ public interface SectionsPresenterHandlers extends MvpPresenterHandlers {
 	public boolean checkSurveyExistence(String instructorEmailId,String semester,String year);
 	public List<Section> getSectionList(String semester, String year,Account instructor);
 	public List<Room> getAllRooms();
-	public StreamResource createClaraProgram();	
+	public StreamResource createClaraProgram(String semester,String year);	
 }
