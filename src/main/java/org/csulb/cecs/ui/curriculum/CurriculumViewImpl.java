@@ -150,6 +150,7 @@ public class CurriculumViewImpl extends AbstractMvpView implements
 					Curriculum curriculum = binder.getItemDataSource().getBean();
 					curriculum.setName(txtName.getValue());
 					//init the course list
+					curriculum.getCurriculumCourseList().removeAll(curriculum.getCurriculumCourseList());
 					for(Object itemId:curriculumCourseContainer.getItemIds()){
 						curriculum.getCurriculumCourseList().add(curriculumCourseContainer.getItem(itemId).getBean());
 					}
@@ -187,6 +188,7 @@ public class CurriculumViewImpl extends AbstractMvpView implements
 				Curriculum curriculum = binder.getItemDataSource().getBean();
 				curriculum.setName(txtName.getValue());
 				//init the course list
+				curriculum.getCurriculumCourseList().removeAll(curriculum.getCurriculumCourseList());
 				for(Object itemId:curriculumCourseContainer.getItemIds()){
 					curriculum.getCurriculumCourseList().add(curriculumCourseContainer.getItem(itemId).getBean());
 				}

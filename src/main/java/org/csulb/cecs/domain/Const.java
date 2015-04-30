@@ -14,7 +14,7 @@ public class Const {
 	
 	public static final String emailSubject = "Request: Instructor Survey Request";
 	
-	public static final String[] hoursList = {"0.5", "1.0", "1.5", "2.0", "2.5", "3.0" ,"3.5" ,"4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0"};
+	public static final String[] hoursList = {"0.0","0.5", "1.0", "1.5", "2.0", "2.5", "3.0" ,"3.5" ,"4.0", "4.5", "5.0", "5.5", "6.0", "6.5", "7.0", "7.5", "8.0"};
 	
 	public static final String emailMessage = "Please follow the below Instructions<br>"
 			+ "Login using your username and passsword<br>"

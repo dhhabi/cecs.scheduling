@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.Hours;
@@ -38,7 +39,14 @@ public class Course {
 	@NotEmpty(message="Can not be null")
 	private String activityHours;
 	
+	private String requiredLab;
 	
+	public String getRequiredLab() {
+		return requiredLab;
+	}
+	public void setRequiredLab(String requiredLab) {
+		this.requiredLab = requiredLab;
+	}
 	public String getLectureHours() {
 		return lectureHours;
 	}
