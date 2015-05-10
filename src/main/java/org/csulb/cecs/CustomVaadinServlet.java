@@ -11,6 +11,11 @@ import com.vaadin.server.ServiceException;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
 
+/**
+ * Custom vaadin Servelet
+ * @author preet
+ *
+ */
 @SuppressWarnings("serial")
 public class CustomVaadinServlet extends SpringAwareVaadinServlet {
 	

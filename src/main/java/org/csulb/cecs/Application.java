@@ -18,6 +18,7 @@ import org.vaadin.spring.sidebar.annotation.EnableSideBar;
 
 /**
  * Main application class
+ * Application execution start from here. Load the application context and vaadin servlet
  * 
  * @author Gurprit Singh
  *

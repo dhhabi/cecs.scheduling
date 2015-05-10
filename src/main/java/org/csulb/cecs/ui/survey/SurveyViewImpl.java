@@ -38,6 +38,14 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+
+/**
+ * User Interface - For professors to fill the survey form
+ * 
+ * @author preet
+ *
+ */
+
 @SuppressWarnings("serial")
 @UIScope
 @VaadinComponent

@@ -54,7 +54,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay,
 	private Button btnHome;
 	private Button btnUser;
 	private Button btnAdmin;
-	private Button btnAdminHidden;
+	//private Button btnAdminHidden;
 	private Button btnSignIn;
 	private Button btnSignUp;
 	private Button btnLogout;
@@ -120,11 +120,11 @@ public class MainLayout extends VerticalLayout implements ViewDisplay,
 		btnAdmin.addClickListener(this);
 		navbar.addComponent(btnAdmin);
 
-		btnAdminHidden = new Button("Admin secret", FontAwesome.EYE_SLASH);
+	/*	btnAdminHidden = new Button("Admin secret", FontAwesome.EYE_SLASH);
 		btnAdminHidden.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		btnAdminHidden.setData(ViewToken.ADMIN_HIDDEN);
 		btnAdminHidden.addClickListener(this);
-		navbar.addComponent(btnAdminHidden);
+		navbar.addComponent(btnAdminHidden);*/
 
 		btnSignIn = new Button("Sign in", FontAwesome.SIGN_IN);
 		btnSignIn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -297,7 +297,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay,
 	}
 
 	private void displayAnonymousNavbar() {
-		btnAdminHidden.setVisible(false);
+		//btnAdminHidden.setVisible(false);
 		btnLogout.setVisible(false);
 		btnSignIn.setVisible(true);
 		btnSignUp.setVisible(false);
@@ -305,7 +305,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay,
 	}
 
 	private void displayUserNavbar() {
-		btnAdminHidden.setVisible(false);
+		//btnAdminHidden.setVisible(false);
 		btnLogout.setVisible(true);
 		btnSignIn.setVisible(false);
 		btnSignUp.setVisible(false);
@@ -313,7 +313,7 @@ public class MainLayout extends VerticalLayout implements ViewDisplay,
 	}
 
 	private void displayAdminNavbar() {
-		btnAdminHidden.setVisible(true);
+		//btnAdminHidden.setVisible(true);
 		btnLogout.setVisible(true);
 		btnSignIn.setVisible(false);
 		btnSignUp.setVisible(true);

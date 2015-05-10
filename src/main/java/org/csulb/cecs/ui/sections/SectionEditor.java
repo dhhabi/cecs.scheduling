@@ -36,6 +36,12 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
+/**
+ * A custom user interface component to edit a Section
+ * 
+ * @author preet
+ *
+ */
 
 public class SectionEditor extends CustomField<Section> {
 

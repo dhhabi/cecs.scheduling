@@ -1,6 +1,14 @@
 package org.csulb.cecs.domain;
 
+/**
+ * Interface to represent the days of the week, Replaced by Day enum in this project
+ * 
+ * @author preet
+ *
+ */
 
+
+@Deprecated
 public interface Days {
 	
 	public static final String MONDAY = "Monday";

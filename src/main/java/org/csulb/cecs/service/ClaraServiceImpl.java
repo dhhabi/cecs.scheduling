@@ -4,14 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.List;
-
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.AvailableActivities;
 import org.csulb.cecs.domain.Course;
 import org.csulb.cecs.domain.Day;
 import org.csulb.cecs.domain.LabType;
 import org.csulb.cecs.domain.Room;
+import org.csulb.cecs.domain.Survey;
 import org.csulb.cecs.domain.TwoDayScheduleImportance;
 import org.csulb.cecs.dto.CurrentSemesterDAO;
 import org.csulb.cecs.dto.ProjectDAO;
@@ -20,10 +19,16 @@ import org.csulb.cecs.dto.SurveyDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.spi.ScanException;
-
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
+
+/**
+ * This class is used to generate a clara program based on the information present in the database.
+ * 
+ * 
+ * @author preet
+ *
+ */
 
 @Service
 public class ClaraServiceImpl implements ClaraService {
@@ -41,6 +46,14 @@ public class ClaraServiceImpl implements ClaraService {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Create a Clara program using information present in the database
+	 * 
+	 * @param semester, Semester for which we want to find a schedule
+	 * @param year, Year for which we want to find a schedule
+	 * 
+	 * @return an object of StreamResource created using an inputstream reference to the created clara file
+	 */
 	@SuppressWarnings("serial")
 	@Override
 	public StreamResource createProgram(final String semester, final String year) {
@@ -281,9 +294,18 @@ public class ClaraServiceImpl implements ClaraService {
 				claraString.append("//A constant for each instructor who will teach\n\n");
 				
 				for(Account instructor:projectDAO.getScheduleProjectWithInstructorListInit(semester, year).getInstructorList()){
+					
+					Survey survey = surveyDAO.getSurvey(instructor.getUsername(), semester, year);
+					
 					StringBuilder constInstructor = new StringBuilder("const "+instructor.getUsername()+", Instructor(");
+					constInstructor.append(instructor.getFirstName()+" "+instructor.getLastName());
+					constInstructor.append(",");
+					constInstructor.append("3,");
+					constInstructor.append("\""+survey.getTwoDayScheduleImportance()+"\",\n");
+					constInstructor.append("\t{");
 					
 					
+					constInstructor.append("}\n");
 				}
 				
 				

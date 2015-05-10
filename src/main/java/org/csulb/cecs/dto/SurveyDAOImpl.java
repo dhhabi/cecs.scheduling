@@ -1,7 +1,10 @@
 package org.csulb.cecs.dto;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
+import org.csulb.cecs.domain.Room;
 import org.csulb.cecs.domain.Survey;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -76,12 +79,49 @@ public class SurveyDAOImpl implements SurveyDAO{
 				.setParameter("semester", semester)
 				.setParameter("year", year)
 				.uniqueResult();
-		Hibernate.initialize(survey);
-		//survey.getAvailabilityList().size();
-		survey.getPreferredCourses().size();
-		//survey.getPreferredRooms().size();
+		
+		if(survey!=null){
+			Hibernate.initialize(survey);
+			survey.getPreferredCourses().size();
+		}
+		return survey;
+	}
+
+
+	@Override
+	public Survey getSurvey(String instructorEmailId, String semester,
+			String year) {
+		Survey survey = (Survey) getSession().createQuery("from Survey where instructorEmailId =:instructorEmailId and semester=:semester and year=:year")
+				.setParameter("instructorEmailId", instructorEmailId)
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.uniqueResult();
+		if(survey!=null){
+			Hibernate.initialize(survey);
+			survey.getAvailabilityList().size();
+			survey.getPreferredCourses().size();
+			survey.getPreferredRooms().size();
+		}
 		//survey.getAvailablityTable().size();
 		return survey;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Survey> getAllSurvey(String semester, String year) {
+		return getSession().createCriteria(Survey.class)
+				.list();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getAllInstructorEmailIds(String semester, String year) {
+		return getSession().createQuery("select instructorEmailId from Survey s where s.semester =:semester and s.year=:year")
+				.setParameter("semester", semester)
+				.setParameter("year", year)
+				.list();
 	}
 
 }

@@ -1,8 +1,12 @@
 package org.csulb.cecs.ui.claradownload;
 
+import java.util.List;
+
+import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.dto.ProjectDAO;
 import org.csulb.cecs.service.ClaraService;
 import org.csulb.cecs.service.DummyService;
+import org.csulb.cecs.service.SurveyService;
 import org.csulb.cecs.ui.ViewToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -33,6 +37,8 @@ public class ClaraDownloadPresenter extends AbstractMvpPresenterView<ClaraDownlo
 	
 	@Autowired
 	private ClaraService claraService;
+	@Autowired
+	private SurveyService surveyService;
 	
 	@Autowired
 	public ClaraDownloadPresenter(ClaraDownloadView view, EventBus eventBus) {
@@ -54,6 +60,11 @@ public class ClaraDownloadPresenter extends AbstractMvpPresenterView<ClaraDownlo
 	@Override
 	public StreamResource createClaraProgram(String semester, String year) {
 		return claraService.createProgram(semester,year);
+	}
+
+	@Override
+	public List<Account> checkIdAllTheSurveyAreDone(String semester, String year) {
+		return surveyService.getAcccountsWhoDidNotFillSurvey(semester, year);
 	}
 
 		

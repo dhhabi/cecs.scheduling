@@ -1,5 +1,8 @@
 package org.csulb.cecs.ui.claradownload;
 
+import java.util.List;
+
+import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.ui.claradownload.ClaraDownloadPresenter.ClaraDownloadView;
 import org.csulb.cecs.ui.user.UserPresenterHandlers;
@@ -14,6 +17,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -77,9 +81,17 @@ public class ClaraDownloadViewImpl extends AbstractMvpView implements ClaraDownl
 			@Override
 			public void buttonClick(ClickEvent event) {
 				// TODO Dialog Submit Click
+				content.removeAllComponents();
 				if(mvpPresenterHandlers.checkProjectExistence((String)boxSemester.getValue(), (String)boxYear.getValue())){
-					dialog.close();
-					dispalyButtonToDownload((String)boxSemester.getValue(), (String)boxYear.getValue());
+					List<Account> remainingInstructorList = mvpPresenterHandlers.checkIdAllTheSurveyAreDone((String)boxSemester.getValue(), (String)boxYear.getValue());
+					if(remainingInstructorList.isEmpty()){
+						dialog.close();
+						dispalyButtonToDownload((String)boxSemester.getValue(), (String)boxYear.getValue());
+					}else{
+						dialog.close();
+						displayRemainingInstructors(remainingInstructorList);
+					}
+					
 				}else{
 					Notification.show("No schedule exists for selected values!",Notification.TYPE_WARNING_MESSAGE);
 				}
@@ -128,6 +140,22 @@ public class ClaraDownloadViewImpl extends AbstractMvpView implements ClaraDownl
         FileDownloader fileDownloader = new FileDownloader(clara);
         fileDownloader.extend(btnDownloadClara);	
         content.addComponent(btnDownloadClara);
+	}
+	private void displayRemainingInstructors(List<Account> remainingInstructorList){
+		
+		caption = new Label("Not all the instructor's are done with survey yet, Remaining Instructors are:");
+		caption.addStyleName(ValoTheme.LABEL_H3);
+		content.addComponent(caption);
+
+		for(Account account:remainingInstructorList){
+			HorizontalLayout instructorlayout = new HorizontalLayout();
+			instructorlayout.setSpacing(true);
+			instructorlayout.addComponent(new Label(account.getFirstName()));
+			instructorlayout.addComponent(new Label(account.getLastName()));
+			instructorlayout.addComponent(new Label(account.getUsername()));
+			content.addComponent(instructorlayout);
+			
+		}
 	}
 	
 }
