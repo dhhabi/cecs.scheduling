@@ -251,7 +251,7 @@ public class SurveyViewImpl extends AbstractMvpView implements SurveyView, Click
 	        
 	        form.addComponent(boxTwoDayImportance);
 	        
-	        form.addComponent(new Label("Availability : Block the time (Check the box) when you are not available!"));
+	        form.addComponent(new Label("Availability : Block the time (Check the box) when you are available!"));
 	        
 	        tableAvailability = new Table();
 	        initTableAvailability();

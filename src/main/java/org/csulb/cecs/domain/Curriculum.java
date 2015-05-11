@@ -6,9 +6,13 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Curriculum {
@@ -20,6 +24,7 @@ public class Curriculum {
 	private boolean essential;
 	
 	@ElementCollection
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade=CascadeType.ALL)
 	private final List<Course> curriculumCourseList = new ArrayList<Course>();
 

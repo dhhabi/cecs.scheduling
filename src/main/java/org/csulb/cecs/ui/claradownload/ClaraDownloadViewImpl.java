@@ -5,7 +5,6 @@ import java.util.List;
 import org.csulb.cecs.domain.Account;
 import org.csulb.cecs.domain.Const;
 import org.csulb.cecs.ui.claradownload.ClaraDownloadPresenter.ClaraDownloadView;
-import org.csulb.cecs.ui.user.UserPresenterHandlers;
 import org.vaadin.spring.UIScope;
 import org.vaadin.spring.VaadinComponent;
 import org.vaadin.spring.mvp.view.AbstractMvpView;

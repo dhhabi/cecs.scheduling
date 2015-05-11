@@ -176,7 +176,7 @@ public class SectionEditor extends CustomField<Section> {
         boxMeetingStartTime = new ComboBox("Meeting StartTime");
         boxMeetingStartTime.setNullSelectionAllowed(true);
         roomLeftLayout.addComponent(boxMeetingStartTime);
-        boxMeetingEndTime = new ComboBox("Meeting EndTime");
+        boxMeetingEndTime = new ComboBox("Interval End");
         boxMeetingEndTime.setNullSelectionAllowed(true);
         roomLeftLayout.addComponent(boxMeetingEndTime);
         for(String time:Const.timeList){
@@ -237,7 +237,7 @@ public class SectionEditor extends CustomField<Section> {
          boxLabStartTime = new ComboBox("Lab StartTime");
          boxLabStartTime.setNullSelectionAllowed(false);
          labLeftLayout.addComponent(boxLabStartTime);
-         boxLabEndTime = new ComboBox("Lab EndTime");
+         boxLabEndTime = new ComboBox("Interval End");
          boxLabEndTime.setNullSelectionAllowed(false);
          labLeftLayout.addComponent(boxLabEndTime);
          for(String time:Const.timeList){
@@ -354,7 +354,7 @@ public class SectionEditor extends CustomField<Section> {
     	
     	if(boxMeetingStartTime.getValue()!=null){
     		if(boxMeetingEndTime.getValue()!=null)
-    			section.setMeetingTiming(new Interval(LocalTime.parse((String)boxMeetingStartTime.getValue()), LocalTime.parse((String)boxMeetingEndTime.getValue())));
+    			section.setMeetingTiming(new Interval(LocalTime.parse((String)boxMeetingStartTime.getValue(),parseFormat), LocalTime.parse((String)boxMeetingEndTime.getValue(),parseFormat)));
     	}else{
     		section.setMeetingTiming(null);
     	}
@@ -368,7 +368,7 @@ public class SectionEditor extends CustomField<Section> {
     		section.setLabRoom(labContainer.getItem(boxLab.getValue()).getBean());
     	if(boxLabStartTime.getValue()!=null){
     		if(boxLabEndTime.getValue()!=null)
-    			section.setLabTiming(new Interval(LocalTime.parse((String)boxLabStartTime.getValue()), LocalTime.parse((String)boxLabEndTime.getValue())));
+    			section.setLabTiming(new Interval(LocalTime.parse((String)boxLabStartTime.getValue(),parseFormat), LocalTime.parse((String)boxLabEndTime.getValue(),parseFormat)));
     	
     	}else{
     		section.setLabTiming(null);
